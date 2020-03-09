@@ -1,0 +1,30 @@
+import { ISlotDescription } from "./ISlotDescription";
+import { IGameOptions } from "./IGameOptions";
+export interface IGameDescription {
+    m_cacheHandles: string[];
+    m_defaultAIBuild: number;
+    m_defaultDifficulty: number;
+    m_gameCacheName: string;
+    m_gameOptions: IGameOptions;
+    m_gameSpeed: number;
+    m_gameType: number;
+    m_hasExtensionMod: boolean;
+    m_isBlizzardMap: boolean;
+    m_isCoopMode: boolean;
+    m_isPremadeFFA: boolean;
+    m_mapAuthorName: string;
+    m_mapFileName: string;
+    m_mapFileSyncChecksum: number;
+    m_mapSizeX: number;
+    m_mapSizeY: number;
+    m_maxColors: number;
+    m_maxControls: number;
+    m_maxObservers: number;
+    m_maxPlayers: number;
+    m_maxRaces: number;
+    m_maxTeams: number;
+    m_maxUsers: number;
+    m_modFileSyncChecksum: number;
+    m_randomValue: number;
+    m_slotDescriptions: ISlotDescription[];
+}

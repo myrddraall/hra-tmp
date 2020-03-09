@@ -17,7 +17,48 @@
     "lib": [
       "es2018",
       "dom"
-    ]
+    ],
+    "paths": {
+      "buffer": [
+        "node_modules/buffer"
+      ],
+      "replays": [
+        "dist/replays"
+      ],
+      "replays/*": [
+        "dist/replays/*"
+      ],
+      "replay-processor": [
+        "dist/replay-processor"
+      ],
+      "replay-processor/*": [
+        "dist/replay-processor/*"
+      ],
+      "angular-worker-proxy": [
+        "dist/angular-worker-proxy"
+      ],
+      "angular-worker-proxy/*": [
+        "dist/angular-worker-proxy/*"
+      ],
+      "heroesprotocol-data": [
+        "dist/heroesprotocol-data"
+      ],
+      "heroesprotocol-data/*": [
+        "dist/heroesprotocol-data/*"
+      ],
+      "heroesprotocol-loader": [
+        "dist/heroesprotocol-loader"
+      ],
+      "heroesprotocol-loader/*": [
+        "dist/heroesprotocol-loader/*"
+      ],
+      "hots-gamedata": [
+        "dist/hots-gamedata"
+      ],
+      "hots-gamedata/*": [
+        "dist/hots-gamedata/*"
+      ]
+    }
   },
   "angularCompilerOptions": {
     "fullTemplateTypeCheck": true,

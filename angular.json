@@ -30,7 +30,8 @@
             "styles": [
               "src/styles.scss"
             ],
-            "scripts": []
+            "scripts": [],
+            "webWorkerTsConfig": "tsconfig.worker.json"
           },
           "configurations": {
             "production": {
@@ -104,7 +105,8 @@
             "tsConfig": [
               "tsconfig.app.json",
               "tsconfig.spec.json",
-              "e2e/tsconfig.json"
+              "e2e/tsconfig.json",
+              "tsconfig.worker.json"
             ],
             "exclude": [
               "**/node_modules/**"
@@ -121,6 +123,216 @@
             "production": {
               "devServerTarget": "heroes-replay-analyser:serve:production"
             }
+          }
+        }
+      }
+    },
+    "replays": {
+      "projectType": "library",
+      "root": "projects/replays",
+      "sourceRoot": "projects/replays/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/replays/tsconfig.lib.json",
+            "project": "projects/replays/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/replays/src/test.ts",
+            "tsConfig": "projects/replays/tsconfig.spec.json",
+            "karmaConfig": "projects/replays/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/replays/tsconfig.lib.json",
+              "projects/replays/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "replay-processor": {
+      "projectType": "library",
+      "root": "projects/replay-processor",
+      "sourceRoot": "projects/replay-processor/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/replay-processor/tsconfig.lib.json",
+            "project": "projects/replay-processor/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/replay-processor/src/test.ts",
+            "tsConfig": "projects/replay-processor/tsconfig.spec.json",
+            "karmaConfig": "projects/replay-processor/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/replay-processor/tsconfig.lib.json",
+              "projects/replay-processor/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "angular-worker-proxy": {
+      "projectType": "library",
+      "root": "projects/angular-worker-proxy",
+      "sourceRoot": "projects/angular-worker-proxy/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/angular-worker-proxy/tsconfig.lib.json",
+            "project": "projects/angular-worker-proxy/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/angular-worker-proxy/src/test.ts",
+            "tsConfig": "projects/angular-worker-proxy/tsconfig.spec.json",
+            "karmaConfig": "projects/angular-worker-proxy/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/angular-worker-proxy/tsconfig.lib.json",
+              "projects/angular-worker-proxy/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "heroesprotocol-data": {
+      "projectType": "library",
+      "root": "projects/heroesprotocol-data",
+      "sourceRoot": "projects/heroesprotocol-data/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/heroesprotocol-data/tsconfig.lib.json",
+            "project": "projects/heroesprotocol-data/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/heroesprotocol-data/src/test.ts",
+            "tsConfig": "projects/heroesprotocol-data/tsconfig.spec.json",
+            "karmaConfig": "projects/heroesprotocol-data/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/heroesprotocol-data/tsconfig.lib.json",
+              "projects/heroesprotocol-data/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "heroesprotocol-loader": {
+      "projectType": "library",
+      "root": "projects/heroesprotocol-loader",
+      "sourceRoot": "projects/heroesprotocol-loader/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/heroesprotocol-loader/tsconfig.lib.json",
+            "project": "projects/heroesprotocol-loader/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/heroesprotocol-loader/src/test.ts",
+            "tsConfig": "projects/heroesprotocol-loader/tsconfig.spec.json",
+            "karmaConfig": "projects/heroesprotocol-loader/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/heroesprotocol-loader/tsconfig.lib.json",
+              "projects/heroesprotocol-loader/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
+          }
+        }
+      }
+    },
+    "hots-gamedata": {
+      "projectType": "library",
+      "root": "projects/hots-gamedata",
+      "sourceRoot": "projects/hots-gamedata/src",
+      "prefix": "lib",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-ng-packagr:build",
+          "options": {
+            "tsConfig": "projects/hots-gamedata/tsconfig.lib.json",
+            "project": "projects/hots-gamedata/ng-package.json"
+          }
+        },
+        "test": {
+          "builder": "@angular-devkit/build-angular:karma",
+          "options": {
+            "main": "projects/hots-gamedata/src/test.ts",
+            "tsConfig": "projects/hots-gamedata/tsconfig.spec.json",
+            "karmaConfig": "projects/hots-gamedata/karma.conf.js"
+          }
+        },
+        "lint": {
+          "builder": "@angular-devkit/build-angular:tslint",
+          "options": {
+            "tsConfig": [
+              "projects/hots-gamedata/tsconfig.lib.json",
+              "projects/hots-gamedata/tsconfig.spec.json"
+            ],
+            "exclude": [
+              "**/node_modules/**"
+            ]
           }
         }
       }
