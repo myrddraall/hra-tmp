@@ -16,7 +16,7 @@ export interface GitTreeEntry {
 
 export class GitHubApi {
     private apiBaseURL: string = 'https://api.github.com/repos';
-
+    private fileBaseURL: string = 'https://raw.githubusercontent.com';
     constructor(
         private readonly user: string,
         private readonly repo: string,
@@ -26,6 +26,10 @@ export class GitHubApi {
 
     private get apiBaseUrl(): string {
         return `${this.apiBaseURL}/${this.user}/${this.repo}`;
+    }
+
+    private get fileBaseUrl(): string {
+        return `${this.fileBaseURL}/${this.user}/${this.repo}`;
     }
 
     public async listTags(): Promise<string[]> {
@@ -41,7 +45,24 @@ export class GitHubApi {
     public ls(path:string, ref:string = 'master'):Promise<GitTreeEntry[]>{
         return this.callApi(`${this.apiBaseUrl}/contents/${path}?ref=${ref}`);
     }
+    
+    public async read(path:string, ref:string = 'master'):Promise<string>{
+        const response = await this.readFile(`${this.fileBaseUrl}/${ref}/${path}`);
+        if(response.ok){
+            return await response.text();
+        }
+    }
 
+    public async readJson(path:string, ref:string = 'master'):Promise<any>{
+        const response = await this.readFile(`${this.fileBaseUrl}/${ref}/${path}`);
+        if(response.ok){
+            return await response.json();
+        }
+    }
+
+    private async readFile(path:string, ref:string = 'master'):Promise<Response>{
+        return await fetch(`${this.fileBaseUrl}/${ref}/${path}`);
+    }
 /*
     public async getTagByName(tagName: string) {
         const tags = await this.listTags();
@@ -98,9 +119,6 @@ export class GitHubApi {
             const rText = await FileCache.getFile(url);
             return JSON.parse(rText);
         }
-
-
-
         return null;
 
     }
