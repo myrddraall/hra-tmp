@@ -18,11 +18,9 @@ export class AppComponent {
   }
 
   async  init(){
-   // const db = await HotsDB.getVersion(); 
-   const g  = HeroesDataApi.getVersion(new GameVersion('2.48.1.96437'));
-   console.log(await g.test());
-   //const t  = await g.ls('/README.md');
-   //console.log(t);
+    const db = await HotsDB.getVersion(new GameVersion('2.48.1.96437')); 
+    const hcollection = await db.heroes;
+    hcollection.
   }
 
   public async handleFileSelected(event: Event) {

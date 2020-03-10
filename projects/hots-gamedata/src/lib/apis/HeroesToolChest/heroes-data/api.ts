@@ -1,16 +1,20 @@
 import { GitHubApi } from '../../Github';
 import * as linq from 'linq';
 import { GameVersion } from 'heroesprotocol-data';
+import { IHeroDataSet } from './dtos';
 
-
-
-
-
-
+// @dynamic
 export class HeroesDataApi {
 
     private static git: GitHubApi = new GitHubApi('HeroesToolChest', 'heroes-data');
+    // tslint:disable-next-line:variable-name
     private static _cache: Map<string, HeroesDataApi> = new Map();
+    // tslint:disable-next-line:variable-name
+    private _versions: Promise<{ version: string, value: GameVersion }[]>;
+    // tslint:disable-next-line:variable-name
+    private _dataVersion: Promise<{ version: string, value: GameVersion }>;
+    // tslint:disable-next-line:variable-name
+    private _gamestringVersion: Promise<{ version: string, value: GameVersion }>;
 
     public static getVersion(version?: GameVersion, lang: string = 'enUS'): HeroesDataApi {
         const key = `${lang}|${(version ? version.toString() : 'latest')}`;
@@ -39,31 +43,30 @@ export class HeroesDataApi {
             const versions = await this.versions;
             const higherVersions = linq.from(versions).where(_ => _.value.build >= version.build).toArray();
 
-            let bv = higherVersions.length === 0 ? versions[versions.length - 1] : higherVersions[0];
+            const bv = higherVersions.length === 0 ? versions[versions.length - 1] : higherVersions[0];
 
-            let bestVersion: { version: string, value: GameVersion }[] = [
+            const bestVersion: { version: string, value: GameVersion }[] = [
                 bv,
                 bv
             ];
 
             const hdp = await HeroesDataApi.git.readJson(`heroesdata/${bv.version}/.hdp.json`);
             if (hdp.duplicate) {
-                bestVersion[0] = hdp.duplicate.data ? { version: hdp.duplicate.data, value: new GameVersion(hdp.duplicate.data) } : bestVersion[0];
-                bestVersion[1] = hdp.duplicate.gamestring ? { version: hdp.duplicate.gamestring, value: new GameVersion(hdp.duplicate.gamestring) } : bestVersion[1];
+                bestVersion[0] = hdp.duplicate.data
+                    ? { version: hdp.duplicate.data, value: new GameVersion(hdp.duplicate.data) }
+                    : bestVersion[0];
+                bestVersion[1] = hdp.duplicate.gamestring
+                    ? { version: hdp.duplicate.gamestring, value: new GameVersion(hdp.duplicate.gamestring) }
+                    : bestVersion[1];
             }
 
             return bestVersion;
         })();
     }
 
-    private _versions: Promise<{ version: string, value: GameVersion }[]>;
-
     private constructor(public readonly version?: GameVersion, public readonly lang: string = 'enus') {
-        //this._versions = HeroesDataApi.getBestVersion(version);
-
-
+        this._versions = HeroesDataApi.getBestVersion(version);
     }
-    private _dataVersion: Promise<{ version: string, value: GameVersion }>;
 
     public get dataVersion(): Promise<{ version: string, value: GameVersion }> {
         if (!this._dataVersion) {
@@ -74,7 +77,7 @@ export class HeroesDataApi {
         return this._dataVersion;
     }
 
-    private _gamestringVersion: Promise<{ version: string, value: GameVersion }>;
+
     public get gamestringVersion(): Promise<{ version: string, value: GameVersion }> {
         if (!this._gamestringVersion) {
             this._gamestringVersion = (async () => {
@@ -85,7 +88,7 @@ export class HeroesDataApi {
     }
 
     private getVersionUrl(ver: { version: string, value: GameVersion }, path: string): string {
-        return `herodata/${ver.version}`
+        return `heroesdata/${ver.version}` + (path ? path : '');
     }
 
     private get dataBaseDir(): Promise<string> {
@@ -107,18 +110,16 @@ export class HeroesDataApi {
     private async readGameStrings<T = any>(): Promise<T> {
         const base = await this.gamestringBaseDir;
         const ver = await this.gamestringVersion;
-        return this.read(`${base}/gamestrings_${ver.value.build}_${this.lang}.json`)
+        return this.read(`${base}/gamestrings_${ver.value.build}_${this.lang}.json`);
     }
 
-    private async readData<T = any>(id:string): Promise<T> {
+    private async readData<T = any>(id: string): Promise<T> {
         const base = await this.dataBaseDir;
         const ver = await this.dataVersion;
-        return this.read(`${base}/${id}_${ver.value.build}_localized.json`)
+        return this.read(`${base}/${id}_${ver.value.build}_localized.json`);
     }
 
-    public async test() {
-        return null;
+    public getHeroes(): Promise<IHeroDataSet> {
+        return this.readData('herodata');
     }
-
-
 }
