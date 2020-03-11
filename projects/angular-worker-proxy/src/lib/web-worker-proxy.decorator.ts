@@ -268,6 +268,63 @@ export function RunOnWorker(): MethodDecorator {
     };
 }
 
+
+export function WorkerOnly(): MethodDecorator | PropertyDecorator {
+    return (target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): TypedPropertyDescriptor<any> | void => {
+        if(ENVIRONMENT_IS_WEB){
+            if(descriptor?.value){
+                return {
+                    value: () =>{
+                        throw new Error(`Cannot call method '${propertyKey.toString()}'. Call only allowed on worker.`) 
+                    }
+                }
+            } else {
+                const desc =  {
+                    get: () =>{
+                        throw new Error(`Cannot access property '${propertyKey.toString()}'. Access only allowed on worker.`) 
+                    },
+                    set: () =>{
+                        throw new Error(`Cannot set property '${propertyKey.toString()}'. Access only allowed on worker.`) 
+                    }
+                }
+                if(!descriptor){
+                    Reflect.defineProperty(target, propertyKey, desc);
+                }else{
+                    return desc;
+                }
+            }
+        }
+    };
+}
+
+export function MainOnly(): MethodDecorator | PropertyDecorator {
+    return (target: Object, propertyKey: string | symbol, descriptor: TypedPropertyDescriptor<any>): TypedPropertyDescriptor<any> | void => {
+        if(ENVIRONMENT_IS_WORKER){
+            if(descriptor?.value){
+                return {
+                    value: () =>{
+                        throw new Error(`Cannot call method '${propertyKey.toString()}'. Call only allowed on main thread.`) 
+                    }
+                }
+            } else {
+                const desc =  {
+                    get: () =>{
+                        throw new Error(`Cannot access property '${propertyKey.toString()}'. Access only allowed on main thread.`) 
+                    },
+                    set: () =>{
+                        throw new Error(`Cannot set property '${propertyKey.toString()}'. Access only allowed on main thread.`) 
+                    }
+                }
+                if(!descriptor){
+                    Reflect.defineProperty(target, propertyKey, desc);
+                }else{
+                    return desc;
+                }
+            }
+        }
+    };
+}
+
 export function FromWorker(): PropertyDecorator {
     return (target: Object, propertyKey: string | symbol): void => {
         const retType = Reflect.getMetadata('design:returntype', target, propertyKey);

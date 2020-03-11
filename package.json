@@ -19,6 +19,7 @@
     "@angular/platform-browser": "~8.2.14",
     "@angular/platform-browser-dynamic": "~8.2.14",
     "@angular/router": "~8.2.14",
+    "@types/sha1": "^1.1.2",
     "buffer": "^5.5.0",
     "idb-keyval": "^3.2.0",
     "linq": "^3.2.1",
@@ -53,6 +54,6 @@
     "ts-node": "~7.0.0",
     "tsickle": "^0.37.0",
     "tslint": "~5.15.0",
-    "typescript": "~3.5.3"
+    "typescript": "3.7"
   }
 }

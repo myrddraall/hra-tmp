@@ -20,7 +20,7 @@ export class AppComponent {
   async  init(){
     const db = await HotsDB.getVersion(new GameVersion('2.48.1.96437')); 
     const hcollection = await db.heroes;
-    hcollection.
+    //hcollection.
   }
 
   public async handleFileSelected(event: Event) {
@@ -28,16 +28,10 @@ export class AppComponent {
     const file = fileList[0];
     if (file) {
       if (file.name.endsWith('.StormReplay')) {
-
+        const replay = new Replay(file);
+        const r = await replay.init();
+        console.log('-----------------------', r);
       }
-      const replay = new Replay(file);
-      const unsub = replay.progress.subscribe(p => {
-        console.log('~~~', p);
-      });
-      setTimeout(() => {
-        unsub.unsubscribe();
-      }, 5000);
-      const r = await replay.init();
     }
   }
 }

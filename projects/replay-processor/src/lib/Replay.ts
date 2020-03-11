@@ -7,6 +7,7 @@ import { HeroProtocolLoader } from 'heroesprotocol-loader';
 import { Buffer } from 'buffer';
 import { IReplayHeader, IReplayDetails, IHeroProtocol, IReplayInitData } from 'heroesprotocol-data';
 import { PlayerInfoParser } from './parsers';
+import { MatchParser, IMatch } from './parsers/MatchParser';
 
 
 interface Defer<T> extends Promise<T> {
@@ -60,6 +61,8 @@ export class Replay {
     private _initData: Defer<IReplayInitData>;
     private _attributeEvents: Defer<IReplayDetails>;
 
+    private _matchInfo:Promise<IMatch>;
+
     constructor(private file?: any) {
         /*setInterval(()=>{
              this._progress.next({} as any)
@@ -76,11 +79,11 @@ export class Replay {
     }
 
     @RunOnWorker()
-    public async init(): Promise<void> {
+    public async init(): Promise<IMatch> {
         this._replayData = await this.loadReplayData();
         await this.initializeMatchData();
-
-
+        this._matchInfo = new MatchParser(this).parse();
+        return await this._matchInfo;
     }
 
     private async initializeMatchData(): Promise<void> {

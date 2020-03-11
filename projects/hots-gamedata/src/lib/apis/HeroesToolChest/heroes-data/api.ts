@@ -2,7 +2,7 @@ import { GitHubApi } from '../../Github';
 import * as linq from 'linq';
 import { GameVersion } from 'heroesprotocol-data';
 import { IHeroDataSet } from './dtos';
-
+import { Cache } from '../../cache.decorator'
 // @dynamic
 export class HeroesDataApi {
 
@@ -87,12 +87,14 @@ export class HeroesDataApi {
         return this._gamestringVersion;
     }
 
+    @Cache()
     private getVersionUrl(ver: { version: string, value: GameVersion }, path: string): string {
         return `heroesdata/${ver.version}` + (path ? path : '');
     }
 
     private get dataBaseDir(): Promise<string> {
         return (async () => {
+            this.getVersionUrl(await this.dataVersion, '/data');
             return this.getVersionUrl(await this.dataVersion, '/data');
         })();
     }
