@@ -47,7 +47,8 @@ export class MatchParser extends ReplayParser<IMatch> {
 
 
     public async parse(): Promise<IMatch> {
-        const header = await this.replay.header;
+        return null;
+        /*const header = await this.replay.header;
         const details = await this.replay.details;
         const initData = await this.replay.initData;
 
@@ -70,6 +71,7 @@ export class MatchParser extends ReplayParser<IMatch> {
         match.type = this.getGameType(initData.m_syncLobbyState.m_gameDescription);
         match.duration = header.m_elapsedGameLoops / 16;
         return match;
+        */
     }
 
     private getTimeZone(tz: number) {

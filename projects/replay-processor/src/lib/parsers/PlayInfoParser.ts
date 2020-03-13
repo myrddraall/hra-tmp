@@ -9,7 +9,8 @@ export class PlayerInfoParser extends ReplayParser<any[]> {
 
 
     public async parse(): Promise<any[]> {
-        const initData = await this.replay.initData;
+        return null;
+       /* const initData = await this.replay.initData;
         const details = await this.replay.details;
         const attrib = new ReplayAttributeHelper(await this.replay.attributeEvents);
         const slotInfo: Partial<ISlotInfo>[] = [];
@@ -108,7 +109,7 @@ console.log('lobbySlots', lobbySlots)
             })
             .toArray();
         return slotList;
-
+*/
     }
 
 }

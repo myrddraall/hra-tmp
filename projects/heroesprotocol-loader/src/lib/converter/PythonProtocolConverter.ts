@@ -1,13 +1,16 @@
 import * as decoders from './decoders';
 import { IHeroProtocol } from 'heroesprotocol-data';
+import { Subject } from 'rxjs';
 const _template = `
     "use strict";
 
     const progress = {
+        file: 'none',
         current: -1,
         total: -1
     }
-    exports.progress = progress;
+    
+    onprogress(progress);
 
     exports.version = \${version};
     \${patch}
@@ -72,7 +75,6 @@ const _template = `
     while (!decoder.isDone) {
         
         var startBits = decoder.usedBits;
-
         // decode the gameloop delta before each event
         var delta = _varuint32Value(decoder.instance(svaruint32_typeid));
         gameloop += delta;
@@ -102,60 +104,96 @@ const _template = `
         // insert bits used in stream
         event._bits = decoder.usedBits - startBits;
         progress.current = decoder.usedBits;
+        onprogress(progress);
         yield event;
     }
     }
 
     exports.decodeReplayGameEvents = function* (contents) {
-    // Decodes and yields each game event from the contents byte string.
-    const decoder = new BitPackedDecoder(contents, typeinfos);
-    progress.current = 0;
-    progress.total = decoder.size;
-    for (let event of _decode_event_stream(decoder, game_eventid_typeid, game_event_types, true))
-        yield event;
+        // Decodes and yields each game event from the contents byte string.
+        const decoder = new BitPackedDecoder(contents, typeinfos);
+        progress.file = 'GameEvents';
+        progress.current = 0;
+        progress.total = decoder.size;
+        onprogress(progress);
+        for (let event of _decode_event_stream(decoder, game_eventid_typeid, game_event_types, true))
+            yield event;
+        progress.current = decoder.size;
+        onprogress(progress);
     };
 
     exports.decodeReplayMessageEvents = function* (contents) {
         // Decodes and yields each message event from the contents byte string.
         const decoder = new BitPackedDecoder(contents, typeinfos);
+        progress.file = 'MessageEvents';
         progress.current = 0;
         progress.total = decoder.size;
+        onprogress(progress);
         for (let event of _decode_event_stream(decoder, message_eventid_typeid, message_event_types, true))
             yield event;
+        progress.current = decoder.size;
+        onprogress(progress);
     };
 
     exports.decodeReplayTrackerEvents = function* (contents) {
-    // Decodes and yields each tracker event from the contents byte string.
-    const decoder = new VersionDecoder(contents, typeinfos);
-    progress.current = 0;
-    progress.total = decoder.size;
-    for (let event of _decode_event_stream(decoder, tracker_eventid_typeid, tracker_event_types, false))
-        yield event;
+        // Decodes and yields each tracker event from the contents byte string.
+        const decoder = new VersionDecoder(contents, typeinfos);
+        progress.file = 'TrackerEvents';
+        progress.current = 0;
+        progress.total = decoder.size;
+        onprogress(progress);
+        for (let event of _decode_event_stream(decoder, tracker_eventid_typeid, tracker_event_types, false))
+            yield event;
+        progress.current = decoder.size;
+        onprogress(progress);
     };
 
     exports.decodeReplayHeader = function(contents) {
-    // Decodes and return the replay header from the contents byte string.
-    const decoder = new VersionDecoder(contents, typeinfos);
-    return decoder.instance(replay_header_typeid);
+        // Decodes and return the replay header from the contents byte string.
+        progress.file = 'Header';
+        progress.current = 0;
+        progress.total = 1;
+        onprogress(progress);
+        const decoder = new VersionDecoder(contents, typeinfos);
+        const ret =  decoder.instance(replay_header_typeid);
+        progress.current = 1;
+        onprogress(progress);
+        return ret;
     };
 
     exports.decodeReplayDetails = function(contents) {
-    // Decodes and returns the game details from the contents byte string.
-    const decoder = new VersionDecoder(contents, typeinfos);
-    return decoder.instance(game_details_typeid);
+        progress.file = 'Details';
+        progress.current = 0;
+        progress.total = 1;
+        onprogress(progress);
+        // Decodes and returns the game details from the contents byte string.
+        const decoder = new VersionDecoder(contents, typeinfos);
+        const ret = decoder.instance(game_details_typeid);
+        progress.current = 1;
+        onprogress(progress);
+        return ret;
     };
 
     exports.decodeReplayInitdata = function(contents) {
-    // Decodes and return the replay init data from the contents byte string.
-    const decoder = new BitPackedDecoder(contents, typeinfos);
-    return decoder.instance(replay_initdata_typeid);
+        progress.file = 'Initdata';
+        progress.current = 0;
+        progress.total = 1;
+        onprogress(progress);
+        // Decodes and return the replay init data from the contents byte string.
+        const decoder = new BitPackedDecoder(contents, typeinfos);
+        const ret = decoder.instance(replay_initdata_typeid);
+        progress.current = 1;
+        onprogress(progress);
+        return ret;
     };
 
     exports.decodeReplayAttributesEvents = function (contents) {
     // Decodes and yields each attribute from the contents byte string.
     const buffer = new decoders.BitPackedBuffer(contents, 'little');
+    progress.file = 'AttributesEvents';
     progress.current = 0;
     progress.total = buffer.size;
+    onprogress(progress);
     const attributes = {};
 
     if (!buffer.isDone) {
@@ -178,9 +216,11 @@ const _template = `
             attributes.scopes[scope][attrid] = [];
         attributes.scopes[scope][attrid].push(value);
         progress.current = buffer.usedBits;
+        onprogress(progress);
         }
     }
-
+    progress.current = buffer.size;
+    onprogress(progress);
     return attributes;
     };
 
@@ -369,9 +409,21 @@ export class PythonProtocolConverter {
 
     public static compile(protocolCode: string): IHeroProtocol {
         const start = new Date().getTime();
-        const protocol: IHeroProtocol = <IHeroProtocol>{};
-        const fn = Function('exports', 'decoders', protocolCode);
-        fn(protocol, decoders);
+        const protocol: IHeroProtocol = {
+            progress: new Subject(),
+        } as unknown as IHeroProtocol;
+        const fn = Function('exports', 'decoders', 'onprogress', protocolCode);
+
+        let lastUpdate = 0;
+        let lastFile = '';
+        fn(protocol, decoders, (progress: {file:string, currrent: number, total: number}) => {
+            const now = new Date().getTime();
+            if(lastFile !== progress.file || progress.currrent === progress.total || now - lastUpdate > 20){
+                (protocol.progress as Subject<any>).next(progress);
+                lastUpdate = now;
+                lastFile = progress.file;
+            }
+        });
         console.log('Protocol Compile Time: ', new Date().getTime() - start);
         return protocol;
     }

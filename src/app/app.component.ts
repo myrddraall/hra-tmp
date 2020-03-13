@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import './process-replay.worker.factory';
-import { Replay } from 'replay-processor';
-import {HotsDB, GitHubApi, HeroesDataApi} from 'hots-gamedata';
+import { ReplayWorker } from 'replay-processor';
+import { HotsDB, GitHubApi, HeroesDataApi } from 'hots-gamedata';
 import { GameVersion } from 'heroesprotocol-data';
 
 @Component({
@@ -17,9 +17,9 @@ export class AppComponent {
     this.init()
   }
 
-  async  init(){
-    const db = await HotsDB.getVersion(new GameVersion('2.48.1.96437')); 
-    const hcollection = await db.heroes;
+  async  init() {
+    // const db = await HotsDB.getVersion(new GameVersion('2.48.1.96437')); 
+    // const hcollection = await db.heroes;
     //hcollection.
   }
 
@@ -28,9 +28,23 @@ export class AppComponent {
     const file = fileList[0];
     if (file) {
       if (file.name.endsWith('.StormReplay')) {
-        const replay = new Replay(file);
-        const r = await replay.init();
-        console.log('-----------------------', r);
+        const replay = new ReplayWorker(file);
+        replay.progress.subscribe( _ => {
+          //console.log(_);
+        })
+        await replay.initialize();
+
+        /*setTimeout(()=>{
+          unsub.unsubscribe();
+        }, 7000)*/
+        //const r = await replay.matchInfo2.test()
+        // console.log('-----------------------', r);
+
+        //const r2 = await replay.matchInfo2.test2('hi');
+        //console.log('-----------------------', r2);
+        //  const r = await replay.init();
+        // console.log('-----------------------', r);
+        // await replay.matchInfo.test();
       }
     }
   }

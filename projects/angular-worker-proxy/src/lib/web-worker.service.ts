@@ -1,5 +1,14 @@
 import { Type } from './Type'
-import { IWebWorkerMessage, MessageType, isMethodCall, REMOTE_TARGET_KEY, getPropertyKey, IWebWorkerCallResponse, isSubscribe, getPropertyKeyInst, IWebWorkerNext, isTargeted, isUnsubscribe } from './web-worker-proxy.decorator';
+import { REMOTE_TARGET_KEY, getPropertyKey, getPropertyKeyInst, IWebworkerRelay } from './web-worker-proxy.decorator';
+import { IWebworkerNextValue } from "./messages/IWebworkerNextValue";
+import { isWebworkerUnsubscribeCall } from "./messages/IWebworkerUnsubscribeCall";
+import { isWebworkerSubscribeCall } from "./messages/IWebworkerSubscribeCall";
+import { IWebworkerMethodCallResponse } from "./messages/IWebworkerMethodCallResponse";
+import { isWebworkerMethodCall } from "./messages/IWebworkerMethodCall";
+import { isWebworkerMemberMessage } from "./messages/IWebworkerMemberMessage";
+import { isWebworkerInitMessage } from "./messages/IWebworkerInitMessage";
+import { IWebworkerMessage, isWebworkerMessage } from "./messages/IWebworkerMessage";
+import { MessageType } from "./messages/MessageType";
 import { Observable, Unsubscribable } from 'rxjs';
 
 export declare type WorkerFactory = () => Worker;
@@ -30,7 +39,24 @@ export class WebWorkerService {
     }
 
     public static runWorker(ofClass: Type): void {
-        let instance: any;
+        let hostInstance: IWebworkerRelay = null;
+
+        const listener = (event: MessageEvent) => {
+            const msg = event.data;
+            if (isWebworkerMessage(msg)) {
+                if(hostInstance){
+                    throw new Error(`Host instance for '${ofClass.name}' already initialized.`);
+                }else if(!isWebworkerInitMessage(msg) || msg.data.id !== -1){
+                    throw new Error(`Host instance for '${ofClass.name}' not yet initialized.`)
+                }
+                hostInstance = new ofClass(...msg.data.args);
+                hostInstance.initializeAsHost(msg);
+                removeEventListener('message', listener);
+            }
+        };
+
+        addEventListener('message', listener);
+        /*let instance: any;
         const unsubs: Map<string, Unsubscribable> = new Map();
         addEventListener('message', async ({ data }) => {
             const msg: IWebWorkerMessage = data;
@@ -85,6 +111,7 @@ export class WebWorkerService {
                 
             }
         });
+        */
     }
 
 

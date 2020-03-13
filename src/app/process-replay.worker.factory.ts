@@ -1,6 +1,6 @@
 import { WebWorkerService } from 'angular-worker-proxy';
-import { Replay } from 'replay-processor';
+import { ReplayWorker } from 'replay-processor';
 
-WebWorkerService.registerWorkerFactory(Replay, () => {
+WebWorkerService.registerWorkerFactory(ReplayWorker, () => {
   return new Worker('./process-replay.worker', { type: "module" });
 });

@@ -1,11 +1,13 @@
 import { Buffer } from 'buffer';
 import { IReplayHeader } from './header-data/IReplayHeader';
+import { Observable } from 'rxjs';
 export interface IHeroProtocol {
     readonly version: number;
-    readonly progress: {
+    readonly progress: Observable<{
+        file: string;
         current: number,
         total: number
-    };
+    }>;
     decodeReplayGameEvents(contents: Buffer): any;
     decodeReplayMessageEvents(contents: Buffer): any;
     decodeReplayTrackerEvents(contents: Buffer): any;

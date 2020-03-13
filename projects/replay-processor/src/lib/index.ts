@@ -1,1 +1,1 @@
-export * from './Replay';
+export * from './ReplayWorker';
