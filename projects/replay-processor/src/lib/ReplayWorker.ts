@@ -1,13 +1,10 @@
 
-import { WebWorker, RunOnWorker, RunOnMain, Proxy, OnWorker } from 'angular-worker-proxy';
-import { Subject, Observable, asapScheduler, queueScheduler } from 'rxjs';
-import { IProgressEvent } from './ProgressEvent';
+import { Proxy, RunOnWorker, WebWorker, WorkerOnly } from 'angular-worker-proxy';
 import { Buffer } from 'buffer';
-import { PlayerInfoParser } from './parsers';
-import { MatchParser, IMatch } from './parsers/MatchParser';
-import { MatchInfo } from './MatchInfo';
-import { PlayerInfo } from './PlayerInfo';
-import { debounceTime, throttleTime } from 'rxjs/operators';
+import { Observable, Subject } from 'rxjs';
+import { IReplayDataProvider } from './IReplayDataProvider';
+import { MatchInfo, IMatch } from './MatchInfo';
+import { IProgressEvent } from './ProgressEvent';
 import { ReplayData } from './ReplayData';
 
 export interface Defer<T> extends Promise<T> {
@@ -15,45 +12,32 @@ export interface Defer<T> extends Promise<T> {
     reject: (reason?: any) => void;
 }
 
-export function parseStrings<T>(data) {
-    if (!data) {
-        return data;
-    } else if (data instanceof Buffer) {
-        return data.toString();
-    } else if (Array.isArray(data)) {
-        return data.map(item => parseStrings(item));
-    } else if (typeof data === 'object') {
-        // tslint:disable-next-line:forin
-        for (const key in data) {
-            data[key] = parseStrings(data[key]);
-        }
-    }
-    return data;
-};
-
-export enum ReplayFiles {
-    DETAILS = 'replay.details',
-    INITDATA = 'replay.initdata',
-    GAME_EVENTS = 'replay.game.events',
-    MESSAGE_EVENTS = 'replay.message.events',
-    TRACKER_EVENTS = 'replay.tracker.events',
-    ATTRIBUTES_EVENTS = 'replay.attributes.events',
+function createDefered<T>(): Defer<T> {
+    const d = {
+        promise: undefined,
+        resolve: undefined,
+        reject: undefined
+    };
+    const p: Defer<T> = new Promise((res, rej) => {
+        d.resolve = res;
+        d.reject = rej;
+    }) as Defer<T>;
+    p.reject = d.reject;
+    p.resolve = d.resolve;
+    return p;
 }
-
-export const decoderMap = {
-    [ReplayFiles.DETAILS]: 'decodeReplayDetails',
-    [ReplayFiles.INITDATA]: 'decodeReplayInitdata',
-    [ReplayFiles.GAME_EVENTS]: 'decodeReplayGameEvents',
-    [ReplayFiles.MESSAGE_EVENTS]: 'decodeReplayMessageEvents',
-    [ReplayFiles.TRACKER_EVENTS]: 'decodeReplayTrackerEvents',
-    [ReplayFiles.ATTRIBUTES_EVENTS]: 'decodeReplayAttributesEvents',
-};
 
 
 @WebWorker('HotsReplay')
-export class ReplayWorker {
+export class ReplayWorker implements IReplayDataProvider {
     private _progress: Subject<IProgressEvent> = new Subject();
-    private _replayData: ReplayData;
+    private _replayData: Defer<ReplayData> = createDefered();
+    private _matchInfo: Defer<IMatch> = createDefered();
+    private _init = false;
+
+    @Proxy()
+    public matchInfo2: MatchInfo = new MatchInfo(this);
+
 
     constructor(private file?: File) { }
 
@@ -64,13 +48,22 @@ export class ReplayWorker {
 
     @RunOnWorker()
     public async initialize() {
-        if (!this._replayData) {
-            this._replayData = new ReplayData(this.file);
-            this._replayData.progress.subscribe(_ => {
+        console.log('init');
+        if (!this._init) {
+            this._init = true;
+            const replayData = new ReplayData(this.file);
+            replayData.progress.subscribe(_ => {
                 this._progress.next(_);
             })
-            await this._replayData.load();
+            await replayData.load();
+            this._replayData.resolve(replayData);
         }
+        return await this.matchInfo2.matchInfo;
+    }
+
+    @WorkerOnly()
+    public get replayData(): Promise<ReplayData> {
+        return this._replayData;
     }
 
 

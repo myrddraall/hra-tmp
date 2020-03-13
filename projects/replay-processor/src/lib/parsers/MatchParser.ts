@@ -3,51 +3,17 @@ import { GameVersion, IGameDescription } from 'heroesprotocol-data';
 import sha1 from 'sha1';
 import linq from 'linq';
 
-export interface IMatch {
-    id: string;
-    mapId: string;
-    type: GameType;
-    gameVersion: string;
-    date: string;
-    localTimeZone: number;
-    duration: number;
-}
-
-export enum GameType{
-    UNKNOWN = 0,
-    FLAG_SOLO_QUEUE = 1,
-    FLAG_COOP = 1 << 1,
-    FLAG_PVP = 1 << 2,
-    FLAG_DRAFT = 1 << 3,
-    FLAG_RANKED = 1 << 4,
-    MODE_PRACTICE = 1 << 5,
-    MODE_AI = 1 << 6,
-    MODE_BRAWL = 1 << 7,
-    MODE_QM = 1 << 8,
-    MODE_UR = 1 << 9,
-    MODE_HL = 1 << 10,
-    MODE_TL = 1 << 11,
-    MODE_CUSTOM = 1 << 12,
-
-    PRACTICE = MODE_PRACTICE | FLAG_SOLO_QUEUE,
-    SOLO_AI = MODE_AI | FLAG_SOLO_QUEUE,
-    COOP_AI = MODE_AI | FLAG_COOP,
-    CUSTOM = MODE_CUSTOM | FLAG_PVP,
-    CUSTOM_DRAFT = MODE_CUSTOM | FLAG_PVP | FLAG_DRAFT,
-    BRAWL = MODE_BRAWL | FLAG_PVP,
-    QUICK_MATCH = MODE_QM | FLAG_PVP,
-    UNRANKED_DRAFT = MODE_UR | FLAG_PVP | FLAG_DRAFT,
-    HERO_LEAGUE = MODE_HL | FLAG_PVP | FLAG_DRAFT | FLAG_RANKED | FLAG_SOLO_QUEUE,
-    TEAM_LEAGUE = MODE_TL | FLAG_PVP | FLAG_DRAFT | FLAG_RANKED
-}
 
 
-export class MatchParser extends ReplayParser<IMatch> {
+export class MatchParser extends ReplayParser<any> {
+    public parse(...args: any[]): Promise<any> {
+        throw new Error("Method not implemented.");
+    }
 
 
 
-    public async parse(): Promise<IMatch> {
-        return null;
+    //public async parse(): Promise<IMatch> {
+     //   return null;
         /*const header = await this.replay.header;
         const details = await this.replay.details;
         const initData = await this.replay.initData;
@@ -72,7 +38,7 @@ export class MatchParser extends ReplayParser<IMatch> {
         match.duration = header.m_elapsedGameLoops / 16;
         return match;
         */
-    }
+   // }
 
     private getTimeZone(tz: number) {
         return tz / 10000000 / 60 / 60;
@@ -85,7 +51,7 @@ export class MatchParser extends ReplayParser<IMatch> {
     private getWinningTeam(date: number): number {
         return date / 10000 - 11644473600000;
     }
-
+/*
     private getGameType(gameDesc: IGameDescription): GameType {
         switch (gameDesc.m_gameOptions.m_ammId) {
             case 50021:
@@ -112,5 +78,6 @@ export class MatchParser extends ReplayParser<IMatch> {
                 return GameType.UNKNOWN;
         }
     }
+    */
 
 }

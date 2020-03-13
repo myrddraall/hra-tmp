@@ -1,9 +1,44 @@
-import { Subject, Observable } from 'rxjs';
-import { IProgressEvent } from './ProgressEvent';
 import { MPQArchive } from '@heroesbrowser/mpq';
+import { FilteredEvents, IHeroProtocol, IReplayDetails, IReplayGameEvent, IReplayHeader, IReplayInitData, IReplayMessageEvent, IReplayTrackerEvent } from 'heroesprotocol-data';
 import { HeroProtocolLoader } from 'heroesprotocol-loader';
-import { IReplayHeader, IReplayDetails, IHeroProtocol, IReplayInitData, IReplayGameEvent, IReplayMessageEvent, IReplayTrackerEvent, FilteredEvents } from 'heroesprotocol-data';
-import { parseStrings, ReplayFiles, decoderMap, Defer } from './ReplayWorker';
+import { Observable, Subject } from 'rxjs';
+import { IProgressEvent } from './ProgressEvent';
+import { Buffer } from 'buffer';
+
+function parseStrings<T>(data) {
+    if (!data) {
+        return data;
+    } else if (data instanceof Buffer) {
+        return data.toString();
+    } else if (Array.isArray(data)) {
+        return data.map(item => parseStrings(item));
+    } else if (typeof data === 'object') {
+        // tslint:disable-next-line:forin
+        for (const key in data) {
+            data[key] = parseStrings(data[key]);
+        }
+    }
+    return data;
+};
+
+enum ReplayFiles {
+    DETAILS = 'replay.details',
+    INITDATA = 'replay.initdata',
+    GAME_EVENTS = 'replay.game.events',
+    MESSAGE_EVENTS = 'replay.message.events',
+    TRACKER_EVENTS = 'replay.tracker.events',
+    ATTRIBUTES_EVENTS = 'replay.attributes.events',
+}
+
+const decoderMap = {
+    [ReplayFiles.DETAILS]: 'decodeReplayDetails',
+    [ReplayFiles.INITDATA]: 'decodeReplayInitdata',
+    [ReplayFiles.GAME_EVENTS]: 'decodeReplayGameEvents',
+    [ReplayFiles.MESSAGE_EVENTS]: 'decodeReplayMessageEvents',
+    [ReplayFiles.TRACKER_EVENTS]: 'decodeReplayTrackerEvents',
+    [ReplayFiles.ATTRIBUTES_EVENTS]: 'decodeReplayAttributesEvents',
+};
+
 export class ReplayData {
     private _progress: Subject<IProgressEvent> = new Subject();
     private _mpq: MPQArchive;
@@ -210,20 +245,7 @@ export class ReplayData {
         }
         return events;
     }
-    private createDefer<T>(): Defer<T> {
-        const d = {
-            promise: undefined,
-            resolve: undefined,
-            reject: undefined
-        };
-        const p: Defer<T> = new Promise((res, rej) => {
-            d.resolve = res;
-            d.reject = rej;
-        }) as Defer<T>;
-        p.reject = d.reject;
-        p.resolve = d.resolve;
-        return p;
-    }
+
     private loadFromFile(): Promise<ArrayBuffer> {
         return new Promise((res, rej) => {
             const progress: IProgressEvent = {

@@ -32,8 +32,8 @@ export class AppComponent {
         replay.progress.subscribe( _ => {
           //console.log(_);
         })
-        await replay.initialize();
-
+        const result = await replay.initialize();
+console.log(result);
         /*setTimeout(()=>{
           unsub.unsubscribe();
         }, 7000)*/
