@@ -10,7 +10,7 @@
     "e2e": "ng e2e",
     "docs:clean": "rimraf ./docs/*",
     "docs:copy": "yarn run docs:clean  && yarn run copy ./dist/heroes-replay-analyser ./docs",
-    "docs": "ng build --prod && yarn run docs:copy"
+    "docs": "ng build --prod --baseHref=/hra-tmp/ && yarn run docs:copy"
   },
   "private": true,
   "dependencies": {
