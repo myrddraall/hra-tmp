@@ -26,7 +26,7 @@ export class TalentCalculatorComponent implements OnInit {
   }
 
   public onHeroSelect(heroId: string) {
-    if (heroId) {
+    if (heroId && heroId !== this.selectedHeroId) {
       this.router.navigate([heroId], { relativeTo: this.route });
     }
   }
