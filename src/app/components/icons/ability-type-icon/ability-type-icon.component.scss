@@ -26,7 +26,7 @@
     &::before {
       position: absolute;
       display: block;
-      background-image: url(/assets/ui/icons/storm_ui_heroselect_customizepanel_abilityframe_upgradearrow.png);
+      background-image: url(~/assets/ui/icons/storm_ui_heroselect_customizepanel_abilityframe_upgradearrow.png);
       content: " ";
       width: 30px;
       height: 26px;
@@ -37,7 +37,7 @@
 
     &.heroic {
       &::before {
-        background-image: url(/assets/ui/icons/storm_ui_heroselect_customizepanel_abilityframe_heroicupgradearrow.png);
+        background-image: url(~/assets/ui/icons/storm_ui_heroselect_customizepanel_abilityframe_heroicupgradearrow.png);
       }
     }
     &.active,
@@ -55,7 +55,7 @@
     &::before {
       position: absolute;
       display: block;
-      background-image: url(/assets/ui/icons/storm_ui_hud_log_icon_quest_sm.png)  !important;
+      background-image: url(~/assets/ui/icons/storm_ui_hud_log_icon_quest_sm.png)  !important;
       content: " ";
       width: 20px;
       height: 20px;

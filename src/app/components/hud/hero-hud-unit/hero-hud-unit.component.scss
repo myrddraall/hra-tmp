@@ -93,7 +93,7 @@ $statsOffset: $portraitWidth * 0.28;
         display: flex;
         align-items: center;
         justify-content: center;
-        background-image: url(/assets/ui/borders/small_hud_button_border.png);
+        background-image: url(~/assets/ui/borders/small_hud_button_border.png);
         width: 6.3em;
         height: 3.6em;
         margin-left: -2.2em;
@@ -108,11 +108,11 @@ $statsOffset: $portraitWidth * 0.28;
           > * {
             opacity: 1;
           }
-          background-image: url(/assets/ui/borders/small_hud_button_border_selected.png);
+          background-image: url(~/assets/ui/borders/small_hud_button_border_selected.png);
         }
         &:hover {
           z-index: 3;
-          background-image: url(/assets/ui/borders/small_hud_button_border_selected.png);
+          background-image: url(~/assets/ui/borders/small_hud_button_border_selected.png);
         }
       }
     }

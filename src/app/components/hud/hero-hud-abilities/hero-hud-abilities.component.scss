@@ -14,7 +14,7 @@ $height: 9.2em * $factor;
         .bottom{
             width:$width;
             height: $height;
-            background-image: url(/assets/ui/borders/hud_bg_artbarmiddlefill_glass.png);
+            background-image: url(~/assets/ui/borders/hud_bg_artbarmiddlefill_glass.png);
             background-size: $width $height;
         }
     }

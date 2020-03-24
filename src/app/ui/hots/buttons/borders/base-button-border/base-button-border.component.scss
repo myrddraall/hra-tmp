@@ -16,7 +16,7 @@
       top: -0.9em;
       left: -1em;
   
-      background-image: url(/assets/ui/borders/storm_ui_ingame_abilitybuttonborder.png);
+      background-image: url(~/assets/ui/borders/storm_ui_ingame_abilitybuttonborder.png);
       background-size: 100%;
     }
   
@@ -24,7 +24,7 @@
     &:hover,
     &.hover {
       [border] {
-       // background-image: url(/assets/ui/borders/storm_ui_ingame_abilitybuttonborder_hover.png);
+       // background-image: url(~/assets/ui/borders/storm_ui_ingame_abilitybuttonborder_hover.png);
       }
       [content]{
           filter: grayscale(0);
@@ -34,7 +34,7 @@
     &[selected],
     &.selected {
       [border] {
-        background-image: url(/assets/ui/borders/storm_ui_ingame_abilitybuttonborder_hover.png);
+        background-image: url(~/assets/ui/borders/storm_ui_ingame_abilitybuttonborder_hover.png);
       }
       [content] {
           filter: grayscale(0);
@@ -53,7 +53,7 @@
         height: 7em;
         top: 0em;
         left: 0em;
-        background-image: url(/assets/ui/borders/hud_btn_bg_ability_disabled.png);
+        background-image: url(~/assets/ui/borders/hud_btn_bg_ability_disabled.png);
   
       }
       [content] {
