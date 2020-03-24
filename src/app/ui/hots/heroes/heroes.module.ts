@@ -9,7 +9,8 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
 import { ContainersModule } from '../../common/containers/containers.module';
-
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 
 @NgModule({
@@ -29,7 +30,9 @@ import { ContainersModule } from '../../common/containers/containers.module';
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
-    ContainersModule
+    ContainersModule,
+    MatButtonModule,
+    MatIconModule
   ]
 })
 export class HeroesModule { }

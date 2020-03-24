@@ -1,21 +1,44 @@
 @import '~@angular/material/theming';
 @include mat-core();
 
+html{
+    --primary-color-50: #009cff;
+
+    --primary-color-50 : #e9e2f1;
+    --primary-color-100 : #c8b6dc;
+    --primary-color-200 : #a485c4;
+    --primary-color-300 : #8054ac;
+    --primary-color-400 : #642f9b;
+    --primary-color-500 : #490a89;
+    --primary-color-600 : #420981;
+    --primary-color-700 : #390776;
+    --primary-color-800 : #31056c;
+    --primary-color-900 : #210359;
+    --primary-color-A100 : #aa8bff;
+    --primary-color-A200 : #8558ff;
+    --primary-color-A400 : #6025ff;
+    --primary-color-A700 : #4e0bff;
+
+    --primary-color: var(--primary-color-500);
+    --primary-color-light: var(--primary-color-300);
+    --primary-color-dark: var(--primary-color-700);
+
+}
 $md-primary: (
-    50 : #e9e2f1,
-    100 : #c8b6dc,
-    200 : #a485c4,
-    300 : #8054ac,
-    400 : #642f9b,
-    500 : #490a89,
-    600 : #420981,
-    700 : #390776,
-    800 : #31056c,
-    900 : #210359,
-    A100 : #aa8bff,
-    A200 : #8558ff,
-    A400 : #6025ff,
-    A700 : #4e0bff,
+    50 : var(--primary-color-50),
+    100 : var(--primary-color-100),
+    200 : var(--primary-color-200),
+    300 : var(--primary-color-300),
+    400 : var(--primary-color-400),
+    500 : var(--primary-color-500),
+    600 : var(--primary-color-600),
+    700 : var(--primary-color-700),
+    800 : var(--primary-color-800),
+    900 : var(--primary-color-900),
+    A100 : var(--primary-color-A100),
+    A200 : var(--primary-color-A200),
+    A400 : var(--primary-color-A400),
+    A700 : var(--primary-color-A700),
     contrast: (
         50 : #000000,
         100 : #000000,

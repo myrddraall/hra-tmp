@@ -5,7 +5,7 @@ import { CollapsableComponent } from 'src/app/ui/common/containers/collapsable/c
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import linq from 'linq';
-import {IEnumerable} from 'linq';
+import { IEnumerable } from 'linq';
 @Component({
   selector: 'hra-hero-search',
   templateUrl: './hero-search.component.html',
@@ -14,14 +14,14 @@ import {IEnumerable} from 'linq';
 export class HeroSearchComponent implements OnInit {
 
   @ViewChild('search')
-  private search:ElementRef<HTMLInputElement>;
+  private search: ElementRef<HTMLInputElement>;
   @ViewChild('details')
-  private container:CollapsableComponent;
+  private container: CollapsableComponent;
 
   private _selected: string;
-  private searchUpdates:Subject<string> = new Subject();
-  private focusUpdates:Subject<boolean> = new Subject();
-
+  private searchUpdates: Subject<string> = new Subject();
+  private focusUpdates: Subject<boolean> = new Subject();
+  public selectedHero: IBasicHeroModel;
   @Input()
   public heroList: IBasicHeroModel[];
 
@@ -30,9 +30,19 @@ export class HeroSearchComponent implements OnInit {
     return this._selected;
   }
 
+  public opened: boolean;
+
+  public open(){
+    this.opened = true;
+    setTimeout(()=>{
+      this.focusUpdates.next(true);
+    })
+  }
+
   public set value(value: string) {
     if (this._selected !== value) {
       this._selected = value;
+      this.selectedHero = this.heroList.find(_ => _.id === value);
       this.valueChange.emit(value);
     }
   }
@@ -42,60 +52,62 @@ export class HeroSearchComponent implements OnInit {
 
 
   public visibleHeroList: IBasicHeroModel[];
-  private previousSearch:string
+  private previousSearch: string
 
   constructor() { }
 
   ngOnInit(): void {
     this.visibleHeroList = this.heroList;
-    this.focusUpdates.pipe(debounceTime(200)).subscribe(value=>{
-      if(value){
+    this.focusUpdates.pipe(debounceTime(200)).subscribe(value => {
+      if (value) {
         this.search.nativeElement.focus();
         this.container.open = true;
-      }else{
+        this.opened = true;
+      } else {
         this.container.open = false;
+        this.opened = false;
       }
     });
-    this.searchUpdates.pipe(debounceTime(200)).subscribe(value=>{
+    this.searchUpdates.pipe(debounceTime(200)).subscribe(value => {
       value = value || '';
       value = value.toLowerCase();
-      if(this.previousSearch !== value){
+      if (this.previousSearch !== value) {
 
-        let q:IEnumerable<IBasicHeroModel>;
-        if(!value || !this.previousSearch || value.indexOf(this.previousSearch) !== 0){
+        let q: IEnumerable<IBasicHeroModel>;
+        if (!value || !this.previousSearch || value.indexOf(this.previousSearch) !== 0) {
           q = linq.from(this.heroList);
-        }else{
+        } else {
           q = linq.from(this.visibleHeroList);
         }
-        
-        this.visibleHeroList = q.where(hero =>{
-          if(hero.name.toLowerCase().indexOf(value) !== -1){
+
+        this.visibleHeroList = q.where(hero => {
+          if (hero.name.toLowerCase().indexOf(value) !== -1) {
             return true;
           }
-          if(hero.title.toLowerCase().indexOf(value) !== -1){
+          if (hero.title.toLowerCase().indexOf(value) !== -1) {
             return true;
           }
 
-          if(hero.gender.toLowerCase().indexOf(value) !== -1){
+          if (hero.gender.toLowerCase().indexOf(value) !== -1) {
             return true;
           }
 
-          if(hero.role.toLowerCase().indexOf(value) !== -1){
+          if (hero.role.toLowerCase().indexOf(value) !== -1) {
             return true;
           }
 
-          if(hero.expandedRole.toLowerCase().indexOf(value) !== -1){
+          if (hero.expandedRole.toLowerCase().indexOf(value) !== -1) {
             return true;
           }
 
-          if(hero.difficulty.toLowerCase().indexOf(value) !== -1){
+          if (hero.difficulty.toLowerCase().indexOf(value) !== -1) {
             return true;
           }
-          if(hero.searchText && hero.searchText.toLowerCase().indexOf(value) !== -1){
+          if (hero.searchText && hero.searchText.toLowerCase().indexOf(value) !== -1) {
             return true;
           }
 
-          if(hero.tags && hero.tags.join(' ').toLowerCase().indexOf(value) !== -1){
+          if (hero.tags && hero.tags.join(' ').toLowerCase().indexOf(value) !== -1) {
             return true;
           }
           return false;
@@ -104,18 +116,18 @@ export class HeroSearchComponent implements OnInit {
         this.previousSearch = value;
       }
       //linq.from(this.heroList)
-    })
+    });
   }
 
   trackBy(index, item: IBasicHeroModel) {
     return item.id;
   }
 
-  updateFocus(focus:boolean){
-      this.focusUpdates.next(focus);
+  updateFocus(focus: boolean) {
+    this.focusUpdates.next(focus);
   }
 
-  updateSearch(){
+  updateSearch() {
     this.searchUpdates.next(this.search.nativeElement.value);
   }
 
@@ -124,6 +136,7 @@ export class HeroSearchComponent implements OnInit {
       hero = hero?.id;
     }
     this.value = hero;
+    this.selectedHero = this.heroList.find(_ => _.id === hero);
 
   }
 }
