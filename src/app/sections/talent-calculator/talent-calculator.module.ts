@@ -8,7 +8,7 @@ import { HeroTalentSelectorComponent } from './sections/hero-talent-selector/her
 import { TalentCalculatorRoutingModule } from './talent-calculator-routing.module';
 import { TalentCalculatorComponent } from './talent-calculator.component';
 import { ContainersModule } from 'src/app/ui/common/containers/containers.module';
-
+import { MatSliderModule } from '@angular/material/slider';
 
 
 @NgModule({
@@ -16,7 +16,7 @@ import { ContainersModule } from 'src/app/ui/common/containers/containers.module
   imports: [
     CommonModule,
     PortraitsModule,
-
+    MatSliderModule,
     ContainersModule,
     TalentsModule,
     HeroesModule,

@@ -21,6 +21,10 @@ export class TalentCalculatorComponent implements OnInit {
 
   }
 
+  public get selectedHeroId(): string {
+    return this.route.snapshot.firstChild.params.heroId;
+  }
+
   public onHeroSelect(heroId: string) {
     if (heroId) {
       this.router.navigate([heroId], { relativeTo: this.route });

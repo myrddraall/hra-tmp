@@ -5,6 +5,7 @@ import { ImageModule } from '../../common/image/image.module';
 import { ButtonsModule } from '../buttons/buttons.module';
 import { IconsModule } from '../icons/icons.module';
 import { TalentTooltipComponent } from './talent-tooltip/talent-tooltip.component';
+import { TextModule } from '../../common/text/text.module';
 
 
 
@@ -21,7 +22,8 @@ import { TalentTooltipComponent } from './talent-tooltip/talent-tooltip.componen
     CommonModule,
     ImageModule,
     ButtonsModule,
-    IconsModule
+    IconsModule,
+    TextModule
   ]
 })
 export class TalentsModule { }

@@ -42,9 +42,14 @@
     .right {
       display: flex;
      // background-color: blue;
+     align-items: center;
       width:60%;
       height: 100%;
       flex-grow: 1;
+      mat-slider{
+        width:20%;
+        margin-left: 0.5em;
+      }
     }
   }
 

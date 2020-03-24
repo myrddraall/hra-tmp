@@ -7,7 +7,7 @@
           <td class="tier-header">{{tier}}</td>
           <td class="talent-cell" *ngFor="let talent of hero?.talents['level' + tier]; let i = index"
             (click)="selectTalent(tier, i)">
-            <hra-talent-square-button [model]="talent" interactive [class.selected]="isSelected(tier, i)">
+            <hra-talent-square-button [model]="talent" [hero]="hero" interactive [class.selected]="isSelected(tier, i)">
             </hra-talent-square-button>
           </td>
         </tr>
@@ -15,8 +15,9 @@
 
     </div>
     <div class="right">
-R
-
+      <label>Level</label>
+      <mat-slider min="0" max="30" step="1" [(value)]="hero.level" tickInterval="1"></mat-slider>
+      <label>{{hero.level}}</label>
     </div>
   </div>
   <!-- 

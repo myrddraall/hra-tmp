@@ -1,1 +1,4 @@
-<p>talent-tooltip works!</p>
+<section class="header"><hra-glowing-text>{{talent.name}}</hra-glowing-text><hra-ability-type-icon [ability]="talent"></hra-ability-type-icon></section>
+<section *ngIf="talent.energyCostDescription"><div [hraTooltipText]="talent.energyCostDescription"  [level]="hero?.level"></div></section>
+<section *ngIf="talent.cooldownDescription"><div [hraTooltipText]="talent.cooldownDescription"  [level]="hero?.level"></div></section>
+<section><div [hraTooltipText]="talent.description" [level]="hero?.level"></div></section>
