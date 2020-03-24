@@ -7,7 +7,10 @@
     "build": "ng build",
     "test": "ng test",
     "lint": "ng lint",
-    "e2e": "ng e2e"
+    "e2e": "ng e2e",
+    "docs:clean": "rimraf ./docs/*",
+    "docs:copy": "yarn run docs:clean  && yarn run copy ./dist/heroes-replay-analyser ./docs",
+    "docs": "ng build --prod && yarn run docs:copy"
   },
   "private": true,
   "dependencies": {
@@ -50,6 +53,7 @@
     "@types/node": "^12.11.1",
     "@types/semver": "^7.1.0",
     "codelyzer": "^5.1.2",
+    "copy-dir-cli": "^0.0.3",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
     "karma": "~4.1.0",
@@ -59,6 +63,7 @@
     "karma-jasmine-html-reporter": "^1.4.0",
     "ng-packagr": "^9.0.0",
     "protractor": "~5.4.0",
+    "rimraf": "^3.0.2",
     "ts-node": "~7.0.0",
     "tslint": "~5.15.0",
     "typescript": "3.7"
