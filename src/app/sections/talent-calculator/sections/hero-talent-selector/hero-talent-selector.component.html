@@ -1,0 +1,41 @@
+<section talents>
+  <img class="bg" [src]="bgUrl" />
+  <div class="talent-container">
+    <div class="left">
+      <table cellpadding="0" cellspacing="0">
+        <tr class="talent-tier" *ngFor="let tier of ['1','4','7','10','13','16','20']" [ngClass]="['tier-' + tier]">
+          <td class="tier-header">{{tier}}</td>
+          <td class="talent-cell" *ngFor="let talent of hero?.talents['level' + tier]; let i = index"
+            (click)="selectTalent(tier, i)">
+            <hra-talent-square-button [model]="talent" interactive [class.selected]="isSelected(tier, i)">
+            </hra-talent-square-button>
+          </td>
+        </tr>
+      </table>
+
+    </div>
+    <div class="right">
+R
+
+    </div>
+  </div>
+  <!-- 
+    <pre>{{_selectedTalents|json}}</pre>
+    <pre>{{_selectedValue|json}}</pre>
+    <pre>{{base64|json}}</pre>
+
+  -->
+
+</section>
+
+<!--
+
+  <footer>
+    <div class="left">
+      <hra-hero-hud-unit [hero]="hero"></hra-hero-hud-unit>
+    </div>
+    <div class="right">
+      <hra-hero-hud-abilities [hero]="hero"></hra-hero-hud-abilities>
+    </div>
+  </footer>
+-->

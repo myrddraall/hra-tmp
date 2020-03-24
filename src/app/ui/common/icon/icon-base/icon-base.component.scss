@@ -1,0 +1,10 @@
+:host {
+  font-size: var(--base-size);
+  width: 7.2em;
+  height: 7.2em;
+  display: inline-block;
+  canvas {
+    width: 100%;
+    height: 100%;
+  }
+}

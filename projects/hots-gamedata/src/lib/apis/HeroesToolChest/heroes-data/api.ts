@@ -2,7 +2,8 @@ import { GitHubApi } from '../../Github';
 import * as linq from 'linq';
 import { GameVersion } from 'heroesprotocol-data';
 import { IHeroDataSet } from './dtos';
-import { Cache } from '../../cache.decorator'
+import { Cache } from 'angular-worker-proxy'
+import { IGameStringsFile } from './dtos/IGameStrings';
 // @dynamic
 export class HeroesDataApi {
 
@@ -16,7 +17,7 @@ export class HeroesDataApi {
     // tslint:disable-next-line:variable-name
     private _gamestringVersion: Promise<{ version: string, value: GameVersion }>;
 
-    public static getVersion(version?: GameVersion, lang: string = 'enUS'): HeroesDataApi {
+    public static getVersion(version?: GameVersion | 'latest', lang: string = 'enus'): HeroesDataApi {
         const key = `${lang}|${(version ? version.toString() : 'latest')}`;
         if (!HeroesDataApi._cache.has(key)) {
             const db = new HeroesDataApi(version, lang);
@@ -38,19 +39,27 @@ export class HeroesDataApi {
         })();
     }
 
-    private static getBestVersion(version: GameVersion): Promise<{ version: string, value: GameVersion }[]> {
+    private static getBestVersion(version: GameVersion | 'latest'): Promise<{ version: string, value: GameVersion }[]> {
         return (async () => {
+
             const versions = await this.versions;
-            const higherVersions = linq.from(versions).where(_ => _.value.build >= version.build).toArray();
+            let bestVersion: { version: string, value: GameVersion }[];
+            if(version === 'latest' || version === undefined){
+                const v = versions[versions.length -1];
+                bestVersion = [
+                    v,
+                    v
+                ];
+            }else{
+                const higherVersions = linq.from(versions).where(_ => _.value.build >= version.build).toArray();
+                const bv = higherVersions.length === 0 ? versions[versions.length - 1] : higherVersions[0];
+                bestVersion = [
+                    bv,
+                    bv
+                ];
+            }
 
-            const bv = higherVersions.length === 0 ? versions[versions.length - 1] : higherVersions[0];
-
-            const bestVersion: { version: string, value: GameVersion }[] = [
-                bv,
-                bv
-            ];
-
-            const hdp = await HeroesDataApi.git.readJson(`heroesdata/${bv.version}/.hdp.json`);
+            const hdp = await HeroesDataApi.git.readJson(`heroesdata/${bestVersion[0].version}/.hdp.json`);
             if (hdp.duplicate) {
                 bestVersion[0] = hdp.duplicate.data
                     ? { version: hdp.duplicate.data, value: new GameVersion(hdp.duplicate.data) }
@@ -64,7 +73,7 @@ export class HeroesDataApi {
         })();
     }
 
-    private constructor(public readonly version?: GameVersion, public readonly lang: string = 'enus') {
+    private constructor(public readonly version?: GameVersion | 'latest', public readonly lang: string = 'enus') {
         this._versions = HeroesDataApi.getBestVersion(version);
     }
 
@@ -109,7 +118,7 @@ export class HeroesDataApi {
         return HeroesDataApi.git.readJson(filepath);
     }
 
-    private async readGameStrings<T = any>(): Promise<T> {
+    private async readGameStrings(): Promise<IGameStringsFile> {
         const base = await this.gamestringBaseDir;
         const ver = await this.gamestringVersion;
         return this.read(`${base}/gamestrings_${ver.value.build}_${this.lang}.json`);
@@ -123,5 +132,16 @@ export class HeroesDataApi {
 
     public getHeroes(): Promise<IHeroDataSet> {
         return this.readData('herodata');
+    }
+
+    @Cache()
+    public getGameStrings(): Promise<IGameStringsFile> {
+        try{
+            console.log('############ getGameStrings')
+            console.time(`getGameStrings`);
+            return this.readGameStrings();
+        }finally{
+            console.timeEnd(`getGameStrings`);
+        }
     }
 }

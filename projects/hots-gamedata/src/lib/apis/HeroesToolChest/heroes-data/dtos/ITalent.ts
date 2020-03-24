@@ -1,16 +1,7 @@
-import { ICharges } from './ICharges';
-import { AbilityType } from './AbilityType';
-export interface ITalent {
-    nameId: string;
-    buttonId: string;
-    icon: string;
-    abilityType: AbilityType;
+import { IAbilityBase } from './IAbilityBase';
+export interface ITalent extends IAbilityBase{
     sort?: number;
     abilityTalentLinkIds?: string[];
-    charges?: ICharges;
-    isActive?: boolean;
     prerequisiteTalentIds?: string[];
     isQuest?: boolean;
-    toggleCooldown?: number;
-    isPassive?: boolean;
 }

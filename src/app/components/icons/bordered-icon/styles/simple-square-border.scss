@@ -1,0 +1,104 @@
+:host{
+    --border-size: 3%;
+    --bg-color-dark: var(--team-none-bg-color-dark, 9, 30, 81);
+    --bg-color: var(--team-none-bg-color, 42, 20, 97);
+    --bg-color-light: var(--team-none-bg-color-light, 62, 56, 78);
+    --selected-color: var(--team-none-selected, 0, 245, 245);
+    &[team="0"]{
+        --bg-color-dark: var(--team-1-bg-color-dark, 0, 0, 126);
+        --bg-color: var(--team-1-bg-color, 0, 0, 255);
+        --bg-color-light: var(--team-1-bg-color-light, 123, 123, 255);
+    }
+
+    &[team="1"]{
+        --bg-color-dark: var(--team-2-bg-color-dark, 131, 0, 0);
+        --bg-color: var(--team-2-bg-color, 255, 0, 0);
+        --bg-color-light: var(--team-2-bg-color-light, 255, 125, 125);
+    }
+
+    &[team="2"]{
+        --bg-color-dark: var(--team-neutral-bg-color-dark, 129, 129, 0);
+        --bg-color: var(--team-neutral-bg-color, 255, 255, 0);
+        --bg-color-light: var(--team-neutral-bg-color-light, 255, 255, 124);
+    }
+    --inner-shadow-color: var(--bg-color-dark, 0,0,0);
+
+  
+    line-height: 0px;
+    display: inline-block;
+    
+    bordered-icon{
+        padding: var(--border-size);
+        width:auto;
+        min-width: 100%;
+        max-width: 100%;
+        height:auto;
+        min-height: 100%;
+        max-height: 100%;
+        //background-color: rgb(var(--bg-color));
+        background-image: linear-gradient(rgb(var(--bg-color-dark)),rgb(var(--bg-color)));
+        &::after{
+            content: ' ';
+            margin:var(--border-size);
+            position: absolute;
+            box-shadow: inset 0px 0px 12px 8px rgba(var(--inner-shadow-color), 0.5);
+            top: 0px;
+            left: 0px;
+            width: calc(100% - var(--border-size) * 2);
+            height:calc(100% - var(--border-size) * 2);
+            z-index: 10;
+        }
+       ::ng-deep{
+           canvas{
+            filter: grayscale(80%);
+           }
+       }
+    }
+
+    &:not(.disabled):not(:disabled):not([disabled]){
+
+        &.hover, &:hover{
+            --inner-shadow-color: var(--bg-color, 0,0,0);
+            bordered-icon{
+                background-image: linear-gradient(rgb(var(--bg-color-light)),rgb(var(--bg-color)));
+                ::ng-deep{
+                    canvas{
+                        filter: none;
+                    }
+                }
+            }
+        }
+        &[selected]{
+            bordered-icon{
+                background-image: linear-gradient(rgb(var(--selected-color)),rgb(var(--bg-color)));
+                ::ng-deep{
+                    canvas{
+                        filter: none;
+                    }
+                }
+                &::after{
+                    box-shadow: inset 0px 0px 12px 4px rgba(var(--selected-color), 0.4);
+                }
+            }
+        }
+    }
+
+    &.disabled, &:disabled, &[disabled]{
+        filter: grayscale(100%);
+    }
+
+    &[small]{
+        bordered-icon{
+            width: 32px;
+        }
+    }
+
+    &[medium]{
+        bordered-icon{
+            width: 64px;
+       }
+    }
+
+    margin:4px;
+
+}

@@ -1,0 +1,138 @@
+:host {
+  display: block;
+  position: relative;
+
+
+  // Not animating
+  &:not([opening]):not([closing]) {
+    &[opened] {
+    }
+
+    &[closed] {
+      overflow: hidden;
+
+      > div {
+        //display: none;
+        position: relative;
+        //bottom: 100%;
+      }
+
+      &[origin="top-left"] {
+        > div {
+          bottom: 100%;
+          right: 100%;
+        }
+      }
+      &[origin="top"] {
+        > div {
+          bottom: 100%;
+        }
+      }
+  
+      &[origin="top-right"] {
+        > div {
+          bottom: 100%;
+          left: 100%;
+        }
+      }
+  
+      &[origin="left"] {
+        > div {
+          right: 100%;
+        }
+      }
+  
+      &[origin="right"] {
+        > div {
+          left: 100%;
+        }
+      }
+  
+      &[origin="bottom-left"] {
+        > div {
+          top: 100%;
+          right: 100%;
+        }
+      }
+      &[origin="bottom"] {
+        > div {
+          top: 100%;
+        }
+      }
+  
+      &[origin="bottom-right"] {
+        > div {
+          top: 100%;
+          left: 100%;
+        }
+      }
+
+    }
+  }
+  //animating
+  &[opening],
+  &[closing] {
+
+    overflow: hidden;
+    > div {
+      position: absolute;
+    }
+    &[origin="top-left"] {
+      > div {
+        bottom: 0px;
+        right: 0px;
+      }
+    }
+    &[origin="top"] {
+      > div {
+        bottom: 0px;
+      }
+    }
+
+    &[origin="top-right"] {
+      > div {
+        bottom: 0px;
+        left: 0px;
+      }
+    }
+
+    &[origin="left"] {
+      > div {
+        right: 0px;
+      }
+    }
+
+    &[origin="right"] {
+      > div {
+        left: 0px;
+      }
+    }
+
+    &[origin="bottom-left"] {
+      > div {
+        top: 0px;
+        right: 0px;
+      }
+    }
+    &[origin="bottom"] {
+      > div {
+        top: 0px;
+      }
+    }
+
+    &[origin="bottom-right"] {
+      > div {
+        top: 0px;
+        left: 0px;
+      }
+    }
+  }
+
+  //opening
+  &[opening] {
+  }
+
+  //closing
+  &[closing] {
+  }
+}

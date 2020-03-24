@@ -1,0 +1,91 @@
+:host {
+  $footerHeight: 50px;
+  margin-bottom: $footerHeight;
+  display: flex;
+  flex-direction: column;
+  justify-content: stretch;
+  height: 100%;
+  flex-grow: 1;
+  position: relative;
+  .bg {
+    width: 100%;
+    bottom: 0px;
+    left: 0px;
+    position: fixed;
+    z-index: 1;
+  }
+  section[talents] {
+   
+    height: 100%;
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: stretch;
+  }
+  .talent-container {
+    height: 100%;
+    width: 100%;
+    position: relative;
+    z-index: 2;
+    flex-grow: 1;
+    display: flex;
+    align-items: stretch;
+    .left {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    //  background-color: red;
+      width:40%;
+      height: 100%;
+      flex-grow: 1;
+    }
+    .right {
+      display: flex;
+     // background-color: blue;
+      width:60%;
+      height: 100%;
+      flex-grow: 1;
+    }
+  }
+
+  table {
+    border: none;
+    tr {
+      td {
+        padding: 0px;
+        margin: 0px;
+        line-height: 0px;
+        hra-talent-square-button {
+          display: block;
+          margin: 2px;
+        }
+      }
+    }
+  }
+  footer {
+    position: fixed;
+    display: flex;
+    width: 100%;
+    background-color: red;
+    height: $footerHeight;
+    left: 0px;
+    align-items: flex-end;
+    bottom: 0px;
+    z-index: 100;
+    .left {
+      display: flex;
+      flex-grow: 0;
+      hra-hero-hud-unit {
+        bottom: 5px;
+        left: 5px;
+        position: relative;
+      }
+    }
+    .right {
+      display: flex;
+      justify-content: center;
+      flex-grow: 1;
+      // background-color: green;
+    }
+  }
+}

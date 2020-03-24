@@ -1,0 +1,9 @@
+<bordered-icon *ngIf="talent" [src]="iconUrl">
+    <div border-above ></div>
+</bordered-icon>
+<div *hraTooltip class="talent-tooltip">
+    <section class="header"><hra-glowing-text>{{talent.name}}</hra-glowing-text><hra-ability-type-icon [ability]="talent"></hra-ability-type-icon></section>
+    <section *ngIf="talent.energyCostDescription"><div [hraTooltipText]="talent.energyCostDescription"></div></section>
+    <section *ngIf="talent.cooldownDescription"><div [hraTooltipText]="talent.cooldownDescription"></div></section>
+    <section><div [hraTooltipText]="talent.description"></div></section>
+</div>

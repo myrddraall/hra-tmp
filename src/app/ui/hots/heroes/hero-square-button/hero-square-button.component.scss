@@ -1,0 +1,16 @@
+$size: 7.2em;
+// base layout
+:host {
+  font-size: var(--base-size);
+  position: relative;
+  display: inline-block;
+  width: $size;
+  height: $size;
+  hra-square-button-border,
+  hra-icon-square {
+    font-size: 1em;
+  }
+  &.selected{
+    z-index: 2;
+  }
+}

@@ -1,0 +1,104 @@
+<collapsable #details details origin="bottom" duration="250ms" [open]="false">
+    <div class="details">
+        <hra-tooltip-panel>
+            <header>
+                <div class="franchise-wrapper">
+                    <img class="franchise" [attr.src]="'/assets/ui/icons/franchise/' + hero.franchise + '.png'"/>
+                </div>
+                <div>
+                    <hra-glowing-text>{{hero.formName}}</hra-glowing-text>
+                    <div>{{hero.title}}</div>
+                </div>
+            </header>
+            <br/>
+            <div>
+                {{hero.description}}
+            </div>
+        </hra-tooltip-panel>
+        </div>
+</collapsable>
+<div portrait (click)="details.open = !details.open">
+  <!-- 
+
+      <canvas class="portrait" clip="M 25,14 75,14 98,50 75,87 25,87 2,50 z" background="#000000"
+      [src]="'https://raw.githubusercontent.com/HeroesToolChest/heroes-images/master/heroesimages/heroportraits/' + hero.portraits.draftScreen"></canvas>
+    -->
+    <img class="frame" src="assets/ui/borders/hud_bg_portraitframe.png" />
+</div>
+<div class="stats-offset">
+    <div forms>
+        <div class="form-button" *ngFor="let form of this.hero.forms; let i = index" (click)="this.hero.formId = form.linkId" [class.selected]="this.hero.formId === form.linkId">
+            <hra-glowing-text>{{i+1}}</hra-glowing-text> 
+        </div>
+    </div>
+    <div stats>
+        <img class="frame" src="assets/ui/borders/hud_bg_artbarbottom.png" />
+        <div class="resource-bars">
+            <div class="resource-bar health" [class.no-resource]="!hero.energyType">
+             <!--
+
+                 <canvas class="bg"
+                 [clip]="!!hero.energyType ? 'M 5,0 86,0 82,99 1,100 z' : 'M 5,0 42.5,0 38.5,99 1,100 z'"
+                 tint="#00ff0088" src="assets/ui/borders/hud_bar_health_generic_straight.png"></canvas>
+                --> 
+                <label [hraTooltipText]="'<s>' + hero.life.amount +'~~' +  hero.life.scale + '~~</s>'"
+                    [level]="hero?.level"></label>
+            </div>
+            <div class="resource-bar resource" *ngIf="!!hero.energyType">
+                <!-- 
+
+                    <canvas *ngIf="!!hero.energyType" class="bg" clip="M 5,0 86,0 82,99 1,100 z" [tint]="resourceColor"
+                    src="assets/ui/borders/hud_bar_health_generic_straight.png"></canvas>
+                -->
+                <label [hraTooltipText]="'<s>' + hero.energy.amount +  resourceScale + '</s>'"
+                    [level]="hero?.level"></label>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- 
+<div portrait>
+    <canvas clip="m 25,17 48,0 24,42 -24,42 -48,0 -24,-42 z" coordinates="x%"
+        [src]="'https://raw.githubusercontent.com/HeroesToolChest/heroes-images/master/heroesimages/heroportraits/' + hero.portraits.draftScreen"></canvas>
+    <img src="assets/ui/borders/hud_bg_portraitframe.png" />
+
+</div>
+<div stats [class.no-resource]="!hero.energyType">
+    <img class="bg" src="assets/ui/borders/hud_bg_artbarbottom.png" />
+    
+    <div class="hp-bar">
+        <canvas *ngIf="!!hero.energyType" class="hp-bg" clip="M 5,0 99,0 94,99 1,100 z" tint="#00ff0088"
+        src="assets/ui/borders/hud_bar_health_generic_straight.png"></canvas>
+        <canvas *ngIf="!hero.energyType" class="hp-bg" clip="M 10,0 99,0 90,99 1,100 z" tint="#00ff0088"
+        src="assets/ui/borders/hud_bar_health_generic_straight.png"></canvas>
+        <svg xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" >
+            
+            <text font-size="11" style="stroke-width:0.0px;"
+            x="50%" y="50%" dominant-baseline="middle" text-anchor="middle" stroke="#000" fill="#fff" >Testing</text>
+            
+        </svg>
+    </div>
+    
+    <div class="rp-bar">
+        <canvas class="rp-bg" clip="M 5,0 99,0 94,99 1,100 z" tint="#0000ff77"
+        src="assets/ui/borders/hud_bar_health_generic_straight.png"></canvas>
+        <div>{{hero.energyType}}</div>
+    </div>
+    
+</div>
+-->
+
+
+
+<!-- 
+    <img class="mp-bg" src="assets/ui/borders/hud_bg_artbarbottom.png"/>
+    
+-->
+<!-- 
+           
+           <canvas class="mp-bg" clip="M 6,0 86,0 82,100 2,100 z" tint="#0000ff77"  src="assets/ui/borders/hud_bar_health_generic_straight.png"></canvas>
+           <div class="hp" [hraTooltipText]="'<s>' + hero.life.amount +'~~' +  hero.life.scale + '~~</s>'" level="10"></div>
+           <div class="mp" [hraTooltipText]="'<s>' + hero.energy.amount +'~~' +  hero.energy.regenRate + '~~</s>'" level="10"></div>
+        
+        -->

@@ -1,0 +1,125 @@
+$size: 7.2em;
+// base layout
+:host {
+  font-size: var(--base-size);
+  position: relative;
+  display: inline-block;
+  width: $size * 0.86;
+  height: $size;
+
+  [content] {
+    position: relative;
+  }
+  [border] {
+    position: absolute;
+  }
+
+  &[interactive],
+  &:host-context([interactive]) {
+    cursor: pointer;
+  }
+
+  &[disabled],
+  &.disabled,
+  &:disabled {
+    cursor: default;
+  }
+}
+// boder image
+:host {
+  [border] {
+    background-image: url(/assets/ui/borders/ability-vhex-border.png);
+    background-size: 200% 200%;
+    background-position: top left;
+  }
+}
+
+// positioning
+:host {
+  [content] {
+    top: 0.5em;
+    left: 0em;
+    ::ng-deep {
+      > * {
+        font-size: 0.86em;
+      }
+    }
+  }
+  [border] {
+    width: $size * 1.27;
+    height: $size * 1.27;
+    top: -1.2em;
+    left: -1.6em;
+  }
+}
+
+// non interacive state
+:host {
+  [content] {
+  }
+  [border] {
+    background-position: top right;
+  }
+}
+
+// interacive state
+:host {
+  &:host-context([interactive]),
+  &[interactive] {
+    [content] {
+      filter: grayscale(0.6);
+    }
+    [border] {
+      background-position: top left;
+    }
+  }
+}
+
+// over state
+:host {
+  :host-context([interactive]:hover),
+  :host-context([interactive][hover]),
+  :host-context([interactive].hover),
+  &[hover],
+  &.hover,
+  &[interactive]:hover {
+    [content] {
+      filter: grayscale(0);
+    }
+    [border] {
+      background-position: top right;
+    }
+  }
+}
+
+// selected state
+:host {
+  :host-context([selected]),
+  :host-context(.selected),
+  &[selected],
+  &.selected {
+    [content] {
+      filter: grayscale(0);
+    }
+    [border] {
+      background-position: bottom left;
+    }
+  }
+}
+
+// disabled state
+:host {
+  :host-context([disabled]),
+  :host-context(.disabled),
+  :host-context(:disabled),
+  &[disabled],
+  &.disabled,
+  &:disabled {
+    [content] {
+      filter: grayscale(0.9);
+    }
+    [border] {
+      background-position: bottom right;
+    }
+  }
+}

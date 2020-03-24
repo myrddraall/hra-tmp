@@ -1,0 +1,8 @@
+<mat-form-field color="accent">
+    <input type="text" #search name="heroId" matInput placeholder="Select a Hero" (focus)="updateFocus(true)" (blur)="updateFocus(false)" (keyup)="updateSearch()" (change)="updateSearch()">
+</mat-form-field>
+<collapsable  class="hero-list-container" #details details origin="bottom" duration="250ms" [open]="false" (click)="updateFocus(true)">
+    <div class="hero-list">
+        <hra-hero-square-button *ngFor="let hero of visibleHeroList; trackBy: trackBy" [hero]="hero" (click)="setSelected(hero); $event.stopPropagation()" [class.selected]="hero.id === value" interactive></hra-hero-square-button>
+    </div>
+</collapsable>

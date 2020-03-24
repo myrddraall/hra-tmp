@@ -1,1 +1,137 @@
-/* You can add global styles to this file, and also import other style files */
+@import '~@angular/material/theming';
+@include mat-core();
+
+$md-primary: (
+    50 : #e9e2f1,
+    100 : #c8b6dc,
+    200 : #a485c4,
+    300 : #8054ac,
+    400 : #642f9b,
+    500 : #490a89,
+    600 : #420981,
+    700 : #390776,
+    800 : #31056c,
+    900 : #210359,
+    A100 : #aa8bff,
+    A200 : #8558ff,
+    A400 : #6025ff,
+    A700 : #4e0bff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #ffffff,
+        400 : #ffffff,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #ffffff,
+        A400 : #ffffff,
+        A700 : #ffffff,
+    )
+);
+
+$md-accent: (
+    50 : #e0f3ff,
+    100 : #b3e1ff,
+    200 : #80ceff,
+    300 : #4dbaff,
+    400 : #26abff,
+    500 : #009cff,
+    600 : #0094ff,
+    700 : #008aff,
+    800 : #0080ff,
+    900 : #006eff,
+    A100 : #ffffff,
+    A200 : #f2f7ff,
+    A400 : #bfd7ff,
+    A700 : #a6c7ff,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #ffffff,
+        600 : #ffffff,
+        700 : #ffffff,
+        800 : #ffffff,
+        900 : #ffffff,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$md-warn: (
+    50 : #fff5e7,
+    100 : #ffe6c2,
+    200 : #ffd599,
+    300 : #ffc470,
+    400 : #ffb752,
+    500 : #ffaa33,
+    600 : #ffa32e,
+    700 : #ff9927,
+    800 : #ff9020,
+    900 : #ff7f14,
+    A100 : #ffffff,
+    A200 : #fffdfb,
+    A400 : #ffdfc8,
+    A700 : #ffd0ae,
+    contrast: (
+        50 : #000000,
+        100 : #000000,
+        200 : #000000,
+        300 : #000000,
+        400 : #000000,
+        500 : #000000,
+        600 : #000000,
+        700 : #000000,
+        800 : #000000,
+        900 : #000000,
+        A100 : #000000,
+        A200 : #000000,
+        A400 : #000000,
+        A700 : #000000,
+    )
+);
+
+$hots-primary: mat-palette($md-primary);
+$hots-accent:  mat-palette($md-accent);
+$hots-warn:  mat-palette($md-warn);
+
+$hots-theme: mat-dark-theme($hots-primary, $hots-accent, $hots-warn);
+@include angular-material-theme($hots-theme);
+
+*{
+  box-sizing: border-box;
+}
+html, body{
+    width:100%;
+    height:100%;
+    margin:0px;
+    padding: 0px;
+    border:none;
+    
+}
+html{
+  // overflow: hidden;
+  min-height: 100vh;
+  max-height: 100vh;
+  --base-size: 10px;
+  font-size: var(--base-size);
+}
+
+body{
+    //overflow-x: hidden;
+    overflow-y: scroll;
+    background-color: rgb(8,0,15);
+    color: white;
+    font-size: 1.4em;
+}
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

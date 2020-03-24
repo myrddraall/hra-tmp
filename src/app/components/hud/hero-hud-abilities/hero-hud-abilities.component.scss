@@ -1,0 +1,22 @@
+$factor: 0.6;
+$width: 80em * $factor;
+$height: 9.2em * $factor;
+
+:host{
+    font-size:10px;
+
+    display: flex;
+    align-items: flex-end;
+    justify-content: center;
+   
+
+    .center{
+        .bottom{
+            width:$width;
+            height: $height;
+            background-image: url(/assets/ui/borders/hud_bg_artbarmiddlefill_glass.png);
+            background-size: $width $height;
+        }
+    }
+    //hud_bg_artbarmiddlefill_glass
+}

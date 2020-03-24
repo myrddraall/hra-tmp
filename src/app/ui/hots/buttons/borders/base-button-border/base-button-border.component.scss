@@ -1,0 +1,68 @@
+:host {
+    font-size: var(--base-size);
+    width: 7.2em;
+    height: 7.2em;
+  
+    position: relative;
+    display: inline-block;
+    [content] {
+      position: relative;
+     
+    }
+    [border] {
+      position: absolute;
+      width: 9em;
+      height: 9em;
+      top: -0.9em;
+      left: -1em;
+  
+      background-image: url(/assets/ui/borders/storm_ui_ingame_abilitybuttonborder.png);
+      background-size: 100%;
+    }
+  
+    
+    &:hover,
+    &.hover {
+      [border] {
+       // background-image: url(/assets/ui/borders/storm_ui_ingame_abilitybuttonborder_hover.png);
+      }
+      [content]{
+          filter: grayscale(0);
+      }
+    }
+  
+    &[selected],
+    &.selected {
+      [border] {
+        background-image: url(/assets/ui/borders/storm_ui_ingame_abilitybuttonborder_hover.png);
+      }
+      [content] {
+          filter: grayscale(0);
+          ::ng-deep {
+              canvas{
+                 // filter: drop-shadow(0px 0px 10px red);
+  
+              }
+          }
+      }
+    }
+  
+    &[disabled] {
+      [border] {
+        width: 7em;
+        height: 7em;
+        top: 0em;
+        left: 0em;
+        background-image: url(/assets/ui/borders/hud_btn_bg_ability_disabled.png);
+  
+      }
+      [content] {
+  
+        
+          filter: grayscale(0.75);
+              
+          
+      }
+    }
+  }
+  

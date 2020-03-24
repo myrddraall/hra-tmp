@@ -3,7 +3,8 @@ import { Proxy, RunOnWorker, WebWorker, WorkerOnly } from 'angular-worker-proxy'
 import { Buffer } from 'buffer';
 import { Observable, Subject } from 'rxjs';
 import { IReplayDataProvider } from './IReplayDataProvider';
-import { MatchInfo, IMatch } from './MatchInfo';
+import { MatchInfo } from './MatchInfo';
+import { IMatch } from "./types/IMatch";
 import { IProgressEvent } from './ProgressEvent';
 import { ReplayData } from './ReplayData';
 

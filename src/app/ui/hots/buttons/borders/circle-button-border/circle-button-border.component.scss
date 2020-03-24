@@ -1,0 +1,151 @@
+$size: 7.2em;
+// base layout
+:host {
+  font-size: var(--base-size);
+  position: relative;
+  display: inline-block;
+  width: $size;
+  height: $size;
+
+  [content] {
+    position: relative;
+    border-radius: 50%;
+  }
+  [border] {
+    position: absolute;
+    border-radius: 50%;
+  }
+
+  &[interactive],
+  &:host-context([interactive]) {
+    cursor: pointer;
+  }
+
+  &[disabled],
+  &.disabled,
+  &:disabled {
+    cursor: default;
+  }
+}
+$color: rgba(58, 45, 115, 0.9);
+$lightColor: rgba(156, 142, 255, 1);
+$darkColor: rgba(123, 105, 247, 1);
+// border
+:host {
+  [border] {
+    //border: 0.4em solid $color;
+    //box-shadow: inset 0px 0px 1.6em 0.3em rgba(0,0,0, 0.8);
+    &::before {
+      content: " ";
+      position: absolute;
+      top: 0.4em;
+      left: 0.4em;
+      width: $size - (0.4em * 2);
+      height: $size - (0.4em * 2);
+      z-index: 20;
+      background-color: transparent;
+      border-radius: 50%;
+      // border-radius: 50%;
+      box-shadow: inset 0px 0px 1em 0.2em rgba(0, 0, 0, 1);
+    }
+  }
+}
+
+// positioning
+:host {
+  [content] {
+    top: 0.4em;
+    left: 0.4em;
+    z-index: 2;
+    width: $size - (0.4em * 2);
+    height: $size - (0.4em * 2);
+    ::ng-deep {
+      > * {
+        font-size: 0.9em;
+      }
+    }
+  }
+  [border] {
+    width: $size;
+    height: $size;
+    top: 0em;
+    left: 0em;
+  }
+}
+
+// non interacive state
+:host {
+  [content] {
+  }
+  [border] {
+    background-color: $darkColor;
+  }
+}
+
+// interacive state
+:host {
+  &:host-context([interactive]),
+  &[interactive] {
+    [content] {
+      filter: grayscale(0.6);
+    }
+    [border] {
+      background-color: $color;
+    }
+  }
+}
+
+// over state
+:host {
+  :host-context([interactive]:hover),
+  :host-context([interactive][hover]),
+  :host-context([interactive].hover),
+  &[hover],
+  &.hover,
+  &[interactive]:hover {
+    [content] {
+      filter: grayscale(0);
+    }
+    [border] {
+      // background-image: linear-gradient(180deg, $lightColor 25%, $lightColor 10%, $color 90%, $color);
+      background: linear-gradient(180deg, $lightColor 0%, $lightColor 25%, $color 75%, $color 100%);
+      background-color: $lightColor;
+      // border:none;
+      background-clip: border-box;
+    }
+  }
+}
+
+// selected state
+:host {
+  :host-context([selected]),
+  :host-context(.selected),
+  &[selected],
+  &.selected {
+    [content] {
+      filter: grayscale(0);
+    }
+    [border] {
+      background-color: $lightColor;
+      box-shadow: 0px 0px 1.6em 0.3em transparentize($lightColor, 0.7);
+    }
+  }
+}
+
+// disabled state
+:host {
+  :host-context([disabled]),
+  :host-context(.disabled),
+  :host-context(:disabled),
+  &[disabled],
+  &.disabled,
+  &:disabled {
+    [content] {
+      filter: grayscale(0.9);
+    }
+    [border] {
+      filter: grayscale(1);
+      background-color: $color;
+    }
+  }
+}

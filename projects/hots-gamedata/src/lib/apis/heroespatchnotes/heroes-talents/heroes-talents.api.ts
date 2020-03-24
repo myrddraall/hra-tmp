@@ -2,6 +2,7 @@ import { GameVersion } from 'heroesprotocol-data';
 import { GitHubApi } from '../../Github';
 import * as linq from 'linq';
 import { Cache } from '../../cache.decorator';
+import { IHero } from './dtos/IHero';
 export class HeroesTalentsApi {
     // tslint:disable-next-line:variable-name
     private static _cache: Map<string, HeroesTalentsApi> = new Map();
@@ -51,7 +52,7 @@ export class HeroesTalentsApi {
         return this.git.readJson(path, (await this.bestVersion).value);
     }
 
-    public getHero(shortName:string):Promise<any>{
+    public getHero(shortName:string):Promise<IHero>{
         return this.readJson(`hero/${shortName}.json`);
     }
 

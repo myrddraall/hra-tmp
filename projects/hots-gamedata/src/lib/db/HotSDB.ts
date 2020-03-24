@@ -1,5 +1,5 @@
 // tslint:disable:variable-name
-import { HeroesCollection } from '../collections/HeroesCollection';
+import { HeroesCollection } from '../collections/heroes/HeroesCollection';
 import { GameVersion } from 'heroesprotocol-data/lib';
 
 export class HotsDB {
@@ -7,7 +7,7 @@ export class HotsDB {
     private _heroes: HeroesCollection;
     private _initialized: Promise<HotsDB>;
 
-    public static getVersion(version: GameVersion, lang: string = 'enUS'): Promise<HotsDB> {
+    public static getVersion(version: GameVersion | 'latest', lang: string = 'enus'): Promise<HotsDB> {
         const key = `${lang}|${version.toString()}`;
         if (!HotsDB._cache.has(key)) {
             const db = new HotsDB(version, lang);
@@ -18,7 +18,7 @@ export class HotsDB {
 
 
     private constructor(
-        public readonly version: GameVersion,
+        public readonly version: GameVersion | 'latest',
         public readonly lang: string,
     ) {
         this._heroes = new HeroesCollection(this);

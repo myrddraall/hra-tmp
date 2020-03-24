@@ -25,4 +25,10 @@ export interface ISlotInfo {
     m_region: number;
     m_result: number;
     m_hero: string;
+    m_heroMasteryTiers: Array<{
+        m_hero: string;
+        m_tier: number;
+    }>;
+    m_isBlizzardStaff:boolean;
+    m_hasActiveBoost:boolean;
 }

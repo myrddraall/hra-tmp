@@ -3,6 +3,8 @@ import './process-replay.worker.factory';
 import { ReplayWorker } from 'replay-processor';
 import { HotsDB, GitHubApi, HeroesDataApi } from 'hots-gamedata';
 import { GameVersion } from 'heroesprotocol-data';
+import { ReplayService } from './services/replay/replay.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-root',
@@ -13,7 +15,10 @@ export class AppComponent {
   title = 'heroes-replay-analyser';
   //replay = new Replay();
 
-  constructor() {
+  constructor(
+    private readonly replayService: ReplayService,
+    private readonly router:Router
+    ) {
     this.init()
   }
 
@@ -28,7 +33,10 @@ export class AppComponent {
     const file = fileList[0];
     if (file) {
       if (file.name.endsWith('.StormReplay')) {
-        const replay = new ReplayWorker(file);
+        const match = await this.replayService.loadReplay(file);
+        console.log(match);
+        this.router.navigate(['/match', match.id]);
+       /* const replay = new ReplayWorker(file);
         replay.progress.subscribe( _ => {
           //console.log(_);
         })

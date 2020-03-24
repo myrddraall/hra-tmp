@@ -132,7 +132,7 @@ function createWebWorkerRelay<T>(ofType: Type<T>): Type<IWebworkerRelayInternal>
             const tp = this.parentProxy.targetPath;
             return [...tp, this._remoteId];
         }
-        
+
         public prepareMessage(msg: IWebworkerMessage): void {
             if (msg.messageId === undefined) {
                 msg.messageId = this.nextMessageId;
@@ -1008,6 +1008,62 @@ function createProxyMember(forSide: WebWorkerSide, target: any, propertyKey: str
             }
         }
     }
+}
+
+const CACHED_KEY = '__cache_value__'
+function getCacheValue(inst: any, propertyKey: string | symbol, key: string): any {
+    return (Reflect.getOwnMetadata(CACHED_KEY, inst, propertyKey) as Map<string, any>)?.get(key);
+}
+function setCacheValue(inst: any, propertyKey: string | symbol, key: string, value: void): any {
+    if (!Reflect.hasOwnMetadata(CACHED_KEY, inst, propertyKey)) {
+        Reflect.defineMetadata(CACHED_KEY, new Map(), inst, propertyKey);
+    }
+    const m: Map<string, any> = Reflect.getOwnMetadata(CACHED_KEY, inst, propertyKey);
+    m.set(key, value);
+}
+
+function hasCacheValue(inst: any, propertyKey: string | symbol, key: string): boolean {
+    return (Reflect.getOwnMetadata(CACHED_KEY, inst, propertyKey) as Map<string, any>)?.has(key);
+}
+
+function deleteCacheValue(inst: any, propertyKey: string | symbol, key: string): void {
+    (Reflect.getOwnMetadata(CACHED_KEY, inst, propertyKey) as Map<string, any>)?.delete(key);
+}
+export function Cache(): MethodDecorator {
+    return (target: Object, propertyKey: string | symbol, descriptor?: TypedPropertyDescriptor<any>): TypedPropertyDescriptor<any> | void => {
+        const isProperty = !!descriptor.get;
+        const isMethod = !isProperty && !!descriptor.value;
+        if (isMethod) {
+            return {
+                value: function (...args: any[]): any {
+                    const key = JSON.stringify(args);
+                    if (hasCacheValue(this, propertyKey, key)) {
+                        return getCacheValue(this, propertyKey, key);
+                    }
+                    const ret = descriptor.value.apply(this, args);
+                    setCacheValue(this, propertyKey, key, ret);
+                    return ret;
+                }
+            };
+        } else {
+            return {
+                get: function (): any {
+                    if (hasCacheValue(this, propertyKey, '')) {
+                        return getCacheValue(this, propertyKey, '');
+                    }
+                    const ret = descriptor.get.call(this);
+                    setCacheValue(this, propertyKey, '', ret);
+                    return ret;
+                },
+                set: function (value:any): void {
+                    if(descriptor.set){
+                        deleteCacheValue(this, propertyKey, '')
+                        descriptor.set.call(this, value);
+                    }
+                }
+            };
+        }
+    };
 }
 
 export function RunOnWorker(): MethodDecorator {

@@ -9,12 +9,11 @@ import { IEnergy } from './IEnergy';
 export interface IUnit {
     unitId: string;
     hyperlinkId: string;
-    attributeId: string;
     franchise: string;
     gender: string;
     innerRadius: number;
     radius: number;
-    releaseDate: Date;
+    releaseDate: string;
     sight: number;
     speed: number;
     rarity: string;

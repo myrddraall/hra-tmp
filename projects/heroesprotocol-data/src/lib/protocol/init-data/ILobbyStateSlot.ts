@@ -29,4 +29,6 @@ export interface ILobbyStateSlot {
     m_userId: number;
     m_voiceLine: string;
     m_workingSetSlotId: number;
+    m_isBlizzardStaff:boolean;
+    m_hasActiveBoost:boolean;
 }

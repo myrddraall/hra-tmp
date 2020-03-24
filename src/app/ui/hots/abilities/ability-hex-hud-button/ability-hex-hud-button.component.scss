@@ -1,0 +1,23 @@
+$size: 7.2em;
+// base layout
+:host {
+  font-size: var(--base-size);
+  position: relative;
+  display: inline-block;
+  width: $size * 0.86;
+  height: $size;
+  hra-hex-button-border,
+  hra-icon-vhex {
+    font-size: 1em;
+  }
+
+  .hotkey {
+    position: absolute;
+    font-size: 1.6em;
+    line-height: 1.6em;
+    top: 3em;
+    left: 0.2em;
+    font-weight: bold;
+    text-shadow: 0 0 0.1em #000,0 0 0.1em #000,0 0 0.1em #000,0 0 0.1em #000,0 0 0.1em #000,0 0 0.1em #000,0 0 0.1em #000,0 0 0.1em #000,0 0 0.1em #000,0 0 0.1em #000,0 0 0.1em #000,0 0 0.1em #000;
+  }
+}
