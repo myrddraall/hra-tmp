@@ -99,10 +99,10 @@ $size: 7.2em;
   &[selected],
   &.selected {
     [content] {
-      filter: grayscale(0);
+      filter: grayscale(0) !important;
     }
     [border] {
-      background-position: bottom left;
+      background-position: bottom left  !important;
     }
   }
 }

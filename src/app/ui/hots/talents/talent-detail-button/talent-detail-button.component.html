@@ -1,0 +1,10 @@
+<hra-hex-button-border [attr.disabled]="!!model ? undefined : ''">
+    <hra-icon-vhex [iconUrl]="iconUrl"></hra-icon-vhex>
+</hra-hex-button-border>
+
+<div class="info">
+    <div class="name">{{model.name}}</div>
+    <div class="desc" [hraTooltipText]="model.shortDescription"></div>
+</div>
+
+<hra-talent-tooltip *hraTooltip="tooltiop" [talent]="model" [hero]="hero"></hra-talent-tooltip>

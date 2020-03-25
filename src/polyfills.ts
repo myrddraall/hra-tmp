@@ -61,3 +61,21 @@ import 'reflect-metadata';
 /***************************************************************************************************
  * APPLICATION IMPORTS
  */
+
+import { ElementQueries } from 'css-element-queries';
+ElementQueries.listen();
+
+const styleobs = new MutationObserver(records=>{
+    let found = false;
+    records.forEach(record =>{
+        record.addedNodes.forEach(_ =>{ 
+            if(_.nodeName === 'STYLE'){
+                found = true;
+            }
+        })
+    });
+    if(found){
+        ElementQueries.init();
+    }
+});
+styleobs.observe(document.querySelector('head'), {childList: true});

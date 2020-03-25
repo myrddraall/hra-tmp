@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges } from '@angular/core';
+import { Component, OnInit, OnChanges, HostBinding } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router, } from '@angular/router';
 import { IHero, ITalent, HeroModel } from 'hots-gamedata';
@@ -30,18 +30,19 @@ export class HeroTalentSelectorComponent implements OnInit, OnChanges {
   ) {
     this.route.data.subscribe(data => {
       if (this._hero?.id !== data.hero.id) {
-        console.log('%%%%%%%%%%', data, this._hero?.id, data.hero.id)
         this._hero = new HeroModel(data.hero);
         this.update();
      }
     });
     this.route.params.subscribe(params => {
       if(this._hero){
-        console.log('^^^^^^^^^^^^^', params);
         this.update();
       }
     })
   }
+
+  @HostBinding('attr.display-mode')
+  public displayMode: 'icon' | 'tile' = 'icon';
 
   public get hero(): HeroModel {
     return this._hero;
@@ -107,9 +108,34 @@ export class HeroTalentSelectorComponent implements OnInit, OnChanges {
       return;
     }
 
-    this._selectedTalents[tier] = index;
     const talent = this._hero.talents['level' + tier][index];
+    const prevTalent = this._hero.talents['level' + tier][this._selectedTalents[tier]];
+ 
+  
    
+
+    console.log(prevTalent, talent);
+
+    // deselect any talents that had the previously selected talent as a requirement
+    if(prevTalent){
+      const dependantTalents = this._hero.findTalents(t => {
+        if(!t.prerequisiteTalentIds || t.prerequisiteTalentIds.indexOf(prevTalent.id) === -1){
+          return false;
+        }
+        return true;
+      });
+      for (const dtalent of dependantTalents) {
+        const dtier = dtalent.tier;
+        const didx = dtalent.sort - 1;
+        if(this._selectedTalents[dtier] === didx){
+          this._selectedTalents[dtier] = -1;
+        }
+      }
+    }
+    // select the talent
+    this._selectedTalents[tier] = index;
+ 
+    // select talents required by this talent
     if(talent.prerequisiteTalentIds){
       for (const id of talent.prerequisiteTalentIds) {
        const preTalent = this._hero.findTalentById(id);
@@ -117,22 +143,6 @@ export class HeroTalentSelectorComponent implements OnInit, OnChanges {
       }
     }
 
-    const dependantTalents = this._hero.findTalents(t => {
-      if(!t.prerequisiteTalentIds || t.prerequisiteTalentIds.indexOf(talent.id) === -1){
-        return false;
-      }
-      return true;
-    });
-    for (const dtalent of dependantTalents) {
-      const dtier = dtalent.tier;
-      const didx = dtalent.sort - 1;
-      if(this._selectedTalents[dtier] !== didx){
-        const stalent = this._hero.talents['level' + dtier][this._selectedTalents[dtier]];
-        if(stalent.prerequisiteTalentIds ){
-          this._selectedTalents[dtier] = -1;
-        }
-      }
-    }
     this.updateValue();
   }
 

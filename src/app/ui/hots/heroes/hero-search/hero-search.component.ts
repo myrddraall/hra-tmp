@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter, HostBinding } from '@angular/core';
 import { IBasicHeroModel } from 'hots-gamedata';
 
 import { CollapsableComponent } from 'src/app/ui/common/containers/collapsable/collapsable.component';
@@ -30,11 +30,15 @@ export class HeroSearchComponent implements OnInit {
     return this._selected;
   }
 
+  public erFilter: Set<string> = new Set();
+  public fFilter: Set<string> = new Set();
+
+  @HostBinding('class.opened')
   public opened: boolean;
 
-  public open(){
+  public open() {
     this.opened = true;
-    setTimeout(()=>{
+    setTimeout(() => {
       this.focusUpdates.next(true);
     })
   }
@@ -56,8 +60,33 @@ export class HeroSearchComponent implements OnInit {
 
   constructor() { }
 
+  public setERFilter(value: string) {
+    //this.search?.nativeElement.focus();
+    if (this.erFilter.has(value)) {
+      this.erFilter.delete(value);
+    } else {
+      this.erFilter.add(value);
+    }
+    this.focusUpdates.next(true);
+    this.doFilter();
+  }
+
+  public setFFilter(value: string) {
+    //this.search?.nativeElement.focus();
+    if (this.fFilter.has(value)) {
+      this.fFilter.delete(value);
+    } else {
+      this.fFilter.add(value);
+    }
+    this.focusUpdates.next(true);
+    this.doFilter();
+  }
+
   ngOnInit(): void {
-    this.visibleHeroList = this.heroList;
+    if(!this.value){
+      this.opened = true;
+    }
+    this.doFilter();
     this.focusUpdates.pipe(debounceTime(200)).subscribe(value => {
       if (value) {
         this.search.nativeElement.focus();
@@ -69,6 +98,8 @@ export class HeroSearchComponent implements OnInit {
       }
     });
     this.searchUpdates.pipe(debounceTime(200)).subscribe(value => {
+      this.doFilter();
+      /*
       value = value || '';
       value = value.toLowerCase();
       if (this.previousSearch !== value) {
@@ -114,7 +145,7 @@ export class HeroSearchComponent implements OnInit {
         }).toArray();
         console.log('search change', value, this.visibleHeroList);
         this.previousSearch = value;
-      }
+      }*/
       //linq.from(this.heroList)
     });
   }
@@ -129,6 +160,66 @@ export class HeroSearchComponent implements OnInit {
 
   updateSearch() {
     this.searchUpdates.next(this.search.nativeElement.value);
+  }
+
+  private doFilter() {
+    let q: IEnumerable<IBasicHeroModel> = linq.from(this.heroList);
+
+    if (this.erFilter.size) {
+      q = q.where(_ => {
+        let role = _.expandedRole.toLowerCase().split(' ')[0];
+        return this.erFilter.has(role);
+      });
+    }
+
+    if (this.fFilter.size) {
+      q = q.where(_ => {
+        let franchise = _.franchise.toLowerCase();
+        switch (franchise) {
+          case 'warcraft':
+          case 'starcraft':
+          case 'overwatch':
+          case 'diablo':
+            break;
+          default:
+            franchise = 'nexus';
+        }
+        return this.fFilter.has(franchise);
+      });
+    }
+
+    if (this.search?.nativeElement.value) {
+      const value = this.search.nativeElement.value.toLowerCase();
+      q = q.where(hero => {
+        if (hero.name.toLowerCase().indexOf(value) !== -1) {
+          return true;
+        }
+        if (hero.title.toLowerCase().indexOf(value) !== -1) {
+          return true;
+        }
+        if (hero.gender.toLowerCase().indexOf(value) !== -1) {
+          return true;
+        }
+        if (hero.role.toLowerCase().indexOf(value) !== -1) {
+          return true;
+        }
+        if (hero.expandedRole.toLowerCase().indexOf(value) !== -1) {
+          return true;
+        }
+        if (hero.difficulty.toLowerCase().indexOf(value) !== -1) {
+          return true;
+        }
+        if (hero.searchText && hero.searchText.toLowerCase().indexOf(value) !== -1) {
+          return true;
+        }
+        if (hero.tags && hero.tags.join(' ').toLowerCase().indexOf(value) !== -1) {
+          return true;
+        }
+        return false;
+      });
+    }
+
+    this.visibleHeroList = q.orderBy(_ => _.name).toArray();
   }
 
   public setSelected(hero: IBasicHeroModel | string): void {

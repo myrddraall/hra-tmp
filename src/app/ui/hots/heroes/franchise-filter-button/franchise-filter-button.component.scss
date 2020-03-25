@@ -1,0 +1,81 @@
+$width: 5.6em;
+$height: 6em;
+
+:host {
+  font-size: var(--base-size);
+  position: relative;
+  display: inline-block;
+  width: $width - 2.3em;
+  height: $height - 2.2em;
+  z-index: 2;
+ // background-color: aqua;
+  &::before {
+    content: " ";
+    position: absolute;
+    top: -0.9em;
+    left: -1.2em;
+    width: $width;
+    height: $height;
+    z-index: 1;
+    background-image: url(~/assets/ui/icons/filter-btn-bg-sheet.png);
+    background-size: $width $height * 3;
+    pointer-events: none;
+  }
+
+  &::after {
+    content: " ";
+    position: absolute;
+    top: -1em;
+    left: -1.2em;
+    width: $width;
+    height: $height;
+    z-index: 1;
+    background-image: url(~/assets/ui/icons/filter-franchise-sheet.png);
+    background-size: $width * 5 $height * 3;
+    pointer-events: none;
+  }
+  &[hover],
+  &:hover {
+    &::before,
+    &::after {
+      background-position-y: center;
+    }
+  }
+  &[selected],
+  &.selected {
+    &::before,
+    &::after {
+      background-position-y: bottom;
+    }
+  }
+
+  &[franchise="warcraft"]{
+    &::after {
+        background-position-x: 0em;
+      }
+  }
+  &[franchise="starcraft"]{
+    &::after {
+        background-position-x: -$width;
+      }
+  }
+
+  &[franchise="overwatch"]{
+    &::after {
+        background-position-x: -$width*2;
+      }
+  }
+
+  &[franchise="diablo"]{
+    &::after {
+        background-position-x: -$width*3;
+      }
+  }
+
+  &[franchise="nexus"]{
+    &::after {
+        background-position-x: -$width*4;
+      }
+  }
+
+}

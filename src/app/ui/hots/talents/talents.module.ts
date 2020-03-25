@@ -6,17 +6,20 @@ import { ButtonsModule } from '../buttons/buttons.module';
 import { IconsModule } from '../icons/icons.module';
 import { TalentTooltipComponent } from './talent-tooltip/talent-tooltip.component';
 import { TextModule } from '../../common/text/text.module';
+import { TalentDetailButtonComponent } from './talent-detail-button/talent-detail-button.component';
 
 
 
 @NgModule({
   declarations: [
     TalentSquareButtonComponent,
-    TalentTooltipComponent
+    TalentTooltipComponent,
+    TalentDetailButtonComponent
   ],
   exports: [
     TalentSquareButtonComponent,
-    TalentTooltipComponent
+    TalentTooltipComponent,
+    TalentDetailButtonComponent
   ],
   imports: [
     CommonModule,

@@ -66,20 +66,37 @@ export class GitHubApi {
 
     private async callApi<T>(url: string): Promise<T> {
         const headers: any = {};
-        const fileTime = await FileCache.getFileEtag(url);
-        if (fileTime) {
-            headers['If-None-Match'] = fileTime;
+        const etag = await FileCache.getFileEtag(url);
+        if (etag) {
+            headers['If-None-Match'] = etag;
+            headers['If-Modified-Since'] = await FileCache.getFileTime(url);
         }
-        const response = await fetch(url, {
-            headers
-        });
-        if (response.ok) {
-            const rText = await response.text();
-            FileCache.storeFile(url, response.headers.get('etag'), rText);
-            return JSON.parse(rText);
-        } else if (response.status === 304) {
-            const rText = await FileCache.getFile(url);
-            return JSON.parse(rText);
+        try{
+            const response = await fetch(url, {
+                headers
+            });
+            if (response.ok) {
+                const rText = await response.text();
+                FileCache.storeFile(url, response.headers.get('etag'), response.headers.get('last-modified'), rText);
+                return JSON.parse(rText);
+            } else if (response.status === 304) {
+                const rText = await FileCache.getFile(url);
+                return JSON.parse(rText);
+            }else{
+                console.warn(response.status, response.statusText);
+                if (etag) {
+                    const rText = await FileCache.getFile(url);
+                    return JSON.parse(rText);
+                }
+            }
+        }catch(e){
+            if(e instanceof TypeError){
+                if (etag) {
+                    const rText = await FileCache.getFile(url);
+                    return JSON.parse(rText);
+                }
+            }
+            throw e;
         }
         return null;
 

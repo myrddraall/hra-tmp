@@ -1,0 +1,86 @@
+$width: 5.6em;
+$height: 6em;
+
+:host {
+  font-size: var(--base-size);
+  position: relative;
+  display: inline-block;
+  width: $width - 2.3em;
+  height: $height - 2.2em;
+  z-index: 2;
+ // background-color: aqua;
+  &::before {
+    content: " ";
+    position: absolute;
+    top: -0.9em;
+    left: -1.2em;
+    width: $width;
+    height: $height;
+    z-index: 1;
+    background-image: url(~/assets/ui/icons/filter-btn-bg-sheet.png);
+    background-size: $width $height * 3;
+    pointer-events: none;
+  }
+
+  &::after {
+    content: " ";
+    position: absolute;
+    top: -1em;
+    left: -1.2em;
+    width: $width;
+    height: $height;
+    z-index: 1;
+    background-image: url(~/assets/ui/icons/extended-role-sheet.png);
+    background-size: $width * 6 $height * 3;
+    pointer-events: none;
+  }
+  &[hover],
+  &:hover {
+    &::before,
+    &::after {
+      background-position-y: center;
+    }
+  }
+  &[selected],
+  &.selected {
+    &::before,
+    &::after {
+      background-position-y: bottom;
+    }
+  }
+
+  &[role="tank"]{
+    &::after {
+        background-position-x: 0em;
+      }
+  }
+  &[role="bruiser"]{
+    &::after {
+        background-position-x: -$width;
+      }
+  }
+
+  &[role="support"]{
+    &::after {
+        background-position-x: -$width*3;
+      }
+  }
+
+  &[role="healer"]{
+    &::after {
+        background-position-x: -$width*4;
+      }
+  }
+
+  &[role="ranged"]{
+    &::after {
+        background-position-x: -$width*5;
+      }
+  }
+
+  &[role="melee"]{
+    &::after {
+        background-position-x: -$width*2;
+      }
+  }
+}

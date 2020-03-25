@@ -33,9 +33,9 @@
     .left {
       display: flex;
       flex-direction: column;
-      align-items: center;
+      align-items: flex-start;
     //  background-color: red;
-      width:40%;
+      width:100%;
       height: 100%;
       flex-grow: 1;
     }
@@ -43,9 +43,9 @@
       display: flex;
      // background-color: blue;
      align-items: center;
-      width:60%;
+      //width:60%;
       height: 100%;
-      flex-grow: 1;
+      flex-grow: 0;
       mat-slider{
         width:20%;
         margin-left: 0.5em;
@@ -63,6 +63,13 @@
         hra-talent-square-button {
           display: block;
           margin: 2px;
+        }
+
+        &.tier-header{
+          padding: 1em;
+          font-size: 1.5em;
+          line-height: 1.5em;
+          text-align: center;
         }
       }
     }

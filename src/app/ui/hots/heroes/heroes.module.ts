@@ -11,16 +11,22 @@ import { FormsModule } from '@angular/forms';
 import { ContainersModule } from '../../common/containers/containers.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { ExtendedRoleFilterButtonComponent } from './extended-role-filter-button/extended-role-filter-button.component';
+import { FranchiseFilterButtonComponent } from './franchise-filter-button/franchise-filter-button.component';
 
 
 @NgModule({
   declarations: [
     HeroSquareButtonComponent,
-    HeroSearchComponent
+    HeroSearchComponent,
+    ExtendedRoleFilterButtonComponent,
+    FranchiseFilterButtonComponent
   ],
   exports: [
     HeroSquareButtonComponent,
-    HeroSearchComponent
+    HeroSearchComponent,
+    ExtendedRoleFilterButtonComponent,
+    FranchiseFilterButtonComponent
   ],
   imports: [
     CommonModule,
