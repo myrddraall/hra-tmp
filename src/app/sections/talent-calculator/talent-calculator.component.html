@@ -1,4 +1,10 @@
 <header>
     <hra-hero-search [heroList]="heroList" (valueChange)="onHeroSelect($event)" [value]="selectedHeroId"></hra-hero-search>
+    <div class="mode-buttons">
+        <button mat-icon-button [color]="mode === 'tile'? 'accent' : 'primary'" (click)="mode = 'tile'"><mat-icon>view_list</mat-icon></button>
+        <button mat-icon-button [color]="mode === 'icon'? 'accent' : 'primary'" (click)="mode = 'icon'"><mat-icon>apps</mat-icon></button>
+    </div>
 </header>
-<router-outlet></router-outlet>
+<div>
+    <router-outlet></router-outlet>
+</div>

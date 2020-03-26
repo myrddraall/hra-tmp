@@ -9,7 +9,8 @@ import { TalentCalculatorRoutingModule } from './talent-calculator-routing.modul
 import { TalentCalculatorComponent } from './talent-calculator.component';
 import { ContainersModule } from 'src/app/ui/common/containers/containers.module';
 import { MatSliderModule } from '@angular/material/slider';
-
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
 
 @NgModule({
   declarations: [TalentCalculatorComponent, HeroTalentSelectorComponent, HeroTalentCalcDescriptionComponent],
@@ -20,6 +21,8 @@ import { MatSliderModule } from '@angular/material/slider';
     ContainersModule,
     TalentsModule,
     HeroesModule,
+    MatButtonModule,
+    MatIconModule,
     TalentCalculatorRoutingModule
   ]
 })

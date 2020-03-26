@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { IHeroListItem } from 'hots-gamedata';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-talent-calculator',
@@ -8,6 +9,9 @@ import { IHeroListItem } from 'hots-gamedata';
   styleUrls: ['./talent-calculator.component.scss']
 })
 export class TalentCalculatorComponent implements OnInit {
+
+  private _mode: 'icon' | 'tile' = 'tile';
+  public modeChanged:BehaviorSubject<'icon' | 'tile'> = new BehaviorSubject('tile');
 
   public get heroList(): IHeroListItem[] {
     return this.route.snapshot.data.heroList;
@@ -19,6 +23,19 @@ export class TalentCalculatorComponent implements OnInit {
 
   ngOnInit(): void {
 
+  }
+
+  public get mode(): 'icon' | 'tile' {
+    return this._mode;
+  }
+
+  public set mode(value: 'icon' | 'tile') {
+    if(this.mode !== value){
+      this._mode =  value;
+      this.modeChanged.next(value);
+    }else{
+      this._mode =  value;
+    }
   }
 
   public get selectedHeroId(): string {

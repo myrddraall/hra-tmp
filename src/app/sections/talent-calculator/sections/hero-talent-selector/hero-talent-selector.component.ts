@@ -3,6 +3,7 @@ import { Location } from '@angular/common';
 import { ActivatedRoute, Router, } from '@angular/router';
 import { IHero, ITalent, HeroModel } from 'hots-gamedata';
 import { HeroStringsUtil } from 'hots-gamedata';
+import { TalentCalculatorComponent } from '../../talent-calculator.component';
 
 @Component({
   selector: 'app-hero-talent-selector',
@@ -27,7 +28,11 @@ export class HeroTalentSelectorComponent implements OnInit, OnChanges {
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly location: Location,
+    private readonly parent: TalentCalculatorComponent
   ) {
+    parent.modeChanged.subscribe((value)=>{
+      this.displayMode = value;
+    });
     this.route.data.subscribe(data => {
       if (this._hero?.id !== data.hero.id) {
         this._hero = new HeroModel(data.hero);

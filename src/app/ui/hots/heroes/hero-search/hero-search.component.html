@@ -5,7 +5,7 @@
         <mat-icon>expand_more</mat-icon>
     </button>
 </div>
-<collapsable #details origin="top" duration="250ms" [open]="opened || !selectedHero">
+<collapsable #details origin="top" duration="250ms" [open]="opened || !selectedHero" (click)="updateFocus(true)">
     <div class="filters">
         <div class="filter-buttons">
             <div class="filter extended-roles">

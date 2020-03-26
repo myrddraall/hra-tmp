@@ -3,11 +3,27 @@
   flex-direction: column;
   min-height: 100%;
   justify-content: stretch;
-  > * {
+  > div {
     flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    padding-top:1em;
   }
   hra-hero-search,
   router-outlet {
     flex-grow: 0;
+  }
+
+  header{
+    position: relative;
+    display: flex;
+    align-items: center;
+    z-index:5;
+    background-color: rgba(0,0,0,0.82);
+    width:100%;
+    border-bottom: 1px solid rgba(149, 160, 255, 0.42);
+    .mode-buttons{
+      padding: 0.8em;
+    }
   }
 }
