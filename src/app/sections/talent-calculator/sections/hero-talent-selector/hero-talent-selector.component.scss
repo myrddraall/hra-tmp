@@ -15,7 +15,6 @@
     z-index: 1;
   }
   section[talents] {
-   
     height: 100%;
     flex-grow: 1;
     display: flex;
@@ -33,21 +32,18 @@
     .left {
       display: flex;
       flex-direction: column;
-      align-items: flex-start;
-    //  background-color: red;
-      width:100%;
-    //  height: 100%;
+      align-items: center;
+      justify-content: flex-start;
+      width: 100%;
       flex-grow: 1;
+      //  background-color: rgba(255, 0, 0, 0.3);
     }
     .right {
       display: flex;
-     // background-color: blue;
-     align-items: center;
-      //width:60%;
-   //   height: 100%;
+      align-items: center;
       flex-grow: 0;
-      mat-slider{
-        width:20%;
+      mat-slider {
+        width: 20%;
         margin-left: 0.5em;
       }
     }
@@ -65,8 +61,8 @@
           margin: 2px;
         }
 
-        &.tier-header{
-          padding: 1em;
+        &.tier-header {
+          padding: 0.86em;
           font-size: 1.5em;
           line-height: 1.5em;
           text-align: center;
@@ -78,7 +74,7 @@
     position: fixed;
     display: flex;
     width: 100%;
-    background-color: red;
+   // background-color: red;
     height: $footerHeight;
     left: 0px;
     align-items: flex-end;
@@ -98,6 +94,35 @@
       justify-content: center;
       flex-grow: 1;
       // background-color: green;
+    }
+  }
+  &[display-mode="icon"] {
+    .talent-container {
+      .left {
+        width: 50%;
+      }
+      .right {
+        width: 50%;
+      }
+    }
+    &[max-width~="800px"] {
+      .talent-container {
+        .left {
+          width: 100%;
+        }
+        .right {
+          width: 0%;
+        }
+      }
+    }
+  }
+  &[min-width~="1350px"] {
+    hra-talent-detail-button {
+      font-size: 12px;
+      margin: 0.6em 0.8em;
+    }
+    .tier-header {
+      
     }
   }
 }

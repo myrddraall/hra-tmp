@@ -25,9 +25,6 @@ export class HeroesCollection extends Collection<IHeroRecord> {
     }
 
     private createUnit(heroData: DTOs.IUnit, gamestrings: IGameStrings): Models.IUnit {
-       
-    
-        
         const hid = heroData.hyperlinkId;
         const unit: Models.IUnit = {
             linkId: heroData.hyperlinkId,

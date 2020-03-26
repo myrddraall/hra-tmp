@@ -62,6 +62,7 @@ $statsOffset: $portraitWidth * 0.28;
     z-index: 20;
     height: $height;
     width: $portraitWidth;
+    cursor: pointer;
     .frame {
       position: absolute;
       left: -$frameOffsetLeft;
@@ -182,6 +183,9 @@ $statsOffset: $portraitWidth * 0.28;
       }
     }
   }
+}
+hra-tooltip-panel{
+  padding: 1em;
 }
 
 /*

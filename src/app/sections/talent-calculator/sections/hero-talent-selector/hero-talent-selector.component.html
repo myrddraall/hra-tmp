@@ -2,7 +2,7 @@
   <img class="bg" [src]="bgUrl" />
   <div class="talent-container">
     <div class="left">
-      <table cellpadding="0" cellspacing="0">
+      <table cellpadding="0" cellspacing="0" *ngIf="hero && displayMode">
         <tr class="talent-tier" *ngFor="let tier of ['1','4','7','10','13','16','20']" [ngClass]="['tier-' + tier]">
           <td class="tier-header">{{tier}}</td>
           <td class="talent-cell" *ngFor="let talent of hero?.talents['level' + tier]; let i = index"
@@ -19,9 +19,12 @@
 
     </div>
     <div class="right">
-      <label>Level</label>
-      <mat-slider min="0" max="30" step="1" [(value)]="hero.level" tickInterval="1"></mat-slider>
-      <label>{{hero.level}}</label>
+      <!-- 
+
+        <label>Level</label>
+        <mat-slider min="0" max="30" step="1" [(value)]="hero.level" tickInterval="1"></mat-slider>
+        <label>{{hero.level}}</label>
+      -->
     </div>
   </div>
   <!-- 
@@ -33,14 +36,16 @@
 
 </section>
 
-<!--
+
 
   <footer>
     <div class="left">
       <hra-hero-hud-unit [hero]="hero"></hra-hero-hud-unit>
     </div>
+  
     <div class="right">
       <hra-hero-hud-abilities [hero]="hero"></hra-hero-hud-abilities>
     </div>
+
+
   </footer>
--->

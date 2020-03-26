@@ -1,12 +1,15 @@
 import { CommonModule } from '@angular/common';
 import { NgModule } from '@angular/core';
-import { IconsModule } from '../icons';
-import { TooltipsModule } from '../../ui/common/tooltip/tooltip.module';
+
 import { HeroHudUnitComponent } from './hero-hud-unit/hero-hud-unit.component';
 
 import { HeroHudAbilitiesComponent } from './hero-hud-abilities/hero-hud-abilities.component';
-import { TextModule } from 'src/app/ui/common/text/text.module';
+import { TextModule } from '../../../common/text/text.module';
 import { ContainersModule } from 'src/app/ui/common/containers/containers.module';
+import { IconsModule } from '../../icons/icons.module';
+import { TooltipsModule } from '../../../common/tooltip/tooltip.module';
+import { ImageModule } from '../../../common/image/image.module';
+import { AbilitiesModule } from '../../abilities/abilities.module';
 
 
 
@@ -19,7 +22,8 @@ import { ContainersModule } from 'src/app/ui/common/containers/containers.module
     ContainersModule,
     TooltipsModule,
     TextModule,
-    IconsModule
+    ImageModule,
+    AbilitiesModule
   ]
 })
 export class HudModule { }

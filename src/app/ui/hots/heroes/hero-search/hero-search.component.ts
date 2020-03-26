@@ -228,6 +228,6 @@ export class HeroSearchComponent implements OnInit {
     }
     this.value = hero;
     this.selectedHero = this.heroList.find(_ => _.id === hero);
-
+    this.opened = false;
   }
 }

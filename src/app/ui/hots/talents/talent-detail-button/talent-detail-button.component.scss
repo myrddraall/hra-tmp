@@ -1,23 +1,27 @@
-$size: 7.5em;
+$size: 5.6em;
 // base layout
 :host {
   font-size: var(--base-size);
   position: relative;
   display: flex;
-  width: $size * 4;
+  width: $size * 4.5;
   height: $size;
   align-items: center;
 
   border: 1px solid rgba(149, 160, 255, 0.42);
-  background-color: rgb(19, 9, 54, 0.69);
-  box-shadow: 0px 0px 2px 1px rgba(149, 160, 255, 0.42);
-  margin: 0.4em;
+  background-color: rgb(19, 9, 54, 0.9);
+  box-shadow: 0px 0px 0.2em 0.1em rgba(149, 160, 255, 0.42);
+  margin: 0.2em;
   padding: 0.8em;
-
+  margin-left:1em;
   hra-hex-button-border,
   hra-icon-vhex {
     font-size: 0.9em;
     margin-right: 1em;
+  }
+  hra-hex-button-border{
+    margin-left: -1.6em;
+    opacity: 0.6;
   }
   .info{
     font-size: 1.2em;
@@ -25,22 +29,43 @@ $size: 7.5em;
     display: flex;
     width:100%;
     flex-direction: column;
+    opacity: 0.6;
     .name{
-      font-size: 1.4em;
-      line-height: 1.4em;
+      font-size: 1.3em;
+      line-height: 1.3em;
+
       overflow: hidden;
       width:$size * 1.8;
       white-space: nowrap;
       text-overflow: ellipsis;
-      margin-bottom: 0.2em;
+      margin-top: 0.01em;
     }
     .desc{
       color: #bfd4fd;
-      width:$size * 2.4;
-      //background-color: aquamarine;
+      font-size: 0.9em;
+      line-height: 1.1em;
+      width:$size * 3.1;
+      font-weight: 300;
+      //margin-top: -0.1em;
+      //background-color: darkgreen;
     }
+  }
+  &:hover{
+    .info, hra-hex-button-border{
+      opacity: 1;
+    }
+    border: 1px solid rgba(210, 214, 252, 0.5);
   }
   &.selected {
     z-index: 2;
+    border: 1px solid rgba(0, 255, 255, 0.9);
+   
+    box-shadow: inset 0px 0px 1em 0.2em rgba(0, 255, 255, 0.42), 0px 0px 1em 0.2em rgba(0, 255, 255, 0.42);
+    background-color: rgb(29, 22, 53);
+    .info, hra-hex-button-border{
+      opacity: 1;
+    }
   }
+
+  
 }

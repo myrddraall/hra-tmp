@@ -1,6 +1,6 @@
 <div class="selected-hero" (click)="open()">
     <hra-hero-square-button [hero]="selectedHero"></hra-hero-square-button>
-    <label>{{selectedHero.name}}</label>
+    <label>{{selectedHero?.name}}</label>
     <button mat-icon-button color="accent">
         <mat-icon>expand_more</mat-icon>
     </button>
@@ -40,7 +40,7 @@
             <mat-form-field color="accent" appearance="outline">
                 <mat-label>Find a hero</mat-label>
                 <input type="text" #search name="heroId" matInput xplaceholder="Select a Hero"
-                    (focus)="updateFocus(true)" (blur)="updateFocus(false)" (keyup)="updateSearch()"
+                    (focus)="updateFocus(true)" (blur)="selectedHero ? updateFocus(false) : null" (keyup)="updateSearch()"
                     (change)="updateSearch()">
             </mat-form-field>
         </div>

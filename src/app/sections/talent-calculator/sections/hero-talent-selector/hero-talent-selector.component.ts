@@ -1,4 +1,4 @@
-import { Component, OnInit, OnChanges, HostBinding } from '@angular/core';
+import { Component, OnInit, OnChanges, HostBinding, ElementRef } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router, } from '@angular/router';
 import { IHero, ITalent, HeroModel } from 'hots-gamedata';
@@ -22,6 +22,8 @@ export class HeroTalentSelectorComponent implements OnInit, OnChanges {
   }
   private _hero: HeroModel;
 
+ 
+
   public _selectedValue: number = 0;
   // public _selectedValue: number;
   constructor(
@@ -30,6 +32,7 @@ export class HeroTalentSelectorComponent implements OnInit, OnChanges {
     private readonly location: Location,
     private readonly parent: TalentCalculatorComponent
   ) {
+    
     parent.modeChanged.subscribe((value)=>{
       this.displayMode = value;
     });
@@ -61,7 +64,7 @@ export class HeroTalentSelectorComponent implements OnInit, OnChanges {
     if(!this._hero){
       return '';
     }
-    const nName = HeroStringsUtil.normalizeStringNoSpace(this.hero.name, '-').toLowerCase();
+    const nName = HeroStringsUtil.normalizeStringNoSpace(this.hero.heroName, '-').toLowerCase();
     const nTtite = HeroStringsUtil.normalizeStringNoSpace(this.hero.title, '-').toLowerCase();
     if (nName === 'valeera') {
       return `https://static.heroesofthestorm.com/heroes/${nName}/skins/standard/${nTtite}.jpg`

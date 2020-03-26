@@ -3,53 +3,43 @@
         <hra-tooltip-panel>
             <header>
                 <div class="franchise-wrapper">
-                    <img class="franchise" [attr.src]="'/assets/ui/icons/franchise/' + hero.franchise + '.png'"/>
+                    <img class="franchise" [attr.src]="'/assets/ui/icons/franchise/' + hero.franchise + '.png'" />
                 </div>
                 <div>
                     <hra-glowing-text>{{hero.formName}}</hra-glowing-text>
                     <div>{{hero.title}}</div>
                 </div>
             </header>
-            <br/>
-            <div>
-                {{hero.description}}
-            </div>
+            <br />
+            <div [hraTooltipText]="hero.description"></div>
         </hra-tooltip-panel>
-        </div>
+    </div>
 </collapsable>
 <div portrait (click)="details.open = !details.open">
-  <!-- 
-
-      <canvas class="portrait" clip="M 25,14 75,14 98,50 75,87 25,87 2,50 z" background="#000000"
-      [src]="'https://raw.githubusercontent.com/HeroesToolChest/heroes-images/master/heroesimages/heroportraits/' + hero.portraits.draftScreen"></canvas>
-    -->
+    <canvas class="portrait" clipPath="M 25%,14% 75%,14% 98%,50% 75%,87% 25%,87% 2%,50% z" background="#000000"
+        [src]="'https://raw.githubusercontent.com/HeroesToolChest/heroes-images/master/heroesimages/heroportraits/' + hero.portraits.draftScreen"></canvas>
     <img class="frame" src="assets/ui/borders/hud_bg_portraitframe.png" />
 </div>
 <div class="stats-offset">
-    <div forms>
-        <div class="form-button" *ngFor="let form of this.hero.forms; let i = index" (click)="this.hero.formId = form.linkId" [class.selected]="this.hero.formId === form.linkId">
-            <hra-glowing-text>{{i+1}}</hra-glowing-text> 
+    <div forms *ngIf="hero?.forms?.length > 1">
+        <div class="form-button" *ngFor="let form of hero.forms; let i = index"
+            (click)="this.hero.formId = form.linkId" [class.selected]="this.hero.formId === form.linkId">
+            <hra-glowing-text>{{i+1}}</hra-glowing-text>
         </div>
     </div>
     <div stats>
         <img class="frame" src="assets/ui/borders/hud_bg_artbarbottom.png" />
         <div class="resource-bars">
             <div class="resource-bar health" [class.no-resource]="!hero.energyType">
-             <!--
-
-                 <canvas class="bg"
-                 [clip]="!!hero.energyType ? 'M 5,0 86,0 82,99 1,100 z' : 'M 5,0 42.5,0 38.5,99 1,100 z'"
-                 tint="#00ff0088" src="assets/ui/borders/hud_bar_health_generic_straight.png"></canvas>
-                --> 
+                <canvas class="bg"
+                    [clipPath]="!!hero.energyType ? 'M 5%,0% 86%,0% 82%,99% 1%,100% z' : 'M 5%,0% 42.5%,0% 38.5%,99% 1%,100% z'"
+                    tint="#00ff0088" src="assets/ui/borders/hud_bar_health_generic_straight.png"></canvas>
                 <label [hraTooltipText]="'<s>' + hero.life.amount +'~~' +  hero.life.scale + '~~</s>'"
                     [level]="hero?.level"></label>
             </div>
             <div class="resource-bar resource" *ngIf="!!hero.energyType">
-                <!-- 
-
-                    <canvas *ngIf="!!hero.energyType" class="bg" clip="M 5,0 86,0 82,99 1,100 z" [tint]="resourceColor"
-                    src="assets/ui/borders/hud_bar_health_generic_straight.png"></canvas>
-                -->
+                <canvas *ngIf="!!hero.energyType" class="bg" clipPath="M 5%,0% 86%,0% 82%,99% 1%,100% z"
+                    [tint]="resourceColor" src="assets/ui/borders/hud_bar_health_generic_straight.png"></canvas>
                 <label [hraTooltipText]="'<s>' + hero.energy.amount +  resourceScale + '</s>'"
                     [level]="hero?.level"></label>
             </div>

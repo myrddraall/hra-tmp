@@ -13,6 +13,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ExtendedRoleFilterButtonComponent } from './extended-role-filter-button/extended-role-filter-button.component';
 import { FranchiseFilterButtonComponent } from './franchise-filter-button/franchise-filter-button.component';
+import { HudModule } from './hud/hud.module';
 
 
 @NgModule({
@@ -26,7 +27,8 @@ import { FranchiseFilterButtonComponent } from './franchise-filter-button/franch
     HeroSquareButtonComponent,
     HeroSearchComponent,
     ExtendedRoleFilterButtonComponent,
-    FranchiseFilterButtonComponent
+    FranchiseFilterButtonComponent,
+    HudModule
   ],
   imports: [
     CommonModule,
@@ -38,7 +40,8 @@ import { FranchiseFilterButtonComponent } from './franchise-filter-button/franch
     FormsModule,
     ContainersModule,
     MatButtonModule,
-    MatIconModule
+    MatIconModule,
+    HudModule
   ]
 })
 export class HeroesModule { }

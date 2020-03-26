@@ -34,11 +34,31 @@ export class HeroHudAbilitiesComponent implements OnChanges {
           //this.changeRef.markForCheck();
         });
         this.formSub = this.hero.formChange.subscribe(() => {
-          //this.changeRef.markForCheck();
+          this.changeRef.markForCheck();
         });
       }
       
     }
+  }
+
+  public get abilityQ(){
+    return this.hero.abilities.find(_ => _.button.toUpperCase() === 'Q')
+  }
+
+  public get abilityW(){
+    return this.hero.abilities.find(_ => _.button.toUpperCase() === 'W')
+  }
+
+  public get abilityE(){
+    return this.hero.abilities.find(_ => _.button.toUpperCase() === 'E')
+  }
+
+  public get abilityR(){
+    return this.hero.abilities.find(_ => _.button.toUpperCase() === 'R')
+  }
+
+  public get abilityD(){
+    return this.hero.abilities.find(_ => _.button === 'Trait')
   }
 
 }

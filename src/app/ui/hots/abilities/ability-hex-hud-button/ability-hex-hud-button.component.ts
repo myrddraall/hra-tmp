@@ -11,13 +11,21 @@ export class AbilityHexHudButtonComponent extends AbilityButtonComponent {
 
   constructor(
     @Inject(ABILITY_ICON_BASE_PATH) basePath: string
-  ) { 
+  ) {
     super(basePath);
   }
 
-  public get iconUrl():string{
+  public get iconUrl(): string {
     return super.iconUrl || 'assets/ui/borders/hud_btn_bg_ability_locked.png';
   }
-  
+
+  public get button(): string {
+    switch (this.model?.button) {
+      case 'Trait':
+        return 'D';
+      default:
+        return this.model?.button;
+    }
+  }
 
 }

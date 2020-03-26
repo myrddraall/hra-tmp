@@ -26,4 +26,15 @@
       padding: 0.8em;
     }
   }
+  &[max-width~="1199px"]{
+    .talent-container{
+      .left{
+        width:60%;
+      }
+
+      .right{
+        width:40%;
+      }
+    }
+  }
 }
