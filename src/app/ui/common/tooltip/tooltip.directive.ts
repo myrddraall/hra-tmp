@@ -101,6 +101,7 @@ export class TooltipDirective implements OnInit, OnChanges {
       sub.unsubscribe();
     }
     this.eventSubs = [];
+    this.close();
   }
 
   private get attachTo(): HTMLElement {
