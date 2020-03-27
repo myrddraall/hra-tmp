@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ChangeDetectorRef } from '@angular/core';
 import { TemplatePortal } from '@angular/cdk/portal';
 
 @Component({
@@ -8,9 +8,19 @@ import { TemplatePortal } from '@angular/cdk/portal';
 })
 export class TooltipPanelComponent implements OnInit {
 
-  public content:TemplatePortal;
+  private _content:TemplatePortal;
+  public get content():TemplatePortal{
+    return this._content;
+  }
+
+  public set content(value:TemplatePortal){
+    this._content = value;
+    this.changeRef.markForCheck();
+  }
   
-  constructor() { }
+  constructor(
+    private readonly changeRef:ChangeDetectorRef
+  ) { }
 
   ngOnInit(): void {
   }

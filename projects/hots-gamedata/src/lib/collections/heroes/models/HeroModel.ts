@@ -331,6 +331,18 @@ export class HeroModel implements IBasicHeroModel {
         return this.getTalentByIndex(tier, this.getSelectedTalentIndex(tier));
     }
 
+    public get selectedTalents() {
+        return [
+            this.getSelectedTalent('1'),
+            this.getSelectedTalent('4'),
+            this.getSelectedTalent('7'),
+            this.getSelectedTalent('10'),
+            this.getSelectedTalent('13'),
+            this.getSelectedTalent('16'),
+            this.getSelectedTalent('20')
+        ];
+    }
+
     public getSelectedTalentId(tier: TalentTeir) {
         return this.getTalentByIndex(tier, this.getSelectedTalentIndex(tier))?.id;
     }
@@ -338,9 +350,9 @@ export class HeroModel implements IBasicHeroModel {
     public isSelectedTalentIndex(tier: TalentTeir, index: number) {
         return this._selectedTalentIndecies[tier] === index && index !== undefined;
     }
-    
+
     public isSelectedTalentId(id: string, tier?: TalentTeir) {
-        if(!tier){
+        if (!tier) {
             tier = this.findTalentById(id)?.tier.toString() as TalentTeir;
         }
         return this.isSelectedTalentIndex(tier, this.talentIdToIndex(id, tier));
@@ -348,9 +360,9 @@ export class HeroModel implements IBasicHeroModel {
 
     public isSelectedTalentAbilityId(id: string) {
         const talents = this.findTalents(_ => _.abilityTalentLinkIds ? _.abilityTalentLinkIds.indexOf(id) !== -1 : false);
-        if(talents?.length){
+        if (talents?.length) {
             for (const talent of talents) {
-                if(this.isSelectedTalentId(talent?.id)){
+                if (this.isSelectedTalentId(talent?.id)) {
                     return true;
                 }
             }
@@ -363,17 +375,22 @@ export class HeroModel implements IBasicHeroModel {
         return this.talents['level' + tier][index];
     }
 
+    public getSelectedTalentsForAbility(id: string) {
+        return linq.from(this.selectedTalents).where(_ => _?.abilityTalentLinkIds ? _.abilityTalentLinkIds.indexOf(id) !== -1 : false).toArray();
+    }
+
     public get currentAbilities(): IAbility[] {
-        
+
 
         const abilityTalents = this.findTalentsQuery
-            .where(_ => _.button === '#' && this.isSelectedTalentId(_.id, _.tier.toString() as TalentTeir))
-            .select(_ => ({..._, button: 'Active'} as unknown as IAbility))
+            .where(_ => _.button === '#' && this.isSelectedTalentId(_.id, _.tier.toString() as TalentTeir) && !_.prerequisiteTalentIds?.length)
+            .select(_ => ({ ..._, button: 'Active' } as unknown as IAbility))
             .toArray()
-        ;
+            ;
+        
         const base = [...this.data.units[this.formId].abilities, ...abilityTalents];
 
-        //console.log('+++++++++++++++++++', base);
+        //console.log('+++++++++++++++++++', this.abilities);
         return base;
     }
 }

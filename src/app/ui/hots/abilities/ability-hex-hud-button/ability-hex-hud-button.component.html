@@ -2,3 +2,5 @@
     <hra-icon-vhex [iconUrl]="iconUrl"></hra-icon-vhex>
 </hra-hex-button-border>
 <div class="hotkey">{{button}}</div>
+
+<hra-ability-tooltip *hraTooltip="tooltip && !!model?.id" [ability]="model" [hero]="hero" position="below"></hra-ability-tooltip>

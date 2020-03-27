@@ -1,13 +1,48 @@
-import { Overlay, OverlayRef } from '@angular/cdk/overlay';
+import { Overlay, OverlayRef, ConnectedPosition } from '@angular/cdk/overlay';
 import { ComponentPortal, TemplatePortal } from '@angular/cdk/portal';
-import { ComponentFactoryResolver, ComponentRef, Directive, ElementRef, Injector, Input, TemplateRef, ViewContainerRef } from '@angular/core';
-import { fromEvent } from 'rxjs';
+import { ComponentFactoryResolver, ComponentRef, Directive, ElementRef, Injector, Input, TemplateRef, ViewContainerRef, OnChanges, SimpleChanges, OnInit } from '@angular/core';
+import { fromEvent, Unsubscribable } from 'rxjs';
 import { TooltipPanelComponent } from './tooltip-panel/tooltip-panel.component';
+
+
+export enum TooltipPosition {
+  ABOVE = 'above',
+  BELOW = 'below',
+  START = 'start',
+  END = 'end',
+}
+
+const TooltipPositionConnections = {
+  [TooltipPosition.ABOVE]: [
+    { originX: "center", originY: "top", overlayX: "center", overlayY: "bottom", offsetX: 0, offsetY: -10 },
+    { originX: "center", originY: "bottom", overlayX: "center", overlayY: "top", offsetX: 0, offsetY: 10 },
+    { originX: "end", originY: "top", overlayX: "start", overlayY: "top", offsetX: 10, offsetY: -1 },
+    { originX: "start", originY: "top", overlayX: "end", overlayY: "top", offsetX: -10, offsetY: -1 },
+  ],
+  [TooltipPosition.BELOW]: [
+    { originX: "center", originY: "bottom", overlayX: "center", overlayY: "top", offsetX: 0, offsetY: 10 },
+    { originX: "center", originY: "top", overlayX: "center", overlayY: "bottom", offsetX: 0, offsetY: -10 },
+    { originX: "end", originY: "top", overlayX: "start", overlayY: "top", offsetX: 10, offsetY: -1 },
+    { originX: "start", originY: "top", overlayX: "end", overlayY: "top", offsetX: -10, offsetY: -1 },
+  ],
+  [TooltipPosition.START]: [
+    { originX: "start", originY: "top", overlayX: "end", overlayY: "top", offsetX: -10, offsetY: -1 },
+    { originX: "end", originY: "top", overlayX: "start", overlayY: "top", offsetX: 10, offsetY: -1 },
+    { originX: "center", originY: "top", overlayX: "center", overlayY: "bottom", offsetX: 0, offsetY: -10 },
+    { originX: "center", originY: "bottom", overlayX: "center", overlayY: "top", offsetX: 0, offsetY: 10 },
+  ],
+  [TooltipPosition.END]: [
+    { originX: "end", originY: "top", overlayX: "start", overlayY: "top", offsetX: 10, offsetY: -1 },
+    { originX: "start", originY: "top", overlayX: "end", overlayY: "top", offsetX: -10, offsetY: -1 },
+    { originX: "center", originY: "top", overlayX: "center", overlayY: "bottom", offsetX: 0, offsetY: -10 },
+    { originX: "center", originY: "bottom", overlayX: "center", overlayY: "top", offsetX: 0, offsetY: 10 },
+  ]
+}
 
 @Directive({
   selector: '[hraTooltip]'
 })
-export class TooltipDirective {
+export class TooltipDirective implements OnInit, OnChanges {
   private _isOpen: boolean = false;
   private _overlayRef: OverlayRef;
   private _tooltipContainerRef: ComponentRef<TooltipPanelComponent>;
@@ -16,6 +51,11 @@ export class TooltipDirective {
   @Input('hraTooltip')
   public enabled: boolean;
 
+  private eventSubs: Unsubscribable[] = [];
+
+  @Input()
+  public position: TooltipPosition = TooltipPosition.ABOVE;
+
   constructor(
     private readonly templateRef: TemplateRef<any>,
     private readonly viewContainerRef: ViewContainerRef,
@@ -23,17 +63,44 @@ export class TooltipDirective {
     private readonly resolver: ComponentFactoryResolver,
     private readonly injector: Injector
   ) {
-    //  const overlayRef = overlay.create();
-    //const ttRef = overlayRef.attach(new TemplatePortal(templateRef, viewContainerRef));
-    //viewContainerRef.element.nativeElement.
-   
-    const subEnter = fromEvent(this.attachTo, 'mouseenter').subscribe(()=>{
-      this.open();
-    })
 
-    const subLeave = fromEvent(this.attachTo, 'mouseleave').subscribe(()=>{
+  }
+  ngOnInit(): void {
+    if (this.enabled) {
+      this.enableTooltip();
+    } else {
+      this.disableTooltip();
+    }
+  }
+
+  public ngOnChanges(changes: SimpleChanges): void {
+    if (changes.enabled) {
+      if (this.enabled) {
+        this.enableTooltip();
+      } else {
+        this.disableTooltip();
+      }
+    }
+  }
+
+
+  private enableTooltip() {
+    this.disableTooltip();
+
+    this.eventSubs.push(fromEvent(this.attachTo, 'mouseenter').subscribe(() => {
+      this.open();
+    }));
+
+    this.eventSubs.push(fromEvent(this.attachTo, 'mouseleave').subscribe(() => {
       this.close();
-    })
+    }));
+  }
+
+  private disableTooltip() {
+    for (const sub of this.eventSubs) {
+      sub.unsubscribe();
+    }
+    this.eventSubs = [];
   }
 
   private get attachTo(): HTMLElement {
@@ -43,10 +110,12 @@ export class TooltipDirective {
   public open() {
     if (!this._isOpen) {
       if (!this._overlayRef) {
+        const positionStrategy = this.overlay.position().flexibleConnectedTo(new ElementRef(this.attachTo)).withPositions(TooltipPositionConnections[this.position] as ConnectedPosition[]);
         this._overlayRef = this.overlay.create({
-          positionStrategy: this.overlay.position().connectedTo(new ElementRef(this.attachTo), {originX:"end", originY: "top"}, {overlayX: "start", overlayY:"top"})
+          positionStrategy
         });
       }
+      //new ElementRef(this.attachTo), {originX:"end", originY: "top"}, {overlayX: "start", overlayY:"top"}
       this._tooltipContainerRef = this._overlayRef.attach(new ComponentPortal(TooltipPanelComponent, this.viewContainerRef, this.viewContainerRef.injector));
       this._tooltipContainerRef.instance.content = new TemplatePortal(this.templateRef, this.viewContainerRef);
       //this._tooltipContainerRef.instance
@@ -56,7 +125,7 @@ export class TooltipDirective {
       this._overlayRef.attach(tt);
       //this._tooltipRef = this._overlayRef.attach(new TemplatePortal(this.templateRef, this.viewContainerRef));
       */
-     this._isOpen = true;
+      this._isOpen = true;
     }
   }
 

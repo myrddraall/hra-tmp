@@ -141,6 +141,32 @@ export class ShapedImageDirective implements OnInit, OnChanges {
     return this._resolvedclipPath;
   }
 
+  private drawErrorImage() {
+    const canvas = this.elm.nativeElement;
+    var ctx = canvas.getContext('2d');
+    const canvasRect = { top: 0, left: 0, width: 128, height: 128 };
+    canvas.width = canvasRect.width;
+    canvas.height = canvasRect.height;
+    ctx.save();
+    const path = this.getClipPath(canvasRect);
+    if(path){
+      ctx.clip(path);
+    }
+
+     // draw background
+     ctx.fillStyle = this.getColor('#666666').hex('rgba');
+     ctx.fillRect(0, 0, canvas.width, canvas.height);
+     ctx.fillStyle = this.getColor('#444444').hex('rgba');
+     ctx.font = "bold 90px Roboto";
+     ctx.textAlign = "center";
+     ctx.textBaseline = "middle"
+     ctx.fillText('?', canvas.width/2, canvas.height/2 + 8);
+
+    // ctx.fillStyle = this.getColor('#666666').hex('rgba');
+    // ctx.font = "bold 72px Roboto";
+    // ctx.fillText('?', canvas.width/2 + 3, canvas.height/2 + 2);
+     //ctx.restore();
+  }
   private updateImage() {
 
     const canvas = this.elm.nativeElement;
@@ -264,6 +290,9 @@ export class ShapedImageDirective implements OnInit, OnChanges {
   constructor(private readonly elm: ElementRef<HTMLCanvasElement>) {
     this._image.onload = event => {
       this.onImageLoaded(event);
+    }
+    this._image.onerror = event => {
+      this.drawErrorImage();
     }
   }
 

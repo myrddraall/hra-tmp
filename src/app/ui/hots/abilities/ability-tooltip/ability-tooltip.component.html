@@ -1,0 +1,23 @@
+<section class="header">
+    <hra-glowing-text>{{ability.name}}</hra-glowing-text>
+    <hra-ability-type-icon [ability]="ability"></hra-ability-type-icon>
+</section>
+<section *ngIf="ability.energyCostDescription">
+    <div [hraTooltipText]="ability.energyCostDescription" [level]="hero?.level"></div>
+</section>
+<section *ngIf="ability.cooldownDescription">
+    <div [hraTooltipText]="ability.cooldownDescription" [level]="hero?.level"></div>
+</section>
+<section>
+    <div [hraTooltipText]="ability.description" [level]="hero?.level"></div>
+</section>
+<section>
+    <div>
+        <ng-container *ngFor="let talent of talents">
+            <div *ngIf="talent.button !== 'Heroic' || !talent.isActive">
+                <span style="color:rgb(228, 184, 0)">[{{talent.name}}] </span>
+                <span>{{talent.shortDescription}}</span>
+            </div>
+        </ng-container>
+    </div>
+</section>

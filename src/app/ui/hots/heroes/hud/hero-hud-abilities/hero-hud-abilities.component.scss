@@ -11,11 +11,21 @@ $height: 9.2em * $factor;
    
 
     .center{
+        .top{
+            z-index:2;
+            pointer-events: none;
+            .active-abilities{
+                >*{
+                    pointer-events: all;
+                }
+            }
+        }
         .bottom{
             width:$width;
             height: $height;
             background-image: url(~/assets/ui/borders/hud_bg_artbarmiddlefill_glass.png);
             background-size: $width $height;
+            z-index:1;
         }
     }
     

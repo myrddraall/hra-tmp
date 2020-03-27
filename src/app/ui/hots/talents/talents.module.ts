@@ -26,7 +26,8 @@ import { TalentDetailButtonComponent } from './talent-detail-button/talent-detai
     ImageModule,
     ButtonsModule,
     IconsModule,
-    TextModule
+    TextModule,
+    
   ]
 })
 export class TalentsModule { }

@@ -14,6 +14,8 @@ import { MatIconModule } from '@angular/material/icon';
 import { ExtendedRoleFilterButtonComponent } from './extended-role-filter-button/extended-role-filter-button.component';
 import { FranchiseFilterButtonComponent } from './franchise-filter-button/franchise-filter-button.component';
 import { HudModule } from './hud/hud.module';
+import { TalentsModule } from '../talents/talents.module';
+import { AbilitiesModule } from '../abilities/abilities.module';
 
 
 @NgModule({
@@ -41,7 +43,9 @@ import { HudModule } from './hud/hud.module';
     ContainersModule,
     MatButtonModule,
     MatIconModule,
-    HudModule
+    HudModule,
+    TalentsModule,
+    AbilitiesModule
   ]
 })
 export class HeroesModule { }

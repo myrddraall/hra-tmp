@@ -7,10 +7,10 @@
           <td class="tier-header">{{tier}}</td>
           <td class="talent-cell" *ngFor="let talent of hero?.talents['level' + tier]; let i = index"
             (click)="selectTalent(tier, i)">
-            <hra-talent-square-button *ngIf="displayMode === 'icon'" [model]="talent" [hero]="hero" interactive
+            <hra-talent-square-button *ngIf="displayMode === 'icon'" [model]="talent" [hero]="hero" interactive tooltip="true"
               [class.selected]="isSelected(tier, i)">
             </hra-talent-square-button>
-            <hra-talent-detail-button *ngIf="displayMode === 'tile'" [model]="talent" [hero]="hero" interactive
+            <hra-talent-detail-button *ngIf="displayMode === 'tile'" [model]="talent" [hero]="hero" interactive tooltip="true"
               [class.selected]="isSelected(tier, i)">
             </hra-talent-detail-button>
           </td>

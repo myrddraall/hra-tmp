@@ -1,6 +1,7 @@
 import { Component, OnChanges, Input, SimpleChanges, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { HeroModel } from 'hots-gamedata';
+import { HeroModel, IAbility } from 'hots-gamedata';
 import { Unsubscribable } from 'rxjs';
+
 
 @Component({
   selector: 'hra-hero-hud-abilities',
@@ -82,6 +83,10 @@ export class HeroHudAbilitiesComponent implements OnChanges {
 
   public get abilitiesActive() {
     return this.hero.currentAbilities.filter(_ => _.button === 'Active')
+  }
+
+  public abilityTrackBy(index:number, item:IAbility){
+    return item.icon;
   }
 
 }

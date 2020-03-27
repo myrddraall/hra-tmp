@@ -2,16 +2,16 @@
 <div class="center">
     <div class="top">
         <div class="active-abilities">
-            <hra-ability-hex-hud-button *ngFor="let abil of abilitiesActive; let i = index" [model]="abil" [buttonLabel]="i+1"></hra-ability-hex-hud-button>
+            <hra-ability-hex-hud-button *ngFor="let abil of abilitiesActive; let i = index; trackBy: abilityTrackBy" [model]="abil" [hero]="hero" [buttonLabel]="i+1" tooltip="true"></hra-ability-hex-hud-button>
         </div>
     </div>
     <div class="bottom">
         <div class="main-abilities">
-            <hra-ability-hex-hud-button [model]="abilityQ"></hra-ability-hex-hud-button>
-            <hra-ability-hex-hud-button [model]="abilityW"></hra-ability-hex-hud-button>
-            <hra-ability-hex-hud-button [model]="abilityE"></hra-ability-hex-hud-button>
-            <hra-ability-hex-hud-button [model]="abilityR"></hra-ability-hex-hud-button>
-            <hra-ability-hex-hud-button [model]="abilityD"></hra-ability-hex-hud-button>
+            <hra-ability-hex-hud-button [model]="abilityQ" [hero]="hero" tooltip="true"></hra-ability-hex-hud-button>
+            <hra-ability-hex-hud-button [model]="abilityW" [hero]="hero" tooltip="true"></hra-ability-hex-hud-button>
+            <hra-ability-hex-hud-button [model]="abilityE" [hero]="hero" tooltip="true"></hra-ability-hex-hud-button>
+            <hra-ability-hex-hud-button [model]="abilityR" [hero]="hero" tooltip="true"></hra-ability-hex-hud-button>
+            <hra-ability-hex-hud-button [model]="abilityD" [hero]="hero" tooltip="true"></hra-ability-hex-hud-button>
         </div>
     </div>
 </div>

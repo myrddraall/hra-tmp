@@ -6,21 +6,28 @@ import { AbilityHexHudButtonComponent } from './ability-hex-hud-button/ability-h
 import { ButtonsModule } from '../buttons/buttons.module';
 import { ImageModule } from '../../common/image/image.module';
 import { IconsModule } from '../icons/icons.module';
+import { AbilityTooltipComponent } from './ability-tooltip/ability-tooltip.component';
+import { TextModule } from '../../common/text/text.module';
+import { TooltipsModule } from '../../common/tooltip/tooltip.module';
 
 
 
 @NgModule({
   declarations: [
-    AbilityHexHudButtonComponent
+    AbilityHexHudButtonComponent,
+    AbilityTooltipComponent
   ],
   exports: [
-    AbilityHexHudButtonComponent
+    AbilityHexHudButtonComponent,
+    AbilityTooltipComponent
   ],
   imports: [
     CommonModule,
     ImageModule,
     ButtonsModule,
-    IconsModule
+    IconsModule,
+    TextModule,
+    TooltipsModule
   ]
 })
 export class AbilitiesModule { }

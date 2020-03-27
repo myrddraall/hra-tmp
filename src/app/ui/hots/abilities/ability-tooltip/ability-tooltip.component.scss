@@ -1,0 +1,24 @@
+:host{
+    padding:16px;
+    display: flex;
+    flex-direction: column;
+    >section{
+        display: flex;
+        margin-bottom: 8px;
+        max-width: 350px;
+        &.header{
+            align-items: flex-end;
+            hra-glowing-text{
+                //margin-bottom: 8px;
+                flex-grow: 1;
+                width:100%;
+            }
+            hra-ability-type-icon{
+               //position: relative;
+              // top: -2px;
+              flex-grow: 0;
+              flex-shrink: 0;
+            }
+        }
+    }
+}

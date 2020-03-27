@@ -11,7 +11,7 @@ export abstract class HeroicButtonBaseComponent implements AfterViewInit {
   public hero: HeroModel;
 
   @Input()
-  public tooltiop: boolean;
+  public tooltip: boolean;
 
   constructor(
     protected readonly basePath: string
