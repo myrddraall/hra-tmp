@@ -34,10 +34,8 @@ export class HeroHudUnitComponent implements OnChanges {
     switch (this.hero?.energyType?.toLowerCase()) {
       case 'stored energy':
         const desc = linq.from(this.hero.abilities).where(_ => _.id === 'AurielBestowHope').select(_ => _.description).firstOrDefault();
-        console.log('======== ', desc )
         if (desc) {
           const matches = desc.match(/([\d]+)~~([\d\.]+)~~/);
-          console.log('************* ', matches )
           if (matches?.length === 3) {
             return `~~${matches[2]}~~`;
           }
@@ -57,7 +55,6 @@ export class HeroHudUnitComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.hero) {
-      console.log(this.hero)
       if (this.levelSub) {
         this.levelSub.unsubscribe();
         this.levelSub = null;

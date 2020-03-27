@@ -28,7 +28,7 @@ export class HeroesDataApi {
 
     public static get versions(): Promise<{ version: string, value: GameVersion }[]> {
         return (async () => {
-            const dir = await HeroesDataApi.git.ls('/heroesdata');
+            const dir = await HeroesDataApi.git.ls('heroesdata');
             return linq.from(dir)
                 .select(_ => ({
                     version: _.name,
@@ -137,7 +137,6 @@ export class HeroesDataApi {
     @Cache()
     public getGameStrings(): Promise<IGameStringsFile> {
         try{
-            console.log('############ getGameStrings')
             console.time(`getGameStrings`);
             return this.readGameStrings();
         }finally{

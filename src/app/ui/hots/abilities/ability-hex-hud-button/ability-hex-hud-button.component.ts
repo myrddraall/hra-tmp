@@ -20,9 +20,22 @@ export class AbilityHexHudButtonComponent extends AbilityButtonComponent {
   }
 
   public get button(): string {
+    switch(this.buttonLabel){
+      case null:
+        return '';
+      case undefined:
+        break;
+      default:
+        return this.buttonLabel;
+    }
+    
     switch (this.model?.button) {
+      case 'Heroic':
+        return 'R';
       case 'Trait':
         return 'D';
+        case 'Active':
+          return '#';
       default:
         return this.model?.button;
     }

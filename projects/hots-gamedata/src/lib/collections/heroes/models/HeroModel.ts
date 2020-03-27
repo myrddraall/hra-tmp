@@ -1,34 +1,54 @@
 import { IBasicHeroModel } from './IBasicHeroModel';
 import { IEnergy, IHero, ILife, IPortraits, IRatings, ITalents, IAbility, IUnit, IUnits, ITalent } from './IHero';
-import { Observable, BehaviorSubject } from 'rxjs';
+import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import linq from 'linq';
-import {IEnumerable} from 'linq';
+import { IEnumerable } from 'linq';
+
+
+export type TalentTeir = '1' | '4' | '7' | '10' | '13' | '16' | '20';
+
 
 export class HeroModel implements IBasicHeroModel {
 
-    private _levelSubject: BehaviorSubject<number>= new BehaviorSubject(0);
+    private _levelSubject: BehaviorSubject<number> = new BehaviorSubject(0);
     private _formSubject: BehaviorSubject<string>;
+    private _talentsSubject: Subject<void> = new Subject();
 
-    public get levelChange():Observable<number>{
+    private _selectedTalentIndecies: { [tier: string]: number } = {
+        '1': -1,
+        '4': -1,
+        '7': -1,
+        '10': -1,
+        '13': -1,
+        '16': -1,
+        '20': -1
+    };
+
+    public get levelChange(): Observable<number> {
         return this._levelSubject;
     }
 
-    public get formChange():Observable<string>{
+    public get formChange(): Observable<string> {
         return this._formSubject;
+    }
+
+    public get talentsChange(): Observable<void> {
+        return this._talentsSubject;
     }
 
     public constructor(private readonly data: IHero) {
         this._formSubject = new BehaviorSubject(data.linkId);
+
     }
 
 
-    public get level():number{
+    public get level(): number {
         return this._levelSubject.value;
     }
 
-    public set level(value:number){
+    public set level(value: number) {
         value = Math.max(0, Math.min(30, value || 0));
-        if(this.level !== value){
+        if (this.level !== value) {
             this._levelSubject.next(value);
         }
     }
@@ -118,7 +138,7 @@ export class HeroModel implements IBasicHeroModel {
         if (!(this.data.units as object).hasOwnProperty(value)) {
             throw new Error(`${this.name} does not have a form named '${value}'`);
         }
-        if(this.formId !== value){
+        if (this.formId !== value) {
             this._formSubject.next(value);
         }
     }
@@ -147,20 +167,213 @@ export class HeroModel implements IBasicHeroModel {
             .concat(linq.from(this.talents.level20));
     }
 
-    public findTalent(predicate: (talent:ITalent, index:number)=>boolean): ITalent {
+    public findTalent(predicate: (talent: ITalent, index: number) => boolean): ITalent {
         return this.findTalentsQuery.where(predicate).firstOrDefault();
     }
 
-    public  findTalents(predicate: (talent:ITalent, index:number)=>boolean): ITalent[] {
+    public findTalents(predicate: (talent: ITalent, index: number) => boolean): ITalent[] {
         return this.findTalentsQuery.where(predicate).toArray();
     }
 
-    public findTalentById(id:String){
+    public findTalentById(id: String) {
         return this.findTalent(talent => talent.id === id);
     }
 
 
     public get abilities(): IAbility[] {
         return this.data.units[this.formId].abilities;
+    }
+
+
+    public get selectedTalentIndecies(): Readonly<{ [tier: string]: number }> {
+        return this._selectedTalentIndecies;
+    }
+
+    public get selectedTalentIds(): Readonly<{ [tier: string]: string }> {
+        const talentIds: { [tier: string]: string } = {
+            '1': this.getTalentByIndex('1', this._selectedTalentIndecies['1'])?.id,
+            '4': this.getTalentByIndex('4', this._selectedTalentIndecies['4'])?.id,
+            '7': this.getTalentByIndex('7', this._selectedTalentIndecies['7'])?.id,
+            '10': this.getTalentByIndex('10', this._selectedTalentIndecies['10'])?.id,
+            '13': this.getTalentByIndex('13', this._selectedTalentIndecies['13'])?.id,
+            '16': this.getTalentByIndex('16', this._selectedTalentIndecies['16'])?.id,
+            '20': this.getTalentByIndex('20', this._selectedTalentIndecies['20'])?.id
+        }
+        return talentIds;
+    }
+
+    private talentIdToIndex(talentId: string, tier?: TalentTeir) {
+        if (tier) {
+            return linq.from(this.talents['level' + tier]).select((_, index) => ({ id: _.id, index })).where(_ => _.id === talentId).select(_ => _.index).firstOrDefault();
+        }
+        return this.findTalentsQuery.select((_, index) => ({ id: _.id, index })).where(_ => _.id === talentId).select(_ => _.index).firstOrDefault();
+    }
+
+
+    public setSelectedTalentIndecies(talents: { [tier: string]: number }) {
+        for (const tier in talents) {
+            if (talents.hasOwnProperty(tier)) {
+                const talentIdx = talents[tier];
+                this.selectTalentByIndex(tier as TalentTeir, talentIdx);
+            }
+        }
+    }
+
+    public setSelectedTalentIds(talents: { [tier: string]: string }) {
+        for (const tier in talents) {
+            if (talents.hasOwnProperty(tier)) {
+                const talentId = talents[tier];
+                this.selectTalentById(tier as TalentTeir, talentId);
+            }
+        }
+    }
+
+    public selectTalentById(tier: TalentTeir, talentId: string) {
+        this.selectTalentByIndex(tier, this.talentIdToIndex(talentId, tier));
+    }
+
+    public selectTalentByIndex(tier: TalentTeir, talentIndex: number) {
+        const prevTalentIdx = this.getSelectedTalentIndex(tier);
+        if (prevTalentIdx !== talentIndex) {
+
+            const talent = this.getTalentByIndex(tier, talentIndex);
+            const prevTalent = this.getTalentByIndex(tier, prevTalentIdx);
+
+            // deselect any talents that had the previously selected talent as a requirement
+            if (prevTalent) {
+                const dependantTalents = this.findTalents(t => {
+                    if (!t.prerequisiteTalentIds || t.prerequisiteTalentIds.indexOf(prevTalent.id) === -1) {
+                        return false;
+                    }
+                    return true;
+                });
+                for (const dtalent of dependantTalents) {
+                    const dtier = dtalent.tier;
+                    const didx = this.talentIdToIndex(dtalent.id, dtier.toString() as TalentTeir);
+                    if (this._selectedTalentIndecies[dtier] === didx) {
+                        this._selectedTalentIndecies[dtier] = -1;
+                    }
+                }
+            }
+            // select the talent
+            this._selectedTalentIndecies[tier] = talentIndex;
+
+            // select talents required by this talent
+            if (talent.prerequisiteTalentIds) {
+                for (const id of talent.prerequisiteTalentIds) {
+                    const preTalent = this.findTalentById(id);
+                    const preTalentIdx = this.talentIdToIndex(id, preTalent.tier.toString() as TalentTeir);
+                    this.selectTalentByIndex(preTalent.tier.toString() as any, preTalentIdx);
+                }
+            }
+            this._talentsSubject.next();
+        }
+    }
+
+    public get talentBuildValue(): number {
+        let value = 0;
+        let i = 0;
+        for (const tier in this.selectedTalentIndecies) {
+            if (this.selectedTalentIndecies.hasOwnProperty(tier)) {
+                const selectedIndex = this.selectedTalentIndecies[tier];
+                let tierIdx = 0;
+                for (const talent of this.talents['level' + tier]) {
+                    if (selectedIndex === tierIdx) {
+                        value += 1 << i;
+                    }
+                    tierIdx++;
+                    i++;
+                }
+            }
+        }
+        return value;
+    }
+
+    public set talentBuildValue(value: number) {
+        this._selectedTalentIndecies = {
+            '1': -1,
+            '4': -1,
+            '7': -1,
+            '10': -1,
+            '13': -1,
+            '16': -1,
+            '20': -1
+        };
+        let i = 0;
+        for (const tier in this.selectedTalentIndecies) {
+            if (this.selectedTalentIndecies.hasOwnProperty(tier)) {
+                let tierIdx = 0;
+                for (const talent of this.talents['level' + tier]) {
+                    const talentFlag = 1 << i;
+                    if ((value & talentFlag) === talentFlag) {
+                        this.selectTalentByIndex(tier as TalentTeir, tierIdx);
+                    }
+                    tierIdx++;
+                    i++;
+                }
+            }
+        }
+    }
+
+    public get talentBuildUrl(): string {
+        return this.talentBuildValue.toString(36);
+    }
+
+    public set talentBuildUrl(value: string) {
+        this.talentBuildValue = parseInt(value, 36);
+    }
+
+    public getSelectedTalentIndex(tier: TalentTeir) {
+        return this._selectedTalentIndecies[tier];
+    }
+
+    public getSelectedTalent(tier: TalentTeir) {
+        return this.getTalentByIndex(tier, this.getSelectedTalentIndex(tier));
+    }
+
+    public getSelectedTalentId(tier: TalentTeir) {
+        return this.getTalentByIndex(tier, this.getSelectedTalentIndex(tier))?.id;
+    }
+
+    public isSelectedTalentIndex(tier: TalentTeir, index: number) {
+        return this._selectedTalentIndecies[tier] === index && index !== undefined;
+    }
+    
+    public isSelectedTalentId(id: string, tier?: TalentTeir) {
+        if(!tier){
+            tier = this.findTalentById(id)?.tier.toString() as TalentTeir;
+        }
+        return this.isSelectedTalentIndex(tier, this.talentIdToIndex(id, tier));
+    }
+
+    public isSelectedTalentAbilityId(id: string) {
+        const talents = this.findTalents(_ => _.abilityTalentLinkIds ? _.abilityTalentLinkIds.indexOf(id) !== -1 : false);
+        if(talents?.length){
+            for (const talent of talents) {
+                if(this.isSelectedTalentId(talent?.id)){
+                    return true;
+                }
+            }
+            return false;
+        }
+        return true;
+    }
+
+    public getTalentByIndex(tier: TalentTeir, index: number) {
+        return this.talents['level' + tier][index];
+    }
+
+    public get currentAbilities(): IAbility[] {
+        
+
+        const abilityTalents = this.findTalentsQuery
+            .where(_ => _.button === '#' && this.isSelectedTalentId(_.id, _.tier.toString() as TalentTeir))
+            .select(_ => ({..._, button: 'Active'} as unknown as IAbility))
+            .toArray()
+        ;
+        const base = [...this.data.units[this.formId].abilities, ...abilityTalents];
+
+        //console.log('+++++++++++++++++++', base);
+        return base;
     }
 }

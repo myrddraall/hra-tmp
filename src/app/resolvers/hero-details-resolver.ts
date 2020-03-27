@@ -9,7 +9,6 @@ export class HeroDetailResolver implements Resolve<IHero> {
     private static _prevId: string;
     private static _prev: IHero;
     async resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Promise<IHero> {
-        console.log('_prevId_prevId_prevId_prevId', HeroDetailResolver._prevId);
         if (route.params.heroId === HeroDetailResolver._prevId) {
             return HeroDetailResolver._prev;
         }

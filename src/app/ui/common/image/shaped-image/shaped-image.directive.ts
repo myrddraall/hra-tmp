@@ -115,9 +115,12 @@ export class ShapedImageDirective implements OnInit, OnChanges {
   }
 
   private getClipPath(canvas: Rect<number>): Path2D {
-    if (this._resolvedclipPath || !this.clipPath) {
-      return this._resolvedclipPath;
+    if(!this.clipPath){
+      return;
     }
+   // if (this._resolvedclipPath || !this.clipPath) {
+  //    return this._resolvedclipPath;
+   // }
     const converted = [];
     const args = this.clipPath.split(' ');
 

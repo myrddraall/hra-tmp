@@ -10,7 +10,6 @@ function getRedirect():string{
   }else{
     redirect = 'icons';
   }
-  console.log(redirect);
   return redirect;
 }
 

@@ -4,5 +4,5 @@ import { AbilityTalentButtonBaseComponent } from '../../buttons/ability-talent-b
 
 export abstract class AbilityButtonComponent extends AbilityTalentButtonBaseComponent<IAbility> {
     @Input()
-    private ___a;
+    public buttonLabel:string = undefined;
 }

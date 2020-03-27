@@ -35,7 +35,6 @@ export class TooltipTextDirective implements OnChanges {
     }
     const container = document.createElement('div');
     container.innerHTML = this._text?.replace(/<n\/>/g, '<br/>');
-    console.log(this._text)
 
     container.querySelectorAll('s').forEach(val => {
       const span = document.createElement('span');
@@ -73,12 +72,15 @@ export class TooltipTextDirective implements OnChanges {
   }
 
   private applyScaling(str: string): string {
+    
     let matches = str?.match(/([\d\.]+)~~([\d\.]+)~~/);
-    console.log('matches', matches);
     if (matches?.length === 3) {
+      
       const base = +matches[1];
       const scale = +matches[2];
-      console.log(base, Math.pow(1 + scale, this.level));
+      if(base === 1 && scale === 0){
+        return '<span style="font-size:2em; position:relative; top:0.1em ">∞</span>';
+      }
       return "" + Math.round(base * Math.pow(1 + scale, this.level));
     }
     matches = str?.match(/([\d\.]+)\+\+([\d\.]+)\+\+/);

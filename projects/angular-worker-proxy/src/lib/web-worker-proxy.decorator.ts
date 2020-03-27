@@ -367,7 +367,6 @@ function createWebWorkerRelay<T>(ofType: Type<T>): Type<IWebworkerRelayInternal>
 
         private async processPromiseGet(msg: IWebworkerGetPropertyCall) {
             const key = getPropertyKeyInst(this, msg.memberId);
-            console.log('processPromiseGet', key);
             const result = await this[key];
             const resultMsg: IWebworkerGetPropertyResponse = {
                 messageId: msg.messageId,
@@ -383,7 +382,6 @@ function createWebWorkerRelay<T>(ofType: Type<T>): Type<IWebworkerRelayInternal>
         }
         private async  processObservableCall(msg: IWebworkerSubscribeCall) {
             const key = getPropertyKeyInst(this, msg.memberId);
-            console.log('processObservableCall', key);
             const obs = this[key].apply(this, msg.data) as Observable<any>;
 
             const unsub = obs.subscribe(
@@ -398,7 +396,6 @@ function createWebWorkerRelay<T>(ofType: Type<T>): Type<IWebworkerRelayInternal>
                     this.postMessage(nextMsg);
                 },
                 err => {
-                    console.log('&&&  sending error')
                     const errMsg: IWebworkerSubscriptionError = {
                         messageId: msg.messageId,
                         memberId: msg.memberId,
@@ -423,7 +420,7 @@ function createWebWorkerRelay<T>(ofType: Type<T>): Type<IWebworkerRelayInternal>
 
         private async processObservableGet(msg: IWebworkerSubscribeCall) {
             const key = getPropertyKeyInst(this, msg.memberId);
-            console.log('processObservableGet', key);
+   
             const obs = this[key] as Observable<any>;
 
             const unsub = obs.subscribe(
@@ -438,7 +435,6 @@ function createWebWorkerRelay<T>(ofType: Type<T>): Type<IWebworkerRelayInternal>
                     this.postMessage(nextMsg);
                 },
                 err => {
-                    console.log('&&&  sending error')
                     const errMsg: IWebworkerSubscriptionError = {
                         messageId: msg.messageId,
                         memberId: msg.memberId,
@@ -891,7 +887,6 @@ function createObservableField(memberId: number, descriptor?: TypedPropertyDescr
     let __value__: any;
     return {
         get: function promiseObservableGet(this: IWebworkerRelay): Observable<any> {
-            // console.log('get observavle working side')
             return descriptor ? descriptor.get.call(this) : __value__;
         },
         set: function promiseObservableSet(this: IWebworkerRelay, value: Observable<any>): void {

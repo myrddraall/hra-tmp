@@ -139,7 +139,6 @@ export class CollapsableComponent implements OnInit {
 
   @HostListener('@open.start', ['$event'])
   private onAnimationStart(event: AnimationEvent) {
-    console.log('onAnimationStart', event);
     if (event.toState) {
       this.opening = true;
       this.closing = undefined;
@@ -155,7 +154,7 @@ export class CollapsableComponent implements OnInit {
 
   @HostListener('@open.done', ['$event'])
   private onAnimationDone(event: AnimationEvent) {
-    console.log('onAnimationDone', event);
+
     if (event.toState) {
       this.opening = undefined;
       this.closing = undefined;
