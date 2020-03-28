@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { get, set } from 'idb-keyval';
 import { IFavouriteTalentBuild } from './IFavouriteTalentBuild';
 import { BehaviorSubject, Observable } from 'rxjs';
+import { HotsDB } from 'hots-gamedata';
 
 const FAV_TALENT_BUILDS_KEY = '__talent-calculator__.favoriteTalents';
 
@@ -35,6 +36,9 @@ export class FavouriteTalentbuildsService {
 
   public async saveBuild(build: IFavouriteTalentBuild): Promise<void>{
     const builds = await this.initialize();
+    if(!build.gameVersion){
+      build.gameVersion = await (await (await HotsDB.getVersion('latest')).heroes).version;
+    }
     builds.set(build.hero + '|' + build.build, build);
     await this.save();
   }

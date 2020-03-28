@@ -76,6 +76,7 @@ export class TalentCalculatorComponent implements OnInit, OnDestroy {
       } else {
         await this.favoriteBuildsService.saveBuild({
           name: '',
+          lastUpdated: new Date(),
           description: '',
           build: this.selectedTalentBuild,
           hero: this.selectedHeroId

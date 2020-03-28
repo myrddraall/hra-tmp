@@ -252,6 +252,7 @@ export class HeroesCollection extends Collection<IHeroRecord> {
     public async initialize(): Promise<void> {
         console.time('HeroesCollection.initialize');
         this.apiData = HeroesDataApi.getVersion(this.db.version, this.db.lang);
+        
         //this.apiTalents = HeroesTalentsApi.getVersion(this.db.version);
         const heroes = await this.apiData.getHeroes();
         this.records = [];
@@ -266,6 +267,12 @@ export class HeroesCollection extends Collection<IHeroRecord> {
             }
         }
         console.timeEnd('HeroesCollection.initialize');
+    }
+    public get version(){
+        return (async()=>{
+            await this.initialize();
+            return (await this.apiData.dataVersion).value;
+        })();
     }
 
     public normalizeHeroName(name: string): string {

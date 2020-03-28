@@ -9,6 +9,7 @@ import { IEnumerable } from 'linq';
 import { IFavouriteTalentBuild } from '../services/favourite-talentbuilds-service/IFavouriteTalentBuild';
 import { FavouriteTalentbuildsService } from '../services/favourite-talentbuilds-service/favourite-talentbuilds.service';
 import { Router, ActivatedRoute } from '@angular/router';
+import { GameVersion } from 'heroesprotocol-data/lib';
 
 interface IHeroBuilds {
   hero: HeroModel,
@@ -63,6 +64,7 @@ export class BuildSearchComponent implements OnInit, OnChanges {
   public isFavorite = true;
 
 
+  private gameVersion: GameVersion;
 
   constructor(
     private readonly favouriteBuildsService: FavouriteTalentbuildsService,
@@ -83,17 +85,20 @@ export class BuildSearchComponent implements OnInit, OnChanges {
   private async init() {
     if (!this.heroList) {
       const db = await HotsDB.getVersion('latest');
+      
       const heroCollection = await db.heroes;
+      this.gameVersion = await heroCollection.version;
       const heroIds = await heroCollection.getHeroIds();
       const heroes: IHero[] = [];
       for (const heroId of heroIds) {
         heroes.push(await heroCollection.getHero(heroId));
       }
+      // db.version
       this.heroList = heroes;
     }
     let q = linq.from(this.buildList).groupBy(_ => _.hero, _ => _, (key, _) => ({
       heroId: key,
-      builds: _.toArray()
+      builds: _.orderByDescending(_ => _.lastUpdated).toArray()
     })).join(
       this.heroList,
       o => o.heroId,
@@ -188,6 +193,8 @@ export class BuildSearchComponent implements OnInit, OnChanges {
       } else {
         await this.favouriteBuildsService.saveBuild({
           name: '',
+          gameVersion: this.gameVersion,
+          lastUpdated: new Date(),
           description: '',
           build: this.build,
           hero: this.heroId
