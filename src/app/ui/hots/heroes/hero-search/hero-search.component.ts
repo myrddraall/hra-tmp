@@ -102,54 +102,6 @@ export class HeroSearchComponent implements OnInit {
     });
     this.searchUpdates.pipe(debounceTime(200)).subscribe(value => {
       this.doFilter();
-      /*
-      value = value || '';
-      value = value.toLowerCase();
-      if (this.previousSearch !== value) {
-
-        let q: IEnumerable<IBasicHeroModel>;
-        if (!value || !this.previousSearch || value.indexOf(this.previousSearch) !== 0) {
-          q = linq.from(this.heroList);
-        } else {
-          q = linq.from(this.visibleHeroList);
-        }
-
-        this.visibleHeroList = q.where(hero => {
-          if (hero.name.toLowerCase().indexOf(value) !== -1) {
-            return true;
-          }
-          if (hero.title.toLowerCase().indexOf(value) !== -1) {
-            return true;
-          }
-
-          if (hero.gender.toLowerCase().indexOf(value) !== -1) {
-            return true;
-          }
-
-          if (hero.role.toLowerCase().indexOf(value) !== -1) {
-            return true;
-          }
-
-          if (hero.expandedRole.toLowerCase().indexOf(value) !== -1) {
-            return true;
-          }
-
-          if (hero.difficulty.toLowerCase().indexOf(value) !== -1) {
-            return true;
-          }
-          if (hero.searchText && hero.searchText.toLowerCase().indexOf(value) !== -1) {
-            return true;
-          }
-
-          if (hero.tags && hero.tags.join(' ').toLowerCase().indexOf(value) !== -1) {
-            return true;
-          }
-          return false;
-        }).toArray();
-        console.log('search change', value, this.visibleHeroList);
-        this.previousSearch = value;
-      }*/
-      //linq.from(this.heroList)
     });
   }
 

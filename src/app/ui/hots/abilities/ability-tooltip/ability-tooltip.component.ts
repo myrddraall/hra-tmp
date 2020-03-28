@@ -16,7 +16,6 @@ export class AbilityTooltipComponent implements OnInit {
   constructor() { }
 
   ngOnInit(): void {
-    console.log('ability tt')
   }
 
 

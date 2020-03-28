@@ -51,15 +51,15 @@ export class HeroHudAbilitiesComponent implements OnChanges {
   }
 
   public get abilityQ() {
-    return this.hero.currentAbilities.find(_ => _.button.toUpperCase() === 'Q')
+    return this.hero.currentAbilities.find(_ => _.button.toUpperCase() === 'Q' && _.type === 'ability')
   }
 
   public get abilityW() {
-    return this.hero.currentAbilities.find(_ => _.button.toUpperCase() === 'W')
+    return this.hero.currentAbilities.find(_ => _.button.toUpperCase() === 'W' && _.type === 'ability')
   }
 
   public get abilityE() {
-    return this.hero.currentAbilities.find(_ => _.button.toUpperCase() === 'E')
+    return this.hero.currentAbilities.find(_ => _.button.toUpperCase() === 'E' && _.type === 'ability')
   }
 
   public get abilityR() {
@@ -69,7 +69,7 @@ export class HeroHudAbilitiesComponent implements OnChanges {
 
   private findActiveHeroics(){
     return this.hero.currentAbilities.filter(_ => {
-      return _.button === 'Heroic' && this.hero.isSelectedTalentAbilityId(_.id);
+      return _.button === 'Heroic'  && _.type === 'ability' && this.hero.isSelectedTalentAbilityId(_.id);
     });
   }
 
@@ -78,7 +78,7 @@ export class HeroHudAbilitiesComponent implements OnChanges {
     if(heroics.length === 2){
       return heroics[1];
     }
-    return this.hero.currentAbilities.find(_ => _.button === 'Trait')
+    return this.hero.currentAbilities.find(_ => _.button === 'Trait'  && _.type === 'ability')
   }
 
   public get abilitiesActive() {

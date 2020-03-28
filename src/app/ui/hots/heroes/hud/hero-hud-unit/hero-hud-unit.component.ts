@@ -55,6 +55,7 @@ export class HeroHudUnitComponent implements OnChanges {
 
   ngOnChanges(changes: SimpleChanges): void {
     if (changes.hero) {
+      console.log(this.hero);
       if (this.levelSub) {
         this.levelSub.unsubscribe();
         this.levelSub = null;

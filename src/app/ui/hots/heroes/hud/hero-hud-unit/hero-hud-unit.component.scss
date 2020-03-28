@@ -126,7 +126,23 @@ $statsOffset: $portraitWidth * 0.28;
         height: $statsHeight;
         pointer-events: painted;
       }
+      .level {
+        position: absolute;
 
+        font-size: 1.4em;
+        bottom: 0.45em;
+        left: 0.9em;
+       // background-color: red;
+        width: 2.7em;
+        display: flex;
+        justify-content: center;
+        .mat-slider{
+          position: absolute;
+          left: 3em;
+          top: -1em;
+          pointer-events: painted;
+        }
+      }
       .resource-bars {
         // pointer-events: visiblePainted;
         position: absolute;
@@ -184,7 +200,7 @@ $statsOffset: $portraitWidth * 0.28;
     }
   }
 }
-hra-tooltip-panel{
+hra-tooltip-panel {
   padding: 1em;
 }
 

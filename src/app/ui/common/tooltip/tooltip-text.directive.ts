@@ -33,6 +33,7 @@ export class TooltipTextDirective implements OnChanges {
       this.elm.nativeElement.innerHTML = '';
       return;
     }
+    console.log(this._text);
     const container = document.createElement('div');
     container.innerHTML = this._text?.replace(/<n\/>/g, '<br/>');
 
@@ -40,7 +41,9 @@ export class TooltipTextDirective implements OnChanges {
       const span = document.createElement('span');
       span.innerHTML = this.applyScaling(val.innerHTML);
       span.style.color = '#' + val.getAttribute('val');
-      span.classList.add(val.getAttribute('name'));
+      if (val.hasAttribute('name')) {
+        span.classList.add(val.getAttribute('name'));
+      }
       val.parentElement.insertBefore(span, val);
       val.remove();
     });
@@ -48,8 +51,21 @@ export class TooltipTextDirective implements OnChanges {
     container.querySelectorAll('c').forEach(val => {
       const span = document.createElement('span');
       span.innerHTML = this.applyScaling(val.innerHTML);
-      span.style.color = '#' + val.getAttribute('val');
-      span.classList.add(val.getAttribute('name'));
+      const color = val.getAttribute('val');
+      if (color) {
+        if (color.indexOf('-') !== -1) {
+          const p = color.split("-");
+          span.style.color = 'transparent';
+          span.style.backgroundImage = `linear-gradient(#${p[0]}, #${p[1]}) `;
+          span.style.fontWeight = 'bold';
+          span.classList.add('background-text-clip');
+        } else {
+          span.style.color = '#' + color;
+        }
+      }
+      if (val.hasAttribute('name')) {
+        span.classList.add(val.getAttribute('name'));
+      }
       val.parentElement.insertBefore(span, val);
       val.remove();
     });
@@ -72,13 +88,13 @@ export class TooltipTextDirective implements OnChanges {
   }
 
   private applyScaling(str: string): string {
-    
+
     let matches = str?.match(/([\d\.]+)~~([\d\.]+)~~/);
     if (matches?.length === 3) {
-      
+
       const base = +matches[1];
       const scale = +matches[2];
-      if(base === 1 && scale === 0){
+      if (base === 1 && scale === 0) {
         return '<span style="font-size:2em; position:relative; top:0.1em ">∞</span>';
       }
       return "" + Math.round(base * Math.pow(1 + scale, this.level));
@@ -87,7 +103,7 @@ export class TooltipTextDirective implements OnChanges {
     if (matches?.length === 3) {
       const base = +matches[1];
       const scale = +matches[2];
-      return "" + Math.round(base +  (scale * (this.level - 1)));
+      return "" + Math.round(base + (scale * (this.level - 1)));
     }
     return str;
   }

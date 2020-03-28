@@ -10,7 +10,7 @@ import { IconsModule } from '../../icons/icons.module';
 import { TooltipsModule } from '../../../common/tooltip/tooltip.module';
 import { ImageModule } from '../../../common/image/image.module';
 import { AbilitiesModule } from '../../abilities/abilities.module';
-
+import {MatSliderModule} from '@angular/material/slider'
 
 
 @NgModule({
@@ -23,7 +23,8 @@ import { AbilitiesModule } from '../../abilities/abilities.module';
     TooltipsModule,
     TextModule,
     ImageModule,
-    AbilitiesModule
+    AbilitiesModule,
+    MatSliderModule
   ]
 })
 export class HudModule { }

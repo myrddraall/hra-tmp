@@ -22,8 +22,8 @@
 </div>
 <div class="stats-offset">
     <div forms *ngIf="hero?.forms?.length > 1">
-        <div class="form-button" *ngFor="let form of hero.forms; let i = index"
-            (click)="this.hero.formId = form.linkId" [class.selected]="this.hero.formId === form.linkId">
+        <div class="form-button" *ngFor="let form of hero.forms; let i = index" (click)="this.hero.formId = form.linkId"
+            [class.selected]="this.hero.formId === form.linkId">
             <hra-glowing-text>{{i+1}}</hra-glowing-text>
         </div>
     </div>
@@ -43,6 +43,10 @@
                 <label [hraTooltipText]="'<s>' + hero.energy.amount +  resourceScale + '</s>'"
                     [level]="hero?.level"></label>
             </div>
+        </div>
+        <div class="level">
+            {{hero.level}}
+            <mat-slider min="0" max="30" step="1" [(value)]="hero.level"></mat-slider>
         </div>
     </div>
 </div>

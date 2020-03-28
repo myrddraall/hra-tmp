@@ -47,7 +47,6 @@ export class TalentCalculatorComponent implements OnInit, OnDestroy {
     this._mode = await get<'icon' | 'tile'>('__talent-calculator__.displayMode') || 'tile';
     this.checkMode();
     this.favoriteBuildsService.builds.subscribe(async builds => {
-      console.log('builds changed', builds);
       this.isFavorite = await this.favoriteBuildsService.hasBuild(this.selectedHeroId, this.selectedTalentBuild);
       this.changeRef.markForCheck();
     });

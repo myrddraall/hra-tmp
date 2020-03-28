@@ -120,7 +120,6 @@ export class BuildSearchComponent implements OnInit, OnChanges {
   }
 
   async ngOnChanges(changes: SimpleChanges) {
-    console.log(changes)
     if (this.heroId && this.build) {
       this.isFavorite = await this.favouriteBuildsService.hasBuild(this.heroId, this.build);
       this.changeRef.markForCheck();
@@ -235,7 +234,6 @@ export class BuildSearchComponent implements OnInit, OnChanges {
     if (this.search?.nativeElement.value) {
       const value = this.search.nativeElement.value.toLowerCase();
       q = q.where(_ => {
-        console.log('!!!!!!!!!!!!!!!!!!', _)
         const hero = _.hero;
         if (hero.name.toLowerCase().indexOf(value) !== -1) {
           return true;

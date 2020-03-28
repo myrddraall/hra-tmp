@@ -69,7 +69,7 @@ export interface IUnit {
     energytype: string;
     portraits: IPortraits;
     tags: string[];
-    abilities: IAbility[];
+    abilities: Array<IAbility | ISubAbility>;
     /*
     unitId: string;
     innerRadius: number;
@@ -88,7 +88,7 @@ export interface ITalents {
 
 export interface IAbilityBase {
     id: string;
-    type: 'ability' | 'talent';
+    type: 'ability' | 'subability' | 'talent';
     tooltipId: string;
     button: string;
     name: string;
@@ -111,6 +111,10 @@ export interface IAbilityBase {
 
 export interface IAbility extends IAbilityBase {
     type: 'ability';
+}
+
+export interface ISubAbility extends IAbilityBase {
+    type: 'subability';
 }
 
 export interface ITalent extends IAbilityBase {

@@ -71,10 +71,48 @@ export class HeroesCollection extends Collection<IHeroRecord> {
                         lifeCostDescription: this.prepareGameString(gamestrings.abiltalent.life[stringKey]),
                         lifeCost: HeroStringsUtil.parseLifeCost(gamestrings.abiltalent.life[stringKey]),
                     } as Models.IAbility;
-                    gamestrings.abiltalent.energy
+                   
                     unit.abilities.push(ability);
                 }
             }
+        }
+        if(heroData.subAbilities){
+            for (const subs of heroData.subAbilities) {
+                for (const key in subs) {
+                    if (subs.hasOwnProperty(key)) {
+                        const subTypes = subs[key];
+                        for (const type in subTypes) {
+                            if (subTypes.hasOwnProperty(type)) {
+                                const abilities = subTypes[type] as  DTOs.IAbility[];
+                                for (const abil of abilities) {
+                                    const stringKey = this.getAbilityStringId(abil);
+                                    const ability = {
+                                        id: abil.nameId,
+                                        type: 'subability',
+                                        tooltipId: abil.buttonId,
+                                        button: abil.abilityType,
+                                        icon: abil.icon,
+                                        charges: abil.charges,
+                
+                                        name: gamestrings.abiltalent.name[stringKey],
+                                        description: gamestrings.abiltalent.full[stringKey],
+                                        shortDescription: gamestrings.abiltalent.short[stringKey],
+                                        cooldownDescription: this.prepareGameString(gamestrings.abiltalent.cooldown[stringKey]),
+                                        cooldown: HeroStringsUtil.parseCooldown(gamestrings.abiltalent.cooldown[stringKey]),
+                                        energyCostDescription: this.prepareGameString(gamestrings.abiltalent.energy[stringKey]),
+                                        energyCost: HeroStringsUtil.parseEnergyCost(gamestrings.abiltalent.energy[stringKey]),
+                                        // is localized, but don't want to load en locale
+                                        energyCostType: HeroStringsUtil.parseEnergyType(gamestrings.abiltalent.energy[stringKey]),
+                                        lifeCostDescription: this.prepareGameString(gamestrings.abiltalent.life[stringKey]),
+                                        lifeCost: HeroStringsUtil.parseLifeCost(gamestrings.abiltalent.life[stringKey]),
+                                    } as Models.ISubAbility;
+                                    unit.abilities.push(ability);
+                                }
+                            }
+                        }
+                    }
+                }
+        }
         }
         return unit;
     }
@@ -264,6 +302,7 @@ export class HeroesCollection extends Collection<IHeroRecord> {
                 heroData.id = id;
                 heroData.shortName = id;
                 this.records.push(heroData);
+                console.log(heroData.subAbilities)
             }
         }
         console.timeEnd('HeroesCollection.initialize');

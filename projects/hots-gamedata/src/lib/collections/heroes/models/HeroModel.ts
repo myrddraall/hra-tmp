@@ -1,5 +1,5 @@
 import { IBasicHeroModel } from './IBasicHeroModel';
-import { IEnergy, IHero, ILife, IPortraits, IRatings, ITalents, IAbility, IUnit, IUnits, ITalent } from './IHero';
+import { IEnergy, IHero, ILife, IPortraits, IRatings, ITalents, IAbility, IUnit, IUnits, ITalent, ISubAbility } from './IHero';
 import { Observable, BehaviorSubject, Subject } from 'rxjs';
 import linq from 'linq';
 import { IEnumerable } from 'linq';
@@ -10,7 +10,7 @@ export type TalentTeir = '1' | '4' | '7' | '10' | '13' | '16' | '20';
 
 export class HeroModel implements IBasicHeroModel {
 
-    private _levelSubject: BehaviorSubject<number> = new BehaviorSubject(0);
+    private _levelSubject: BehaviorSubject<number> = new BehaviorSubject(1);
     private _formSubject: BehaviorSubject<string>;
     private _talentsSubject: Subject<void> = new Subject();
 
@@ -187,7 +187,7 @@ export class HeroModel implements IBasicHeroModel {
     }
 
 
-    public get abilities(): IAbility[] {
+    public get abilities(): Array<IAbility | ISubAbility> {
         return this.data.units[this.formId].abilities;
     }
 
@@ -386,7 +386,7 @@ export class HeroModel implements IBasicHeroModel {
         return linq.from(this.selectedTalents).where(_ => _?.abilityTalentLinkIds ? _.abilityTalentLinkIds.indexOf(id) !== -1 : false).toArray();
     }
 
-    public get currentAbilities(): IAbility[] {
+    public get currentAbilities(): Array<IAbility | ISubAbility> {
 
 
         const abilityTalents = this.findTalentsQuery
