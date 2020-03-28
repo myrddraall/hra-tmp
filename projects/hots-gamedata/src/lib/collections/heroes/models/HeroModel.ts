@@ -53,8 +53,6 @@ export class HeroModel implements IBasicHeroModel {
         }
     }
 
-    difficulty: string;
-    searchText: string;
     public get id(): string {
         return this.data.id;
     }
@@ -67,6 +65,15 @@ export class HeroModel implements IBasicHeroModel {
     public get description(): string {
         return this.data.description;
     }
+
+    public get difficulty(): string {
+        return this.data.difficulty;
+    }
+
+    public get searchText(): string {
+        return this.data.searchText;
+    }
+
     public get energyType(): string {
         return this.data.units[this.formId].energytype;
     }

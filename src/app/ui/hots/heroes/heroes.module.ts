@@ -40,9 +40,9 @@ import { AbilitiesModule } from '../abilities/abilities.module';
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
-    ContainersModule,
     MatButtonModule,
     MatIconModule,
+    ContainersModule,
     HudModule,
     TalentsModule,
     AbilitiesModule

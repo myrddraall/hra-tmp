@@ -4,7 +4,16 @@
         <button mat-icon-button [color]="mode === 'tile'? 'accent' : 'primary'" (click)="mode = 'tile'"><mat-icon>view_list</mat-icon></button>
         <button mat-icon-button [color]="mode === 'icon'? 'accent' : 'primary'" (click)="mode = 'icon'"><mat-icon>apps</mat-icon></button>
     </div>
+   
+    <hra-build-search [heroId]="selectedHeroId" [build]="selectedTalentBuild"></hra-build-search>
 </header>
 <div>
-    <router-outlet></router-outlet>
+    <mat-sidenav-container [hasBackdrop]="false">
+        <mat-sidenav-content>
+            <router-outlet></router-outlet>
+        </mat-sidenav-content>
+        <mat-sidenav position="end" [opened]="false" mode="push" >
+
+        </mat-sidenav>
+    </mat-sidenav-container>
 </div>

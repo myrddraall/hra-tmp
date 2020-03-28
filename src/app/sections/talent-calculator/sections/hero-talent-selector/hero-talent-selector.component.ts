@@ -1,16 +1,17 @@
-import { Component, OnInit, OnChanges, HostBinding, ElementRef } from '@angular/core';
+import { Component, OnInit, OnChanges, HostBinding, ElementRef, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
 import { ActivatedRoute, Router, } from '@angular/router';
 import { IHero, ITalent, HeroModel, TalentTeir } from 'hots-gamedata';
 import { HeroStringsUtil } from 'hots-gamedata';
 import { TalentCalculatorComponent } from '../../talent-calculator.component';
+import { Unsubscribable } from 'rxjs';
 
 @Component({
   selector: 'app-hero-talent-selector',
   templateUrl: './hero-talent-selector.component.html',
   styleUrls: ['./hero-talent-selector.component.scss']
 })
-export class HeroTalentSelectorComponent implements OnInit, OnChanges {
+export class HeroTalentSelectorComponent implements OnInit, OnChanges, OnDestroy {
   /*public _selectedTalents = {
     '1': -1,
     '4': -1,
@@ -22,7 +23,8 @@ export class HeroTalentSelectorComponent implements OnInit, OnChanges {
   }*/
   private _hero: HeroModel;
 
-
+  private _subs: Unsubscribable[] = [];
+  private _herosubs: Unsubscribable[] = [];
 
   public _selectedValue: number = 0;
   // public _selectedValue: number;
@@ -33,9 +35,9 @@ export class HeroTalentSelectorComponent implements OnInit, OnChanges {
     private readonly parent: TalentCalculatorComponent
   ) {
 
-    parent.modeChanged.subscribe((value) => {
+    this._subs.push(parent.modeChanged.subscribe((value) => {
       this.displayMode = value;
-    });
+    }));
     this.route.data.subscribe(data => {
       if (this._hero?.id !== data.hero.id) {
         this._hero = new HeroModel(data.hero);
@@ -80,6 +82,10 @@ export class HeroTalentSelectorComponent implements OnInit, OnChanges {
   public update(): void {
     const base36 = this.route.snapshot.params.selectedTalents || '';
     this._hero.talentBuildUrl = base36;
+    this.unsubHero();
+    this._herosubs.push(this._hero.talentsChange.subscribe(_ =>{
+      this.parent.selectedTalentBuild = this._hero.talentBuildUrl;
+    }));
   }
 
   ngOnChanges(changes): void {
@@ -107,5 +113,22 @@ export class HeroTalentSelectorComponent implements OnInit, OnChanges {
     const path = this.router.createUrlTree(['/talent-calculator', this.hero.id, buildStr]);
     this.location.go(path.toString())
 
+  }
+  private unsubHero(){
+    if(this._herosubs){
+      for (const sub of this._herosubs) {
+        sub.unsubscribe();
+      }
+    }
+    this._herosubs = [];
+  }
+
+  public ngOnDestroy(){
+    if(this._subs){
+      for (const sub of this._subs) {
+        sub.unsubscribe();
+      }
+    }
+    this.unsubHero();
   }
 }

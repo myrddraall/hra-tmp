@@ -14,9 +14,12 @@
 <section>
     <div>
         <ng-container *ngFor="let talent of talents">
-            <div *ngIf="talent.button !== 'Heroic' || !talent.isActive">
-                <span style="color:rgb(228, 184, 0)">[{{talent.name}}] </span>
-                <span>{{talent.shortDescription}}</span>
+            <div *ngIf="talent.button !== 'Heroic' || !talent.isActive" class="talent">
+                <div style="color:rgb(228, 184, 0)">[{{talent.name}}] </div>
+                <div [hraTooltipText]="talent.shortDescription"></div>
+                <!-- 
+                    <div [hraTooltipText]="talent.description"></div>
+                -->
             </div>
         </ng-container>
     </div>

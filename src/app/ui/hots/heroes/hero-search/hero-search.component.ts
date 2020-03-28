@@ -17,6 +17,9 @@ export class HeroSearchComponent implements OnInit {
   private search: ElementRef<HTMLInputElement>;
   @ViewChild('details')
   private container: CollapsableComponent;
+  
+  @HostBinding('class.animating')
+  public animating: boolean = false;
 
   private _selected: string;
   private searchUpdates: Subject<string> = new Subject();

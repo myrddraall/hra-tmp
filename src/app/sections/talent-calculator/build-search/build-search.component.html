@@ -1,11 +1,16 @@
-<div class="selected-hero" (click)="open()">
-    <hra-hero-square-button [hero]="selectedHero"></hra-hero-square-button>
-    <label>{{selectedHero?.name}}</label>
-    <button mat-icon-button color="accent">
-        <mat-icon>expand_more</mat-icon>
-    </button>
+<div class="favorites">
+    <div class="fav-btn">
+        <button mat-stroked-button class="fav-this" color="primary" (click)="favouriteTalentBuild()"
+            [disabled]="!heroId || !build">
+            <mat-icon>{{isFavorite ? 'favorite' : 'favorite_border'}}</mat-icon>
+        </button>
+        <button mat-raised-button class="fav-open" color="accent" (click)="open()">Favourites</button>
+    </div>
 </div>
-<collapsable #details origin="top" duration="250ms" [open]="opened || !selectedHero" (click)="updateFocus(true)" (openStart)="animating = true" (openDone)="animating = false">
+
+
+
+<collapsable #details origin="top" duration="250ms" [open]="opened" (click)="updateFocus(true)"  (openStart)="animating = true" (openDone)="animating = false">
     <div class="filters">
         <div class="filter-buttons">
             <div class="filter extended-roles">
@@ -40,15 +45,41 @@
             <mat-form-field color="accent" appearance="outline">
                 <mat-label>Find a hero</mat-label>
                 <input type="text" #search name="heroId" matInput xplaceholder="Select a Hero"
-                    (focus)="updateFocus(true)" (blur)="selectedHero ? updateFocus(false) : null" (keyup)="updateSearch()"
+                    (focus)="updateFocus(true)" (blur)="updateFocus(false)" (keyup)="updateSearch()"
                     (change)="updateSearch()">
             </mat-form-field>
         </div>
     </div>
     <div class="hero-list">
-        <hra-hero-square-button *ngFor="let hero of visibleHeroList; trackBy: trackBy" [hero]="hero"
-            (click)="setSelected(hero); $event.stopPropagation()" [class.selected]="hero.id === value" interactive>
+        <div *ngFor="let heroBuilds of visibleHeroList; trackBy: trackHeroBy" class="hero-item">
+            <div class="hero">
+                <hra-hero-square-button [hero]="heroBuilds.hero"></hra-hero-square-button>
+                <h3>{{heroBuilds.hero.name}}</h3>
+            </div>
+            <div class="builds">
+                <div *ngFor="let build of heroBuilds.builds" class="build" (click)="setSelected(build)" [class.selected]="isSelected(build)">
+                    <div class="talents-col">
+                        <hra-talent-square-button *ngFor="let talent of build.model.selectedTalents" [model]="talent"
+                            [hero]="build.model" >
+                        </hra-talent-square-button>
+                    </div>
+                    <div class="name-col">
+                        <div class="name">
+                            {{build.name || 'Unnamed ' + heroBuilds.hero.name + ' Build'}}
+                        </div>
+                        <div class="desc">
+                            {{build.description || 'This is some test text &nbsp;'}}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- 
+
+          <hra-hero-square-button *ngFor="let hero of visibleHeroList; trackBy: trackBy" [hero]="hero"
+          (click)="setSelected(hero); $event.stopPropagation()" [class.selected]="hero.id === value" interactive>
         </hra-hero-square-button>
+    -->
     </div>
 </collapsable>
 <!-- 

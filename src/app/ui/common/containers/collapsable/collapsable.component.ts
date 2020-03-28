@@ -123,6 +123,11 @@ export class CollapsableComponent implements OnInit {
   @Output()
   public openChange: EventEmitter<boolean> = new EventEmitter();
 
+  @Output()
+  public openDone: EventEmitter<boolean> = new EventEmitter();
+
+  @Output()
+  public openStart: EventEmitter<boolean> = new EventEmitter();
 
   @Input()
   @HostBinding('attr.origin')
@@ -144,11 +149,13 @@ export class CollapsableComponent implements OnInit {
       this.closing = undefined;
       this.opened = undefined;
       this.closed = true;
+      this.openStart.next(true);
     } else {
       this.opening = undefined;
       this.closing = true;
       this.opened = true;
       this.closed = undefined;
+      this.openStart.next(false);
     }
   }
 
@@ -160,11 +167,13 @@ export class CollapsableComponent implements OnInit {
       this.closing = undefined;
       this.opened = true;
       this.closed = undefined;
+      this.openDone.next(true);
     } else {
       this.opening = undefined;
       this.closing = undefined;
       this.opened = undefined;
       this.closed = true;
+      this.openDone.next(false);
     }
   }
 }

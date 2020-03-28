@@ -11,9 +11,13 @@ import { ContainersModule } from 'src/app/ui/common/containers/containers.module
 import { MatSliderModule } from '@angular/material/slider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
-
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { BuildSearchComponent } from './build-search/build-search.component';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { FormsModule } from '@angular/forms';
 @NgModule({
-  declarations: [TalentCalculatorComponent, HeroTalentSelectorComponent, HeroTalentCalcDescriptionComponent],
+  declarations: [TalentCalculatorComponent, HeroTalentSelectorComponent, HeroTalentCalcDescriptionComponent, BuildSearchComponent],
   imports: [
     CommonModule,
     PortraitsModule,
@@ -23,7 +27,12 @@ import { MatIconModule } from '@angular/material/icon';
     HeroesModule,
     MatButtonModule,
     MatIconModule,
-    TalentCalculatorRoutingModule
+    MatFormFieldModule,
+    MatInputModule,
+    FormsModule,
+
+    TalentCalculatorRoutingModule,
+    MatSidenavModule
   ]
 })
 export class TalentCalculatorModule { }

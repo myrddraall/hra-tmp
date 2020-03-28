@@ -37,4 +37,23 @@
       }
     }
   }
+
+  .fav-btn{
+    button.fav-this{
+      border-top-right-radius: 0px;
+      border-bottom-right-radius: 0px;
+      padding: 0 8px;
+      min-width: 40px;
+    }
+    button.fav-open{
+      border-top-left-radius: 0px;
+      border-bottom-left-radius: 0px;
+    }
+  }
+  mat-sidenav-container{
+    background-color: transparent;
+    mat-sidenav{
+      min-width: 200px;
+    }
+  }
 }
