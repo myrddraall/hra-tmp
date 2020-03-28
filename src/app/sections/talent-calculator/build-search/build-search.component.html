@@ -57,7 +57,7 @@
                 <h3>{{heroBuilds.hero.name}}</h3>
             </div>
             <div class="builds">
-                <div *ngFor="let build of heroBuilds.builds" class="build" (click)="setSelected(build)" [class.selected]="isSelected(build)">
+                <div *ngFor="let build of heroBuilds.builds; trackBy: trackBuildBy" class="build" (click)="setSelected(build, $event)" [class.selected]="isSelected(build)">
                     <div class="talents-col">
                         <hra-talent-square-button *ngFor="let talent of build.model.selectedTalents" [model]="talent"
                             [hero]="build.model" >
@@ -70,6 +70,9 @@
                         <div class="desc">
                             {{build.description || 'This is some test text &nbsp;'}}
                         </div>
+                    </div>
+                    <div class="tools-col">
+                        <button mat-icon-button (click)="deleteBuild(build); false"><mat-icon>delete</mat-icon></button>
                     </div>
                 </div>
             </div>

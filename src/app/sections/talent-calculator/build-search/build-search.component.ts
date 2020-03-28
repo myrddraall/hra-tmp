@@ -12,7 +12,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 
 interface IHeroBuilds {
   hero: HeroModel,
-  builds: Array<IFavouriteTalentBuild & {model: HeroModel}>
+  builds: Array<IFavouriteTalentBuild & { model: HeroModel }>
 }
 
 @Component({
@@ -67,16 +67,17 @@ export class BuildSearchComponent implements OnInit, OnChanges {
   constructor(
     private readonly favouriteBuildsService: FavouriteTalentbuildsService,
     private readonly changeRef: ChangeDetectorRef,
-    private readonly router:Router,
-    private readonly route:ActivatedRoute
+    private readonly router: Router,
+    private readonly route: ActivatedRoute
   ) {
     favouriteBuildsService.builds.subscribe(async builds => {
       this.buildList = builds;
       await this.init();
       this.doFilter();
+      this.isFavorite = await this.favouriteBuildsService.hasBuild(this.heroId, this.build);
       this.changeRef.markForCheck();
     });
-    
+
   }
 
   private async init() {
@@ -99,7 +100,7 @@ export class BuildSearchComponent implements OnInit, OnChanges {
       i => i.id,
       (heroBuilds, hero) => ({
         hero: new HeroModel(hero),
-        builds: linq.from(heroBuilds.builds).select(_ =>{
+        builds: linq.from(heroBuilds.builds).select(_ => {
           const h = new HeroModel(hero);
           h.talentBuildUrl = _.build
           return {
@@ -201,74 +202,81 @@ export class BuildSearchComponent implements OnInit, OnChanges {
   private doFilter() {
     let q = linq.from(this.heroBuilds);
 
-        if (this.erFilter.size) {
-          q = q.where(_ => {
-            let role = _.hero.expandedRole.toLowerCase().split(' ')[0];
-            return this.erFilter.has(role);
-          });
+    if (this.erFilter.size) {
+      q = q.where(_ => {
+        let role = _.hero.expandedRole.toLowerCase().split(' ')[0];
+        return this.erFilter.has(role);
+      });
+    }
+
+    if (this.fFilter.size) {
+      q = q.where(_ => {
+        let franchise = _.hero.franchise.toLowerCase();
+        switch (franchise) {
+          case 'warcraft':
+          case 'starcraft':
+          case 'overwatch':
+          case 'diablo':
+            break;
+          default:
+            franchise = 'nexus';
         }
-    
-        if (this.fFilter.size) {
-          q = q.where(_ => {
-            let franchise = _.hero.franchise.toLowerCase();
-            switch (franchise) {
-              case 'warcraft':
-              case 'starcraft':
-              case 'overwatch':
-              case 'diablo':
-                break;
-              default:
-                franchise = 'nexus';
-            }
-            return this.fFilter.has(franchise);
-          });
+        return this.fFilter.has(franchise);
+      });
+    }
+
+    if (this.search?.nativeElement.value) {
+      const value = this.search.nativeElement.value.toLowerCase();
+      q = q.where(_ => {
+        console.log('!!!!!!!!!!!!!!!!!!', _)
+        const hero = _.hero;
+        if (hero.name.toLowerCase().indexOf(value) !== -1) {
+          return true;
         }
-    
-        if (this.search?.nativeElement.value) {
-          const value = this.search.nativeElement.value.toLowerCase();
-          q = q.where(_ => {
-            console.log('!!!!!!!!!!!!!!!!!!', _)
-            const hero = _.hero;
-            if (hero.name.toLowerCase().indexOf(value) !== -1) {
-              return true;
-            }
-            if (hero.title.toLowerCase().indexOf(value) !== -1) {
-              return true;
-            }
-            if (hero.gender.toLowerCase().indexOf(value) !== -1) {
-              return true;
-            }
-            if (hero.role.toLowerCase().indexOf(value) !== -1) {
-              return true;
-            }
-            if (hero.expandedRole.toLowerCase().indexOf(value) !== -1) {
-              return true;
-            }
-            if (hero.difficulty.toLowerCase().indexOf(value) !== -1) {
-              return true;
-            }
-            if (hero.searchText && hero.searchText.toLowerCase().indexOf(value) !== -1) {
-              return true;
-            }
-            if (hero.tags && hero.tags.join(' ').toLowerCase().indexOf(value) !== -1) {
-              return true;
-            }
-            return false;
-          });
+        if (hero.title.toLowerCase().indexOf(value) !== -1) {
+          return true;
         }
-    
-        this.visibleHeroList = q.orderBy(_ => _.hero.id).toArray();
+        if (hero.gender.toLowerCase().indexOf(value) !== -1) {
+          return true;
+        }
+        if (hero.role.toLowerCase().indexOf(value) !== -1) {
+          return true;
+        }
+        if (hero.expandedRole.toLowerCase().indexOf(value) !== -1) {
+          return true;
+        }
+        if (hero.difficulty.toLowerCase().indexOf(value) !== -1) {
+          return true;
+        }
+        if (hero.searchText && hero.searchText.toLowerCase().indexOf(value) !== -1) {
+          return true;
+        }
+        if (hero.tags && hero.tags.join(' ').toLowerCase().indexOf(value) !== -1) {
+          return true;
+        }
+        return false;
+      });
+    }
+
+    this.visibleHeroList = q.orderBy(_ => _.hero.id).toArray();
 
   }
 
-  public setSelected(build: IFavouriteTalentBuild): void {
-    this.router.navigate([build.hero, build.build], {
-      relativeTo: this.route
-    });
-    setTimeout(()=>{
-      this.opened = false;
-      this.updateFocus(false);
-    })
+  public setSelected(build: IFavouriteTalentBuild, event: MouseEvent): void {
+    if (!event.defaultPrevented) {
+      this.router.navigate([build.hero, build.build], {
+        relativeTo: this.route
+      });
+      setTimeout(() => {
+        this.opened = false;
+        this.updateFocus(false);
+      })
+    }
+  }
+
+  public async deleteBuild(build: IFavouriteTalentBuild) {
+    await this.favouriteBuildsService.deleteBuild(build.hero, build.build);
+    this.changeRef.markForCheck();
   }
 
   public isSelected(build: IFavouriteTalentBuild): boolean {

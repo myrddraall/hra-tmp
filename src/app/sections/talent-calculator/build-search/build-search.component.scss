@@ -77,7 +77,6 @@ $height: 7.2em;
   .hero-list{
     display: flex;
     flex-direction: column;
-    justify-content: center;
     padding: 0.8em 0.8em;
     max-height: 80vh;
     overflow-x: hidden;
@@ -90,10 +89,11 @@ $height: 7.2em;
 
 
     .hero-item{
+      margin-bottom: 0.8em;
       .hero{
         display: flex;
         align-items: center;
-        background-color: rgb(19, 9, 54);
+        background-color: lighten( rgb(19, 9, 54), 5);
         border: 1px solid rgba(149, 160, 255, 0.42);
         padding: 0.1em;
         hra-hero-square-button{
@@ -104,23 +104,33 @@ $height: 7.2em;
           margin: 0px;
           margin-left: 1em;
         }
+        z-index: 2;
       }
       .builds{
-        padding:0.8em 0.4em;
-        
-         background-color: lighten( rgb(19, 9, 54), 5);
-         box-shadow: inset 0px 0px 1em 0.2em rgba(0, 0, 0, 0.69);
+        padding: 0em;
+        margin-top:-1px;
+         background-color: rgb(19, 9, 54);
+         box-shadow: inset 0px 0px 2em 0.5em rgba(0, 0, 0, 0.69);
+         border: 1px solid rgba(149, 160, 255, 0.42);
+         border-bottom:none;
          .build{
           border-bottom: 1px solid rgba(149, 160, 255, 0.42);
+          color: rgba(255,255,255, 0.5);
           cursor: pointer;
           &:hover{
             border-bottom: 1px solid rgba(0, 191, 255, 0.42);
-            background-color: lighten( rgb(19, 9, 54), 10);
+            background-color: lighten( rgba(19, 9, 54, 0.1), 20);
+            color: rgba(255,255,255, 1);
           }
+          &.selected{
+            box-shadow: inset 0px 0px 2em 0.5em rgba(0, 191, 255, 0.2);
+            color: rgba(255,255,255, 0.8);
+            border-bottom: 1px solid rgba(0, 191, 255, 0.69);
+          }
+          padding:0.8em 0.8em;
          // margin-bottom: 0.2em;
-          &:last-of-type{
-            border-bottom: none;
-            margin-bottom: 0em;
+          &:first-of-type{
+            //border-top: 1px solid rgba(149, 160, 255, 0.42);
           }
           display: flex;
           align-items: center;
@@ -128,12 +138,15 @@ $height: 7.2em;
           .talents-col{
             line-height: 0px;
             padding: 0.2em 0.1em;
+            flex-shrink: 0;
             hra-talent-square-button{
               font-size: 0.6em;
               margin: 0em 0.1em;
             }
           }
           .name-col{
+            flex: 1 0;
+            width:100%;
             padding: 0.4em 1em;
             .name{
               font-size: 1.8em;

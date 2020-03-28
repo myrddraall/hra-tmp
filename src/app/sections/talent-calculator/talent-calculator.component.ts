@@ -49,7 +49,7 @@ export class TalentCalculatorComponent implements OnInit, OnDestroy {
     this.favoriteBuildsService.builds.subscribe(async builds => {
       console.log('builds changed', builds);
       this.isFavorite = await this.favoriteBuildsService.hasBuild(this.selectedHeroId, this.selectedTalentBuild);
-
+      this.changeRef.markForCheck();
     });
   }
   private _resizeObs: MutationObserver;
