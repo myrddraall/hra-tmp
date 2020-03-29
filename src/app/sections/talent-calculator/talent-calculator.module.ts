@@ -16,6 +16,7 @@ import { BuildSearchComponent } from './build-search/build-search.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
+import { LinksModule } from 'src/app/ui/common/links/links.module';
 @NgModule({
   declarations: [TalentCalculatorComponent, HeroTalentSelectorComponent, HeroTalentCalcDescriptionComponent, BuildSearchComponent],
   imports: [
@@ -30,7 +31,7 @@ import { FormsModule } from '@angular/forms';
     MatFormFieldModule,
     MatInputModule,
     FormsModule,
-
+    LinksModule,
     TalentCalculatorRoutingModule,
     MatSidenavModule
   ]

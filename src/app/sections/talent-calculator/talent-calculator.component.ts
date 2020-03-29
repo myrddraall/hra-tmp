@@ -38,7 +38,7 @@ export class TalentCalculatorComponent implements OnInit, OnDestroy {
 
   private checkMode() {
     const value = this.elmRef.nativeElement.getAttribute('max-width');
-    this.forceIconMode = value === '1199px';
+    this.forceIconMode = value === '1399px';
     this.modeChanged.next(this.activeMode);
     return this.activeMode;
   }
@@ -88,6 +88,9 @@ export class TalentCalculatorComponent implements OnInit, OnDestroy {
     if (this._resizeObs) {
       this._resizeObs.disconnect();
     }
+  }
+  public get url(){
+    return location.href;
   }
 
   @HostBinding('attr.mode')

@@ -1,0 +1,3 @@
+<button class="copy" mat-stroked-button (click)="copyLink(input)"><span *ngIf="showLabel">{{label || url || ''}}</span><mat-icon>assignment</mat-icon></button>
+<button class="navigate" mat-stroked-button><mat-icon>launch</mat-icon></button>
+<input #input [value]="url || ''" readonly/>
