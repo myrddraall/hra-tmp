@@ -1,0 +1,15 @@
+<div class="fixed" #fixed>
+     <!-- this is flex-->
+    <div class="apllication-container">
+        <!-- this is grid-->
+        <div #gridArea class="grid-area top outer"><ng-content select="[top-outer]"></ng-content></div>
+        <div #gridArea class="grid-area left outer"><ng-content select="[left-outer]"></ng-content></div>
+        <div #gridArea class="grid-area top inner"><ng-content select="[top-inner]"></ng-content></div>
+        <div #gridArea class="grid-area left inner"><ng-content select="[left-inner]"></ng-content></div>
+        <div #gridArea class="grid-area right inner"><ng-content select="[right-inner]"></ng-content></div>
+        <div #gridArea class="grid-area bottom inner"><ng-content select="[bottom-inner]"></ng-content></div>
+        <div #gridArea class="grid-area right outer"><ng-content select="[right-outer]"></ng-content></div>
+        <div #gridArea class="grid-area bottom outer"><ng-content select="[bottom-outer]"></ng-content></div>
+    </div>
+</div>
+<ng-content></ng-content>

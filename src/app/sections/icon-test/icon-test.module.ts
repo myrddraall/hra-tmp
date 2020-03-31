@@ -9,6 +9,7 @@ import { ButtonsModule } from '../../ui/hots/buttons/buttons.module';
 import { IconsModule } from '../../ui/hots/icons/icons.module';
 import { TalentsModule } from '../../ui/hots/talents/talents.module';
 
+import {ApplicationModule} from '@ngui/application';
 
 @NgModule({
   declarations: [ShapedImageComponent],
@@ -19,7 +20,8 @@ import { TalentsModule } from '../../ui/hots/talents/talents.module';
     AbilitiesModule,
     ButtonsModule,
     IconsModule,
-    TalentsModule
+    TalentsModule,
+    ApplicationModule
   ]
 })
 export class IconTestModule { }
