@@ -1,10 +1,11 @@
-import { Component, OnInit, OnChanges, HostBinding, ElementRef, OnDestroy } from '@angular/core';
 import { Location } from '@angular/common';
-import { ActivatedRoute, Router, } from '@angular/router';
-import { IHero, ITalent, HeroModel, TalentTeir } from 'hots-gamedata';
-import { HeroStringsUtil } from 'hots-gamedata';
-import { TalentCalculatorComponent } from '../../talent-calculator.component';
+import { Component, ElementRef, HostBinding, OnChanges, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { HeroModel, HeroStringsUtil, TalentTeir } from 'hots-gamedata';
 import { Unsubscribable } from 'rxjs';
+import { TalentCalculatorComponent } from '../../talent-calculator.component';
+import { ElementResizeObserver } from '@ngui/responsive'
+import { get, set } from 'idb-keyval';
 
 @Component({
   selector: 'app-hero-talent-selector',
@@ -12,16 +13,12 @@ import { Unsubscribable } from 'rxjs';
   styleUrls: ['./hero-talent-selector.component.scss']
 })
 export class HeroTalentSelectorComponent implements OnInit, OnChanges, OnDestroy {
-  /*public _selectedTalents = {
-    '1': -1,
-    '4': -1,
-    '7': -1,
-    '10': -1,
-    '13': -1,
-    '16': -1,
-    '20': -1,
-  }*/
+
   private _hero: HeroModel;
+  private forceIconModeAt = 1399;
+  public forceIconMode: boolean = false;
+  private _mode: 'icon' | 'tile';
+
 
   private _subs: Unsubscribable[] = [];
   private _herosubs: Unsubscribable[] = [];
@@ -29,15 +26,21 @@ export class HeroTalentSelectorComponent implements OnInit, OnChanges, OnDestroy
   public _selectedValue: number = 0;
   // public _selectedValue: number;
   constructor(
+    private readonly elmRef: ElementRef<HTMLElement>,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     private readonly location: Location,
-    private readonly parent: TalentCalculatorComponent
+    private readonly parent: TalentCalculatorComponent,
+    private readonly changeRef: ChangeDetectorRef,
   ) {
-
-    this._subs.push(parent.modeChanged.subscribe((value) => {
+    this._subs.push(new ElementResizeObserver(elmRef.nativeElement).subscribe(size =>{
+      this.forceIconMode = size.width <= this.forceIconModeAt;
+      this.changeRef.markForCheck();
+    }));
+    /*this._subs.push(parent.modeChanged.subscribe((value) => {
       this.displayMode = value;
     }));
+    */
     this.route.data.subscribe(data => {
       if (this._hero?.id !== data.hero.id) {
         this._hero = new HeroModel(data.hero);
@@ -52,7 +55,29 @@ export class HeroTalentSelectorComponent implements OnInit, OnChanges, OnDestroy
   }
 
   @HostBinding('attr.display-mode')
-  public displayMode: 'icon' | 'tile' = 'icon';
+  public get displayMode(): 'icon' | 'tile'{
+    return this.forceIconMode ? 'icon' : this._mode;
+  }
+
+  public get mode(): 'icon' | 'tile'{
+    return this._mode;
+  }
+
+  public set mode(value: 'icon' | 'tile') {
+    if (this.mode !== value) {
+      this._mode = value;
+      set('__talent-calculator__.displayMode', value);
+      //this.modeChanged.next(value);
+    } else {
+      this._mode = value;
+      set('__talent-calculator__.displayMode', value);
+    }
+  }
+
+  public get url(){
+    return location.href;
+  }
+
 
   public get hero(): HeroModel {
     return this._hero;
@@ -73,7 +98,9 @@ export class HeroTalentSelectorComponent implements OnInit, OnChanges, OnDestroy
     return `https://static.heroesofthestorm.com/heroes/${nName}/skins/${nTtite}.jpg`
   }
 
-  ngOnInit() {
+  async ngOnInit() {
+    this._mode = await get<'icon' | 'tile'>('__talent-calculator__.displayMode') || 'tile';
+
     const base36 = this.route.snapshot.params.selectedTalents || '';
     this._hero.talentBuildUrl = base36;
   }
@@ -83,8 +110,9 @@ export class HeroTalentSelectorComponent implements OnInit, OnChanges, OnDestroy
     const base36 = this.route.snapshot.params.selectedTalents || '';
     this._hero.talentBuildUrl = base36;
     this.unsubHero();
-    this._herosubs.push(this._hero.talentsChange.subscribe(_ =>{
-      this.parent.selectedTalentBuild = this._hero.talentBuildUrl;
+    this._herosubs.push(this._hero.talentsChange.subscribe(_ => {
+       this.parent.selectedTalentBuild = this._hero.talentBuildUrl;
+      //this.changeRef.markForCheck();
     }));
   }
 
@@ -114,8 +142,8 @@ export class HeroTalentSelectorComponent implements OnInit, OnChanges, OnDestroy
     this.location.go(path.toString())
 
   }
-  private unsubHero(){
-    if(this._herosubs){
+  private unsubHero() {
+    if (this._herosubs) {
       for (const sub of this._herosubs) {
         sub.unsubscribe();
       }
@@ -123,8 +151,8 @@ export class HeroTalentSelectorComponent implements OnInit, OnChanges, OnDestroy
     this._herosubs = [];
   }
 
-  public ngOnDestroy(){
-    if(this._subs){
+  public ngOnDestroy() {
+    if (this._subs) {
       for (const sub of this._subs) {
         sub.unsubscribe();
       }

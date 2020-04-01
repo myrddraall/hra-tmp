@@ -1,3 +1,15 @@
+<ng-template nguiAttachment="app.header.main.right">
+  <div class="mode-buttons tool" *ngIf="!forceIconMode && displayMode">
+    <button mat-icon-button [color]="mode === 'tile'? 'accent' : 'primary'" (click)="mode = 'tile'">
+      <mat-icon>view_list</mat-icon>
+    </button>
+    <button mat-icon-button [color]="mode === 'icon'? 'accent' : 'primary'" (click)="mode = 'icon'">
+      <mat-icon>apps</mat-icon>
+    </button>
+  </div>
+  <hra-link-copy-button class="tool" [url]="url" label="Copy Build Url"></hra-link-copy-button>
+</ng-template>
+
 <section talents>
   <img class="bg" [src]="bgUrl" />
   <div class="talent-container">

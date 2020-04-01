@@ -1,22 +1,8 @@
-<header>
-    <hra-hero-search [heroList]="heroList" (valueChange)="onHeroSelect($event)" [value]="selectedHeroId"></hra-hero-search>
-    <div class="mode-buttons" *ngIf="!forceIconMode && activeMode">
-        <button mat-icon-button [color]="mode === 'tile'? 'accent' : 'primary'" (click)="mode = 'tile'"><mat-icon>view_list</mat-icon></button>
-        <button mat-icon-button [color]="mode === 'icon'? 'accent' : 'primary'" (click)="mode = 'icon'"><mat-icon>apps</mat-icon></button>
-    </div>
-   
-    <hra-build-search [heroId]="selectedHeroId" [build]="selectedTalentBuild"></hra-build-search>
-    <div >
-        <hra-link-copy-button [url]="url" label="Copy Build Url"></hra-link-copy-button>
-    </div>
-</header>
-<div>
-    <mat-sidenav-container [hasBackdrop]="false">
-        <mat-sidenav-content>
-            <router-outlet></router-outlet>
-        </mat-sidenav-content>
-        <mat-sidenav position="end" [opened]="false" mode="push" >
+<ng-template nguiAttachment="app.header.main.left">
+    <hra-hero-search  [heroList]="heroList" (valueChange)="onHeroSelect($event)" [value]="selectedHeroId"></hra-hero-search>
+</ng-template>
+<ng-template nguiAttachment="app.header.main.right" order="10">
+    <hra-build-search class="tool" [heroId]="selectedHeroId" [build]="selectedTalentBuild"></hra-build-search>
+</ng-template>
 
-        </mat-sidenav>
-    </mat-sidenav-container>
-</div>
+<router-outlet></router-outlet>

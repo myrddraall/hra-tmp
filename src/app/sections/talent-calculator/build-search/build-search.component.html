@@ -8,83 +8,109 @@
     </div>
 </div>
 
-
-
-<collapsable #details origin="top" duration="250ms" [open]="opened" (click)="updateFocus(true)"  (openStart)="animating = true" (openDone)="animating = false">
-    <div class="filters">
-        <div class="filter-buttons">
-            <div class="filter extended-roles">
-                <hra-extended-role-filter-button role="tank" (click)="setERFilter('tank')"
-                    [class.selected]="erFilter.has('tank')"></hra-extended-role-filter-button>
-                <hra-extended-role-filter-button role="bruiser" (click)="setERFilter('bruiser')"
-                    [class.selected]="erFilter.has('bruiser')"></hra-extended-role-filter-button>
-                <hra-extended-role-filter-button role="support" (click)="setERFilter('support')"
-                    [class.selected]="erFilter.has('support')"></hra-extended-role-filter-button>
-                <hra-extended-role-filter-button role="healer" (click)="setERFilter('healer')"
-                    [class.selected]="erFilter.has('healer')"></hra-extended-role-filter-button>
-                <hra-extended-role-filter-button role="ranged" (click)="setERFilter('ranged')"
-                    [class.selected]="erFilter.has('ranged')"></hra-extended-role-filter-button>
-                <hra-extended-role-filter-button role="melee" (click)="setERFilter('melee')"
-                    [class.selected]="erFilter.has('melee')"></hra-extended-role-filter-button>
+<ng-template nguiAttachment="app.notifications">
+    <collapsable #details origin="top" duration="250ms" [open]="opened" (click)="updateFocus(true)"
+        (openStart)="animating = true" (openDone)="animating = false">
+        <div class="filters">
+            <div class="filter-buttons">
+                <div class="filter extended-roles">
+                    <hra-extended-role-filter-button role="tank" (click)="setERFilter('tank')"
+                        [class.selected]="erFilter.has('tank')"></hra-extended-role-filter-button>
+                    <hra-extended-role-filter-button role="bruiser" (click)="setERFilter('bruiser')"
+                        [class.selected]="erFilter.has('bruiser')"></hra-extended-role-filter-button>
+                    <hra-extended-role-filter-button role="support" (click)="setERFilter('support')"
+                        [class.selected]="erFilter.has('support')"></hra-extended-role-filter-button>
+                    <hra-extended-role-filter-button role="healer" (click)="setERFilter('healer')"
+                        [class.selected]="erFilter.has('healer')"></hra-extended-role-filter-button>
+                    <hra-extended-role-filter-button role="ranged" (click)="setERFilter('ranged')"
+                        [class.selected]="erFilter.has('ranged')"></hra-extended-role-filter-button>
+                    <hra-extended-role-filter-button role="melee" (click)="setERFilter('melee')"
+                        [class.selected]="erFilter.has('melee')"></hra-extended-role-filter-button>
+                </div>
+                <img class="divider" src="assets/ui/borders/storm_ui_play_filter_divider.png" />
+                <div class="filter franchises">
+                    <hra-franchise-filter-button franchise="warcraft" (click)="setFFilter('warcraft')"
+                        [class.selected]="fFilter.has('warcraft')"></hra-franchise-filter-button>
+                    <hra-franchise-filter-button franchise="starcraft" (click)="setFFilter('starcraft')"
+                        [class.selected]="fFilter.has('starcraft')"></hra-franchise-filter-button>
+                    <hra-franchise-filter-button franchise="overwatch" (click)="setFFilter('overwatch')"
+                        [class.selected]="fFilter.has('overwatch')"></hra-franchise-filter-button>
+                    <hra-franchise-filter-button franchise="diablo" (click)="setFFilter('diablo')"
+                        [class.selected]="fFilter.has('diablo')"></hra-franchise-filter-button>
+                    <hra-franchise-filter-button franchise="nexus" (click)="setFFilter('nexus')"
+                        [class.selected]="fFilter.has('nexus')"></hra-franchise-filter-button>
+                </div>
             </div>
-            <img class="divider" src="assets/ui/borders/storm_ui_play_filter_divider.png" />
-            <div class="filter franchises">
-                <hra-franchise-filter-button franchise="warcraft" (click)="setFFilter('warcraft')"
-                    [class.selected]="fFilter.has('warcraft')"></hra-franchise-filter-button>
-                <hra-franchise-filter-button franchise="starcraft" (click)="setFFilter('starcraft')"
-                    [class.selected]="fFilter.has('starcraft')"></hra-franchise-filter-button>
-                <hra-franchise-filter-button franchise="overwatch" (click)="setFFilter('overwatch')"
-                    [class.selected]="fFilter.has('overwatch')"></hra-franchise-filter-button>
-                <hra-franchise-filter-button franchise="diablo" (click)="setFFilter('diablo')"
-                    [class.selected]="fFilter.has('diablo')"></hra-franchise-filter-button>
-                <hra-franchise-filter-button franchise="nexus" (click)="setFFilter('nexus')"
-                    [class.selected]="fFilter.has('nexus')"></hra-franchise-filter-button>
+            <div class="text-search">
+                <mat-form-field color="accent" appearance="outline">
+                    <mat-label>Find a hero</mat-label>
+                    <input type="text" #search name="heroId" matInput xplaceholder="Select a Hero"
+                        (focus)="updateFocus(true)" (blur)="updateFocus(false)" (keyup)="updateSearch()"
+                        (change)="updateSearch()">
+                </mat-form-field>
             </div>
         </div>
-        <div class="text-search">
-            <mat-form-field color="accent" appearance="outline">
-                <mat-label>Find a hero</mat-label>
-                <input type="text" #search name="heroId" matInput xplaceholder="Select a Hero"
-                    (focus)="updateFocus(true)" (blur)="updateFocus(false)" (keyup)="updateSearch()"
-                    (change)="updateSearch()">
-            </mat-form-field>
-        </div>
-    </div>
-    <div class="hero-list">
-        <div *ngFor="let heroBuilds of visibleHeroList; trackBy: trackHeroBy" class="hero-item">
-            <div class="hero">
-                <hra-hero-square-button [hero]="heroBuilds.hero"></hra-hero-square-button>
-                <h3>{{heroBuilds.hero.name}}</h3>
-            </div>
-            <div class="builds">
-                <div *ngFor="let build of heroBuilds.builds; trackBy: trackBuildBy" class="build" (click)="setSelected(build, $event)" [class.selected]="isSelected(build)">
-                    <div class="talents-col">
-                        <hra-talent-square-button *ngFor="let talent of build.model.selectedTalents" [model]="talent"
-                            [hero]="build.model" >
-                        </hra-talent-square-button>
-                    </div>
-                    <div class="name-col">
-                        <div class="name">
-                            {{build.name || 'Unnamed ' + heroBuilds.hero.name + ' Build'}}
+        <div class="hero-list">
+            <div *ngFor="let heroBuilds of visibleHeroList; trackBy: trackHeroBy" class="hero-item">
+                <div class="hero">
+                    <hra-hero-square-button [hero]="heroBuilds.hero"></hra-hero-square-button>
+                    <h3>{{heroBuilds.hero.name}}</h3>
+                </div>
+                <div class="builds">
+                    <div *ngFor="let build of heroBuilds.builds; trackBy: trackBuildBy" class="build"
+                        (click)="setSelected(build, $event)" [class.selected]="isSelected(build)">
+                        <div class="talents-col">
+                            <hra-talent-square-button *ngFor="let talent of build.model.selectedTalents"
+                                [model]="talent" [hero]="build.model">
+                            </hra-talent-square-button>
                         </div>
-                        <div class="desc">
-                            {{build.description || 'This is some test text &nbsp;'}}
+                        <div class="name-col">
+                            <div class="name">
+                                {{build.name || 'Unnamed ' + heroBuilds.hero.name + ' Build'}}
+                            </div>
+                            <div class="desc" *ngIf="build.description">
+                                {{build.description}}
+                            </div>
                         </div>
-                    </div>
-                    <div class="tools-col">
-                        <button mat-icon-button (click)="deleteBuild(build); false"><mat-icon>delete</mat-icon></button>
+                        <div class="tools-col">
+                            <button mat-icon-button (click)="modifyBuild(build); false">
+                                <mat-icon>edit</mat-icon>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </div>
+            <!-- 
+    
+              <hra-hero-square-button *ngFor="let hero of visibleHeroList; trackBy: trackBy" [hero]="hero"
+              (click)="setSelected(hero); $event.stopPropagation()" [class.selected]="hero.id === value" interactive>
+            </hra-hero-square-button>
+        -->
         </div>
-        <!-- 
+    </collapsable>
+</ng-template>
 
-          <hra-hero-square-button *ngFor="let hero of visibleHeroList; trackBy: trackBy" [hero]="hero"
-          (click)="setSelected(hero); $event.stopPropagation()" [class.selected]="hero.id === value" interactive>
-        </hra-hero-square-button>
-    -->
-    </div>
-</collapsable>
+
+<ng-template #AddEditBuildDialog let-data>
+
+    <mat-form-field appearance="outline">
+        <mat-label>Build Name</mat-label>
+        <input type="text" matInput placeholder="Enter build name" [(ngModel)]="data.build.name">
+    </mat-form-field>
+    <mat-form-field appearance="outline">
+        <mat-label>Description</mat-label>
+        <input type="text" matInput placeholder="Enter build description" [(ngModel)]="data.build.description">
+    </mat-form-field>
+    <mat-dialog-actions align="start">
+        <div class="left">
+            <button mat-raised-button [mat-dialog-close]="data.build" color="accent">Save</button>
+            <button mat-stroked-button mat-dialog-close>Cancel</button>
+        </div>
+        <div class="right">
+            <button mat-stroked-button [mat-dialog-close]="'delete'" *ngIf="data.isSaved" color="warn">Delete</button>
+        </div>
+    </mat-dialog-actions>
+</ng-template>
 <!-- 
 
     

@@ -59,6 +59,14 @@ export class FavouriteTalentbuildsService {
     return false;
   }
 
+  public async getBuild(hero:string, build: string): Promise<IFavouriteTalentBuild>{
+    const builds = await this.initialize();
+    if(builds){
+      return builds.get(hero + '|' + build);
+    }
+    return undefined;
+  }
+
   private toFavList(map: Map<string, IFavouriteTalentBuild>):IFavouriteTalentBuild[]{
     if(!map){
       return [];

@@ -1,127 +1,125 @@
+<ng-template nguiAttachment="app.header">
+    adding a header
+</ng-template>
+<ng-template nguiAttachment="app.header.main.center">
+    adding a header
+</ng-template>
 
-<ngui-application>
- 
+    <hra-icon-vhex
+        iconUrl="https://raw.githubusercontent.com/HeroesToolChest/heroes-images/master/heroesimages/abilitytalents/storm_ui_icon_anduin_flash_heal_a.png">
+    </hra-icon-vhex>
+    <hra-icon-square
+        iconUrl="https://raw.githubusercontent.com/HeroesToolChest/heroes-images/master/heroesimages/abilitytalents/storm_ui_icon_anduin_flash_heal_a.png">
+    </hra-icon-square>
+    <hra-icon-circle
+        iconUrl="https://raw.githubusercontent.com/HeroesToolChest/heroes-images/master/heroesimages/abilitytalents/storm_ui_icon_anduin_flash_heal_a.png">
+    </hra-icon-circle>
 
-     <div top-outer>top-outer</div>
-     <div left-outer>left-outer <button #btn (click)="btn.innerText = btn.innerText + '1'">1</button></div>
-     <div top-inner>top-inner</div>
-     <div left-inner>left-inner</div>
-    <div right-inner>right-inner</div>
-    <div bottom-inner>bottom-inner</div>
-    <div right-outer>right-outer</div>
-    <div bottom-outer>bottom-outer</div>
+    <table>
+        <tr>
+            <th>Static</th>
+            <th>Normal</th>
+            <th>Hover</th>
+            <th>Selected</th>
+            <th>Disabled</th>
+        </tr>
+        <tr>
+            <td>
+                <hra-hex-button-border>
+                    <hra-icon-vhex></hra-icon-vhex>
+                </hra-hex-button-border>
+            </td>
+            <td interactive>
+                <hra-hex-button-border>
+                    <hra-icon-vhex></hra-icon-vhex>
+                </hra-hex-button-border>
+            </td>
+            <td interactive hover>
+                <hra-hex-button-border>
+                    <hra-icon-vhex></hra-icon-vhex>
+                </hra-hex-button-border>
+            </td>
+            <td>
+                <hra-hex-button-border selected>
+                    <hra-icon-vhex></hra-icon-vhex>
+                </hra-hex-button-border>
+            </td>
+            <td>
+                <hra-hex-button-border disabled>
+                    <hra-icon-vhex></hra-icon-vhex>
+                </hra-hex-button-border>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <hra-square-button-border>
+                    <hra-icon-square></hra-icon-square>
+                </hra-square-button-border>
 
-    
-        <hra-icon-vhex iconUrl="https://raw.githubusercontent.com/HeroesToolChest/heroes-images/master/heroesimages/abilitytalents/storm_ui_icon_anduin_flash_heal_a.png"></hra-icon-vhex>
-        <hra-icon-square iconUrl="https://raw.githubusercontent.com/HeroesToolChest/heroes-images/master/heroesimages/abilitytalents/storm_ui_icon_anduin_flash_heal_a.png"></hra-icon-square>
-        <hra-icon-circle iconUrl="https://raw.githubusercontent.com/HeroesToolChest/heroes-images/master/heroesimages/abilitytalents/storm_ui_icon_anduin_flash_heal_a.png"></hra-icon-circle>
-        
-        
-        <table>
-            <tr>
-                <th>Static</th>
-                <th>Normal</th>
-                <th>Hover</th>
-                <th>Selected</th>
-                <th>Disabled</th>
-            </tr>
-            <tr>
-                <td>
-                    <hra-hex-button-border>
-                        <hra-icon-vhex></hra-icon-vhex>
-                    </hra-hex-button-border>
-                </td>
-                <td interactive>
-                    <hra-hex-button-border >
-                        <hra-icon-vhex></hra-icon-vhex>
-                    </hra-hex-button-border>
-                </td>
-                <td interactive hover>
-                    <hra-hex-button-border >
-                        <hra-icon-vhex></hra-icon-vhex>
-                    </hra-hex-button-border>
-                </td>
-                <td>
-                    <hra-hex-button-border selected>
-                        <hra-icon-vhex></hra-icon-vhex>
-                    </hra-hex-button-border>
-                </td>
-                <td>
-                    <hra-hex-button-border disabled>
-                        <hra-icon-vhex></hra-icon-vhex>
-                    </hra-hex-button-border>
-                </td>
-            </tr>
-            <tr>
-                <td>
-                    <hra-square-button-border>
-                        <hra-icon-square></hra-icon-square>
-                    </hra-square-button-border>
-                    
-                </td>
-                <td>
-                    <hra-square-button-border interactive>
-                        <hra-icon-square></hra-icon-square>
-                    </hra-square-button-border>
-                    
-                </td>
-                <td>
-                    <hra-square-button-border hover>
-                        <hra-icon-square></hra-icon-square>
-                    </hra-square-button-border>
-                    
-                </td>
-                <td>
-                    <hra-square-button-border selected>
-                        <hra-icon-square></hra-icon-square>
-                    </hra-square-button-border>
-                    
-                </td>
-                <td>
-                    <hra-square-button-border disabled>
-                        <hra-icon-square></hra-icon-square>
-                    </hra-square-button-border>
-                </td>
-            </tr>
-            
-            <tr>
-                <td>
-                    <hra-circle-button-border>
-                        <hra-icon-circle></hra-icon-circle>
-                    </hra-circle-button-border>
-                    
-                </td>
-                <td>
-                    <hra-circle-button-border interactive>
-                        <hra-icon-circle></hra-icon-circle>
-                    </hra-circle-button-border>
-                    
-                </td>
-                <td>
-                    <hra-circle-button-border hover>
-                        <hra-icon-circle></hra-icon-circle>
-                    </hra-circle-button-border>
-                    
-                </td>
-                <td>
-                    <hra-circle-button-border selected>
-                        <hra-icon-circle></hra-icon-circle>
-                    </hra-circle-button-border>
-                    
-                </td>
-                <td>
-                    <hra-circle-button-border disabled>
-                        <hra-icon-circle></hra-icon-circle>
-                    </hra-circle-button-border>
-                </td>
-            </tr>
-        </table>
-        
-        <hra-ability-hex-hud-button [model]="{icon: 'storm_ui_icon_anduin_flash_heal_a.png', button: 'Q'}"></hra-ability-hex-hud-button>
-        
-        <hra-ability-hex-hud-button ></hra-ability-hex-hud-button>
-        
-        <br/>
-        <hra-talent-square-button [model]="{icon: 'storm_ui_icon_anduin_flash_heal_a.png', button: 'Q'}"></hra-talent-square-button>
-</ngui-application>
+            </td>
+            <td>
+                <hra-square-button-border interactive>
+                    <hra-icon-square></hra-icon-square>
+                </hra-square-button-border>
 
+            </td>
+            <td>
+                <hra-square-button-border hover>
+                    <hra-icon-square></hra-icon-square>
+                </hra-square-button-border>
+
+            </td>
+            <td>
+                <hra-square-button-border selected>
+                    <hra-icon-square></hra-icon-square>
+                </hra-square-button-border>
+
+            </td>
+            <td>
+                <hra-square-button-border disabled>
+                    <hra-icon-square></hra-icon-square>
+                </hra-square-button-border>
+            </td>
+        </tr>
+
+        <tr>
+            <td>
+                <hra-circle-button-border>
+                    <hra-icon-circle></hra-icon-circle>
+                </hra-circle-button-border>
+
+            </td>
+            <td>
+                <hra-circle-button-border interactive>
+                    <hra-icon-circle></hra-icon-circle>
+                </hra-circle-button-border>
+
+            </td>
+            <td>
+                <hra-circle-button-border hover>
+                    <hra-icon-circle></hra-icon-circle>
+                </hra-circle-button-border>
+
+            </td>
+            <td>
+                <hra-circle-button-border selected>
+                    <hra-icon-circle></hra-icon-circle>
+                </hra-circle-button-border>
+
+            </td>
+            <td>
+                <hra-circle-button-border disabled>
+                    <hra-icon-circle></hra-icon-circle>
+                </hra-circle-button-border>
+            </td>
+        </tr>
+    </table>
+
+    <hra-ability-hex-hud-button [model]="{icon: 'storm_ui_icon_anduin_flash_heal_a.png', button: 'Q'}">
+    </hra-ability-hex-hud-button>
+
+    <hra-ability-hex-hud-button></hra-ability-hex-hud-button>
+
+    <br />
+    <hra-talent-square-button [model]="{icon: 'storm_ui_icon_anduin_flash_heal_a.png', button: 'Q'}">
+    </hra-talent-square-button>

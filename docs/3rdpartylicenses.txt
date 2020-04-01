@@ -94,6 +94,12 @@ MIT
 @heroesbrowser/mpq
 ISC
 
+@ngui/application
+
+@ngui/responsive
+
+@ngui/ui-attachments
+
 angular-worker-proxy
 
 base64-js

@@ -16,6 +16,7 @@ import { FranchiseFilterButtonComponent } from './franchise-filter-button/franch
 import { HudModule } from './hud/hud.module';
 import { TalentsModule } from '../talents/talents.module';
 import { AbilitiesModule } from '../abilities/abilities.module';
+import { ApplicationModule } from '@ngui/application';
 
 
 @NgModule({
@@ -45,7 +46,8 @@ import { AbilitiesModule } from '../abilities/abilities.module';
     ContainersModule,
     HudModule,
     TalentsModule,
-    AbilitiesModule
+    AbilitiesModule,
+    ApplicationModule
   ]
 })
 export class HeroesModule { }

@@ -15,8 +15,10 @@ import { MatSidenavModule } from '@angular/material/sidenav';
 import { BuildSearchComponent } from './build-search/build-search.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatDialogModule } from '@angular/material/dialog';
 import { FormsModule } from '@angular/forms';
 import { LinksModule } from 'src/app/ui/common/links/links.module';
+import { ApplicationModule } from '@ngui/application';
 @NgModule({
   declarations: [TalentCalculatorComponent, HeroTalentSelectorComponent, HeroTalentCalcDescriptionComponent, BuildSearchComponent],
   imports: [
@@ -33,7 +35,9 @@ import { LinksModule } from 'src/app/ui/common/links/links.module';
     FormsModule,
     LinksModule,
     TalentCalculatorRoutingModule,
-    MatSidenavModule
+    MatSidenavModule,
+    ApplicationModule,
+    MatDialogModule
   ]
 })
 export class TalentCalculatorModule { }

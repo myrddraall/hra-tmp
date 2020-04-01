@@ -16,9 +16,9 @@ export class TalentCalculatorComponent implements OnInit, OnDestroy {
 
 
   private _selectedTalentBuild: string;
-  public forceIconMode: boolean = false;
-  private _mode: 'icon' | 'tile';
-  public modeChanged: BehaviorSubject<'icon' | 'tile'> = new BehaviorSubject(undefined);
+  //public forceIconMode: boolean = false;
+  //private _mode: 'icon' | 'tile';
+  //public modeChanged: BehaviorSubject<'icon' | 'tile'> = new BehaviorSubject(undefined);
 
   public get heroList(): IHeroListItem[] {
     return this.route.snapshot.data.heroList;
@@ -30,65 +30,67 @@ export class TalentCalculatorComponent implements OnInit, OnDestroy {
     private readonly favoriteBuildsService: FavouriteTalentbuildsService,
     private readonly changeRef: ChangeDetectorRef,
   ) {
-    this.init();
+    // this.init();
   }
 
-  public isFavorite: boolean = false;
+  //public isFavorite: boolean = false;
 
 
-  private checkMode() {
-    const value = this.elmRef.nativeElement.getAttribute('max-width');
-    this.forceIconMode = value === '1399px';
-    this.modeChanged.next(this.activeMode);
-    return this.activeMode;
-  }
+  /* private checkMode() {
+     const value = this.elmRef.nativeElement.getAttribute('max-width');
+     this.forceIconMode = value === '1399px';
+     this.modeChanged.next(this.activeMode);
+     return this.activeMode;
+   }*/
 
-  private async init() {
-    this._mode = await get<'icon' | 'tile'>('__talent-calculator__.displayMode') || 'tile';
-    this.checkMode();
-    this.favoriteBuildsService.builds.subscribe(async builds => {
-      this.isFavorite = await this.favoriteBuildsService.hasBuild(this.selectedHeroId, this.selectedTalentBuild);
-      this.changeRef.markForCheck();
-    });
-  }
-  private _resizeObs: MutationObserver;
-
+  /* private async init() {
+     this._mode = await get<'icon' | 'tile'>('__talent-calculator__.displayMode') || 'tile';
+     this.checkMode();
+     this.favoriteBuildsService.builds.subscribe(async builds => {
+       this.isFavorite = await this.favoriteBuildsService.hasBuild(this.selectedHeroId, this.selectedTalentBuild);
+       this.changeRef.markForCheck();
+     });
+   }
+   private _resizeObs: MutationObserver;
+ */
   async ngOnInit() {
-    if (this._resizeObs) {
-      this._resizeObs.disconnect();
-    }
-
-    this._resizeObs = new MutationObserver(records => {
-      const value = this.elmRef.nativeElement.getAttribute('max-width');
-      if (records[0] && records[0].oldValue !== value) {
-        this.checkMode();
-      }
-    });
-    this._resizeObs.observe(this.elmRef.nativeElement, { attributeFilter: ['max-width'], attributes: true, attributeOldValue: true })
-    // this.checkMode();
+    /* if (this._resizeObs) {
+       this._resizeObs.disconnect();
+     }
+ 
+     this._resizeObs = new MutationObserver(records => {
+       const value = this.elmRef.nativeElement.getAttribute('max-width');
+       if (records[0] && records[0].oldValue !== value) {
+         this.checkMode();
+       }
+     });
+     this._resizeObs.observe(this.elmRef.nativeElement, { attributeFilter: ['max-width'], attributes: true, attributeOldValue: true })
+     // this.checkMode();
+     */
   }
-
-  public async favoriteTalentBuild() {
-    if (this.selectedTalentBuild && this.selectedHeroId) {
-      if (await this.favoriteBuildsService.hasBuild(this.selectedHeroId, this.selectedTalentBuild)) {
-        await this.favoriteBuildsService.deleteBuild(this.selectedHeroId, this.selectedTalentBuild);
-      } else {
-        await this.favoriteBuildsService.saveBuild({
-          name: '',
-          lastUpdated: new Date(),
-          description: '',
-          build: this.selectedTalentBuild,
-          hero: this.selectedHeroId
-        });
+  /*
+    public async favoriteTalentBuild() {
+      if (this.selectedTalentBuild && this.selectedHeroId) {
+        if (await this.favoriteBuildsService.hasBuild(this.selectedHeroId, this.selectedTalentBuild)) {
+          await this.favoriteBuildsService.deleteBuild(this.selectedHeroId, this.selectedTalentBuild);
+        } else {
+          await this.favoriteBuildsService.saveBuild({
+            name: '',
+            lastUpdated: new Date(),
+            description: '',
+            build: this.selectedTalentBuild,
+            hero: this.selectedHeroId
+          });
+        }
       }
     }
-  }
-
+  */
   ngOnDestroy() {
-    if (this._resizeObs) {
-      this._resizeObs.disconnect();
-    }
+    /* if (this._resizeObs) {
+       this._resizeObs.disconnect();
+     }*/
   }
+  /*
   public get url(){
     return location.href;
   }
@@ -112,7 +114,7 @@ export class TalentCalculatorComponent implements OnInit, OnDestroy {
       set('__talent-calculator__.displayMode', value);
     }
   }
-
+*/
   public get selectedHeroId(): string {
     return this.route.snapshot.firstChild.params.heroId;
   }
@@ -123,11 +125,9 @@ export class TalentCalculatorComponent implements OnInit, OnDestroy {
 
   public set selectedTalentBuild(value: string) {
     this._selectedTalentBuild = value;
-    (async () => {
-      this.isFavorite = await this.favoriteBuildsService.hasBuild(this.selectedHeroId, this.selectedTalentBuild);
-      this.changeRef.markForCheck();
-    })();
+    this.changeRef.markForCheck();
   }
+
 
   public onHeroSelect(heroId: string) {
     if (heroId && heroId !== this.selectedHeroId) {

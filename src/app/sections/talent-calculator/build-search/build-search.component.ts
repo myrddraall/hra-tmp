@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter, HostBinding, OnChanges, SimpleChanges, ChangeDetectorRef } from '@angular/core';
+import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter, HostBinding, OnChanges, SimpleChanges, ChangeDetectorRef, TemplateRef } from '@angular/core';
 import { IBasicHeroModel, HeroModel, HotsDB, IHero } from 'hots-gamedata';
 
 import { CollapsableComponent } from 'src/app/ui/common/containers/collapsable/collapsable.component';
@@ -10,6 +10,7 @@ import { IFavouriteTalentBuild } from '../services/favourite-talentbuilds-servic
 import { FavouriteTalentbuildsService } from '../services/favourite-talentbuilds-service/favourite-talentbuilds.service';
 import { Router, ActivatedRoute } from '@angular/router';
 import { GameVersion } from 'heroesprotocol-data/lib';
+import { MatDialog } from '@angular/material/dialog';
 
 interface IHeroBuilds {
   hero: HeroModel,
@@ -28,9 +29,12 @@ export class BuildSearchComponent implements OnInit, OnChanges {
   @ViewChild('details')
   private container: CollapsableComponent;
 
+  @ViewChild('AddEditBuildDialog', { read: TemplateRef, static: true })
+  private addEditBuildDialog: TemplateRef<any>
+
   private searchUpdates: Subject<string> = new Subject();
   private focusUpdates: Subject<boolean> = new Subject();
-
+  private _build: string;
   public heroList: IHero[];
   public buildList: IFavouriteTalentBuild[];
 
@@ -45,7 +49,16 @@ export class BuildSearchComponent implements OnInit, OnChanges {
   @Input()
   public heroId: string;
   @Input()
-  public build: string;
+  public get build(): string {
+    return this._build;
+  }
+  public set build(value: string) {
+    this._build = value;
+    (async () => {
+      this.isFavorite = await this.favouriteBuildsService.hasBuild(this.heroId, this.build);
+      this.changeRef.markForCheck();
+    })();
+  }
 
   @HostBinding('class.opened')
   public opened: boolean;
@@ -70,7 +83,8 @@ export class BuildSearchComponent implements OnInit, OnChanges {
     private readonly favouriteBuildsService: FavouriteTalentbuildsService,
     private readonly changeRef: ChangeDetectorRef,
     private readonly router: Router,
-    private readonly route: ActivatedRoute
+    private readonly route: ActivatedRoute,
+    private readonly dialog: MatDialog
   ) {
     favouriteBuildsService.builds.subscribe(async builds => {
       this.buildList = builds;
@@ -85,7 +99,7 @@ export class BuildSearchComponent implements OnInit, OnChanges {
   private async init() {
     if (!this.heroList) {
       const db = await HotsDB.getVersion('latest');
-      
+
       const heroCollection = await db.heroes;
       this.gameVersion = await heroCollection.version;
       const heroIds = await heroCollection.getHeroIds();
@@ -185,23 +199,45 @@ export class BuildSearchComponent implements OnInit, OnChanges {
   }
 
   public async favouriteTalentBuild() {
+
     if (this.build && this.heroId) {
+      let build;
       if (await this.favouriteBuildsService.hasBuild(this.heroId, this.build)) {
-        await this.favouriteBuildsService.deleteBuild(this.heroId, this.build);
-        this.isFavorite = false;
-      } else {
-        await this.favouriteBuildsService.saveBuild({
+        build = await this.favouriteBuildsService.getBuild(this.heroId, this.build);
+      }else{
+        build = {
           name: '',
           gameVersion: this.gameVersion,
           lastUpdated: new Date(),
           description: '',
           build: this.build,
           hero: this.heroId
-        });
+        };
+      }
+      this.modifyBuild(build);
+    }
+  }
+
+  public async modifyBuild(build: IFavouriteTalentBuild) {
+    const isCurrent = build.hero === this.heroId && build.build === this.build;
+    const isSaved = await this.favouriteBuildsService.hasBuild(build.hero, build.build);
+    const dRef = this.dialog.open(this.addEditBuildDialog, {
+      panelClass: 'hra-dialog',
+      data: { build: {...build}, isSaved, isCurrent }
+    });
+    const r = await dRef.afterClosed().toPromise();
+    if (r === 'delete') {
+      await this.favouriteBuildsService.deleteBuild(build.hero, build.build);
+      if (isCurrent) {
+        this.isFavorite = false;
+      }
+      this.changeRef.markForCheck();
+    } else if (r) {
+      await this.favouriteBuildsService.saveBuild(r);
+      if (isCurrent) {
         this.isFavorite = true;
       }
-
-
+      this.changeRef.markForCheck();
     }
   }
 

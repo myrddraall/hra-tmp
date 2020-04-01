@@ -5,54 +5,57 @@
         <mat-icon>expand_more</mat-icon>
     </button>
 </div>
-<collapsable #details origin="top" duration="250ms" [open]="opened || !selectedHero" (click)="updateFocus(true)" (openStart)="animating = true" (openDone)="animating = false">
-    <div class="filters">
-        <div class="filter-buttons">
-            <div class="filter extended-roles">
-                <hra-extended-role-filter-button role="tank" (click)="setERFilter('tank')"
-                    [class.selected]="erFilter.has('tank')"></hra-extended-role-filter-button>
-                <hra-extended-role-filter-button role="bruiser" (click)="setERFilter('bruiser')"
-                    [class.selected]="erFilter.has('bruiser')"></hra-extended-role-filter-button>
-                <hra-extended-role-filter-button role="support" (click)="setERFilter('support')"
-                    [class.selected]="erFilter.has('support')"></hra-extended-role-filter-button>
-                <hra-extended-role-filter-button role="healer" (click)="setERFilter('healer')"
-                    [class.selected]="erFilter.has('healer')"></hra-extended-role-filter-button>
-                <hra-extended-role-filter-button role="ranged" (click)="setERFilter('ranged')"
-                    [class.selected]="erFilter.has('ranged')"></hra-extended-role-filter-button>
-                <hra-extended-role-filter-button role="melee" (click)="setERFilter('melee')"
-                    [class.selected]="erFilter.has('melee')"></hra-extended-role-filter-button>
+<ng-template nguiAttachment="app.notifications">
+    <collapsable #details origin="top" duration="250ms" [open]="opened || !selectedHero" (click)="updateFocus(true)"
+        (openStart)="animating = true" (openDone)="animating = false">
+        <div class="filters">
+            <div class="filter-buttons">
+                <div class="filter extended-roles">
+                    <hra-extended-role-filter-button role="tank" (click)="setERFilter('tank')"
+                        [class.selected]="erFilter.has('tank')"></hra-extended-role-filter-button>
+                    <hra-extended-role-filter-button role="bruiser" (click)="setERFilter('bruiser')"
+                        [class.selected]="erFilter.has('bruiser')"></hra-extended-role-filter-button>
+                    <hra-extended-role-filter-button role="support" (click)="setERFilter('support')"
+                        [class.selected]="erFilter.has('support')"></hra-extended-role-filter-button>
+                    <hra-extended-role-filter-button role="healer" (click)="setERFilter('healer')"
+                        [class.selected]="erFilter.has('healer')"></hra-extended-role-filter-button>
+                    <hra-extended-role-filter-button role="ranged" (click)="setERFilter('ranged')"
+                        [class.selected]="erFilter.has('ranged')"></hra-extended-role-filter-button>
+                    <hra-extended-role-filter-button role="melee" (click)="setERFilter('melee')"
+                        [class.selected]="erFilter.has('melee')"></hra-extended-role-filter-button>
+                </div>
+                <img class="divider" src="assets/ui/borders/storm_ui_play_filter_divider.png" />
+                <div class="filter franchises">
+                    <hra-franchise-filter-button franchise="warcraft" (click)="setFFilter('warcraft')"
+                        [class.selected]="fFilter.has('warcraft')"></hra-franchise-filter-button>
+                    <hra-franchise-filter-button franchise="starcraft" (click)="setFFilter('starcraft')"
+                        [class.selected]="fFilter.has('starcraft')"></hra-franchise-filter-button>
+                    <hra-franchise-filter-button franchise="overwatch" (click)="setFFilter('overwatch')"
+                        [class.selected]="fFilter.has('overwatch')"></hra-franchise-filter-button>
+                    <hra-franchise-filter-button franchise="diablo" (click)="setFFilter('diablo')"
+                        [class.selected]="fFilter.has('diablo')"></hra-franchise-filter-button>
+                    <hra-franchise-filter-button franchise="nexus" (click)="setFFilter('nexus')"
+                        [class.selected]="fFilter.has('nexus')"></hra-franchise-filter-button>
+                </div>
             </div>
-            <img class="divider" src="assets/ui/borders/storm_ui_play_filter_divider.png" />
-            <div class="filter franchises">
-                <hra-franchise-filter-button franchise="warcraft" (click)="setFFilter('warcraft')"
-                    [class.selected]="fFilter.has('warcraft')"></hra-franchise-filter-button>
-                <hra-franchise-filter-button franchise="starcraft" (click)="setFFilter('starcraft')"
-                    [class.selected]="fFilter.has('starcraft')"></hra-franchise-filter-button>
-                <hra-franchise-filter-button franchise="overwatch" (click)="setFFilter('overwatch')"
-                    [class.selected]="fFilter.has('overwatch')"></hra-franchise-filter-button>
-                <hra-franchise-filter-button franchise="diablo" (click)="setFFilter('diablo')"
-                    [class.selected]="fFilter.has('diablo')"></hra-franchise-filter-button>
-                <hra-franchise-filter-button franchise="nexus" (click)="setFFilter('nexus')"
-                    [class.selected]="fFilter.has('nexus')"></hra-franchise-filter-button>
+            <div class="text-search">
+                <mat-form-field color="accent" appearance="outline">
+                    <mat-label>Find a hero</mat-label>
+                    <input type="text" #search name="heroId" matInput xplaceholder="Select a Hero"
+                        (focus)="updateFocus(true)" (blur)="selectedHero ? updateFocus(false) : null"
+                        (keyup)="updateSearch()" (change)="updateSearch()">
+                </mat-form-field>
             </div>
         </div>
-        <div class="text-search">
-            <mat-form-field color="accent" appearance="outline">
-                <mat-label>Find a hero</mat-label>
-                <input type="text" #search name="heroId" matInput xplaceholder="Select a Hero"
-                    (focus)="updateFocus(true)" (blur)="selectedHero ? updateFocus(false) : null" (keyup)="updateSearch()"
-                    (change)="updateSearch()">
-            </mat-form-field>
+        <div class="hero-list">
+            <hra-hero-square-button *ngFor="let hero of visibleHeroList; trackBy: trackBy" [hero]="hero"
+                (click)="setSelected(hero); $event.stopPropagation()" [class.selected]="hero.id === value" interactive>
+            </hra-hero-square-button>
         </div>
-    </div>
-    <div class="hero-list">
-        <hra-hero-square-button *ngFor="let hero of visibleHeroList; trackBy: trackBy" [hero]="hero"
-            (click)="setSelected(hero); $event.stopPropagation()" [class.selected]="hero.id === value" interactive>
-        </hra-hero-square-button>
-    </div>
-</collapsable>
+    </collapsable>
+</ng-template>
 <!-- 
-
+    
     
     
     <collapsable class="hero-list-container" #details details origin="top" duration="250ms" [open]="opened"
