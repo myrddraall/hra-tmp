@@ -73,6 +73,13 @@ export class BuildSearchComponent implements OnInit, OnChanges {
     })
   }
 
+  public close() {
+    this.opened = false;
+    setTimeout(() => {
+      this.focusUpdates.next(false);
+    })
+  }
+
 
   public isFavorite = true;
 

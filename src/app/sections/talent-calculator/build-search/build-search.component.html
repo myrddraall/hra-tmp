@@ -49,6 +49,7 @@
                         (change)="updateSearch()">
                 </mat-form-field>
             </div>
+            <button class="close" mat-icon-button (click)="close()"><mat-icon>close</mat-icon></button>
         </div>
         <div class="hero-list">
             <div *ngFor="let heroBuilds of visibleHeroList; trackBy: trackHeroBy" class="hero-item">

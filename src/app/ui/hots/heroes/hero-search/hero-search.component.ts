@@ -46,6 +46,13 @@ export class HeroSearchComponent implements OnInit {
     })
   }
 
+  public close() {
+    this.opened = false;
+    setTimeout(() => {
+      this.focusUpdates.next(false);
+    })
+  }
+
   public set value(value: string) {
     if (this._selected !== value) {
       this._selected = value;

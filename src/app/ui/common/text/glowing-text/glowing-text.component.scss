@@ -1,19 +1,25 @@
 :host{
     display: inline-block;
-    font-size: 18px;
+    font-size: var(--base-size);
     font-weight: bold;
     position: relative;
+
+    --text-color-light: #e6e6ff;
+    --text-color: #33f;
+    --text-color-dark: #00f;
+
     >div{
+        font-size: 1.8em;
         color: transparent;
         &.num{
             position: absolute;
-            background-image: linear-gradient(to bottom,#e6e6ff 50%,#33f 130%);
+            background-image: linear-gradient(to bottom,var(--text-color-light) 50%, var(--text-color) 130%);
             background-clip: text;
             z-index: 3
         }
         &.glow{
-            text-shadow: 0 0 2px #33f, 0 0 2px #33f, 0 0 2px #00f, 0 0 2px #00f, 0 0 8px #e6e6ff;
-            opacity: .6;
+            text-shadow: 0 0 0.1em var(--text-color), 0 0 0.1em var(--text-color), 0 0 0.1em var(--text-color-dark), 0 0 0.1em var(--text-color-dark), 0 0 0.4em var(--text-color-light);
+            opacity: .4;
         }
     }
 

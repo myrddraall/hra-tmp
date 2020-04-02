@@ -29,7 +29,7 @@ export class HeroesCollection extends Collection<IHeroRecord> {
         const unit: Models.IUnit = {
             linkId: heroData.hyperlinkId,
             innerRadius: heroData.innerRadius,
-            
+
             radius: heroData.radius,
             sight: heroData.sight,
             speed: heroData.speed,
@@ -50,7 +50,7 @@ export class HeroesCollection extends Collection<IHeroRecord> {
                 const typedAbil = heroData.abilities[type] as DTOs.IAbility[];
                 for (const abil of typedAbil) {
                     const stringKey = this.getAbilityStringId(abil);
-                    
+
                     const ability = {
                         id: abil.nameId,
                         type: 'ability',
@@ -71,19 +71,19 @@ export class HeroesCollection extends Collection<IHeroRecord> {
                         lifeCostDescription: this.prepareGameString(gamestrings.abiltalent.life[stringKey]),
                         lifeCost: HeroStringsUtil.parseLifeCost(gamestrings.abiltalent.life[stringKey]),
                     } as Models.IAbility;
-                   
+
                     unit.abilities.push(ability);
                 }
             }
         }
-        if(heroData.subAbilities){
+        if (heroData.subAbilities) {
             for (const subs of heroData.subAbilities) {
                 for (const key in subs) {
                     if (subs.hasOwnProperty(key)) {
                         const subTypes = subs[key];
                         for (const type in subTypes) {
                             if (subTypes.hasOwnProperty(type)) {
-                                const abilities = subTypes[type] as  DTOs.IAbility[];
+                                const abilities = subTypes[type] as DTOs.IAbility[];
                                 for (const abil of abilities) {
                                     const stringKey = this.getAbilityStringId(abil);
                                     const ability = {
@@ -93,7 +93,7 @@ export class HeroesCollection extends Collection<IHeroRecord> {
                                         button: abil.abilityType,
                                         icon: abil.icon,
                                         charges: abil.charges,
-                
+
                                         name: gamestrings.abiltalent.name[stringKey],
                                         description: gamestrings.abiltalent.full[stringKey],
                                         shortDescription: gamestrings.abiltalent.short[stringKey],
@@ -112,7 +112,7 @@ export class HeroesCollection extends Collection<IHeroRecord> {
                         }
                     }
                 }
-        }
+            }
         }
         return unit;
     }
@@ -174,15 +174,13 @@ export class HeroesCollection extends Collection<IHeroRecord> {
         }
         return tiers;
     }
- 
+
     public async getHero(id: string): Promise<Models.IHero> {
         await this.initialize();
         //console.time('');
         const hero = this.query.first(_ => _.id === id);
-        console.time(`HeroesCollection.getHero('${id}')`);
         const strings = (await this.apiData.getGameStrings()).gamestrings;
-        console.timeEnd(`HeroesCollection.getHero('${id}')`);
-        
+
         const hid = hero.heroId;
         const hdata: Models.IHero = {
             id: hero.id,
@@ -211,30 +209,25 @@ export class HeroesCollection extends Collection<IHeroRecord> {
             gender: hero.gender,
             talents: this.createTalents(hero.talents, strings)
         };
-        console.time(`construct main unit`);
+
         const mainUnit = this.createUnit(hero, strings);
         hdata.units[hdata.linkId] = mainUnit;
-        console.timeEnd(`construct main unit`);
-        console.time(`construct other units`);
+
         if (hero.heroUnits) {
             for (const k of hero.heroUnits) {
                 for (const key in k) {
                     if (k.hasOwnProperty(key)) {
-                        console.time(`construct unit ` + key);
                         const unit = this.createUnit(k[key], strings);
                         hdata.units[key] = unit;
-                        console.timeEnd(`construct unit ` + key);
                     }
                 }
             }
         }
-        console.timeEnd(`construct other units`);
-        
         return hdata;
     }
 
 
-    public async getHeroList():Promise<IHeroListItem[]>{
+    public async getHeroList(): Promise<IHeroListItem[]> {
         await this.initialize();
         const strings = (await this.apiData.getGameStrings()).gamestrings;
         return this.query.select(hero => {
@@ -256,7 +249,7 @@ export class HeroesCollection extends Collection<IHeroRecord> {
                 description: strings.unit.description[hid],
                 searchText: strings.unit.searchtext[hid],
                 tags: hero.descriptors
-            } as IHeroListItem; 
+            } as IHeroListItem;
         }).toArray();
     }
 
@@ -290,7 +283,7 @@ export class HeroesCollection extends Collection<IHeroRecord> {
     public async initialize(): Promise<void> {
         console.time('HeroesCollection.initialize');
         this.apiData = HeroesDataApi.getVersion(this.db.version, this.db.lang);
-        
+
         //this.apiTalents = HeroesTalentsApi.getVersion(this.db.version);
         const heroes = await this.apiData.getHeroes();
         this.records = [];
@@ -302,13 +295,12 @@ export class HeroesCollection extends Collection<IHeroRecord> {
                 heroData.id = id;
                 heroData.shortName = id;
                 this.records.push(heroData);
-                console.log(heroData.subAbilities)
             }
         }
         console.timeEnd('HeroesCollection.initialize');
     }
-    public get version(){
-        return (async()=>{
+    public get version() {
+        return (async () => {
             await this.initialize();
             return (await this.apiData.dataVersion).value;
         })();

@@ -50,7 +50,7 @@ collapsable {
     z-index: 1000;
     display: flex;
     padding: 0.8em 1.6em;
-    align-items: flex-start;
+    align-items: center;
     border-bottom: 1px solid rgba(149, 160, 255, 0.42);
     background-color: rgb(19, 9, 54);
     .filter-buttons {
@@ -74,7 +74,9 @@ collapsable {
         width: 100%;
       }
     }
-
+    .close {
+      margin-left: 1em;
+    }
     &[max-width~="800px"] {
       justify-content: center;
       flex-wrap: wrap;

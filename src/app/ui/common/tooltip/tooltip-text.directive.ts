@@ -33,7 +33,7 @@ export class TooltipTextDirective implements OnChanges {
       this.elm.nativeElement.innerHTML = '';
       return;
     }
-    console.log(this._text);
+    
     const container = document.createElement('div');
     container.innerHTML = this._text?.replace(/<n\/>/g, '<br/>');
 

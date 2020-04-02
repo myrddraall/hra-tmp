@@ -46,6 +46,7 @@
                         (keyup)="updateSearch()" (change)="updateSearch()">
                 </mat-form-field>
             </div>
+            <button class="close" mat-icon-button (click)="close()"><mat-icon>close</mat-icon></button>
         </div>
         <div class="hero-list">
             <hra-hero-square-button *ngFor="let hero of visibleHeroList; trackBy: trackBy" [hero]="hero"
