@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter, HostBinding } from '@angular/core';
 import { IBasicHeroModel } from 'hots-gamedata';
-
-import { CollapsableComponent } from 'src/app/ui/common/containers/collapsable/collapsable.component';
+import { CollapsableComponent } from '@ngui/application'
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import linq from 'linq';
@@ -17,7 +16,7 @@ export class HeroSearchComponent implements OnInit {
   private search: ElementRef<HTMLInputElement>;
   @ViewChild('details')
   private container: CollapsableComponent;
-  
+
   @HostBinding('class.animating')
   public animating: boolean = false;
 
@@ -93,7 +92,7 @@ export class HeroSearchComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if(!this.value){
+    if (!this.value) {
       this.opened = true;
     }
     this.doFilter();

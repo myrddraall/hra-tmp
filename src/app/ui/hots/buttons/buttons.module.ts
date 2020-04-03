@@ -5,6 +5,7 @@ import { HexButtonBorderComponent } from './borders/hex-button-border/hex-button
 import { CircleButtonBorderComponent } from './borders/circle-button-border/circle-button-border.component';
 import { BaseButtonBorderComponent } from './borders/base-button-border/base-button-border.component';
 import { TooltipsModule } from '../../common/tooltip/tooltip.module';
+import { ChevronButtonBorderComponent } from './borders/cheveron-button-border/cheveron-button-border.component';
 
 
 
@@ -13,14 +14,16 @@ import { TooltipsModule } from '../../common/tooltip/tooltip.module';
     SquareButtonBorderComponent,
     HexButtonBorderComponent,
     CircleButtonBorderComponent,
-    BaseButtonBorderComponent
+    BaseButtonBorderComponent,
+    ChevronButtonBorderComponent
   ],
   exports: [
     SquareButtonBorderComponent,
     HexButtonBorderComponent,
     CircleButtonBorderComponent,
     BaseButtonBorderComponent,
-    TooltipsModule
+    TooltipsModule,
+    ChevronButtonBorderComponent
   ],
   imports: [
     CommonModule,

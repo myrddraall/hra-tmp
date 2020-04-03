@@ -7,7 +7,6 @@ import { HeroTalentCalcDescriptionComponent } from './sections/hero-talent-calc-
 import { HeroTalentSelectorComponent } from './sections/hero-talent-selector/hero-talent-selector.component';
 import { TalentCalculatorRoutingModule } from './talent-calculator-routing.module';
 import { TalentCalculatorComponent } from './talent-calculator.component';
-import { ContainersModule } from 'src/app/ui/common/containers/containers.module';
 import { MatSliderModule } from '@angular/material/slider';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
@@ -25,7 +24,6 @@ import { ApplicationModule } from '@ngui/application';
     CommonModule,
     PortraitsModule,
     MatSliderModule,
-    ContainersModule,
     TalentsModule,
     HeroesModule,
     MatButtonModule,

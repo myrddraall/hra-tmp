@@ -49,14 +49,23 @@
 
 
 
-  <footer>
+<ngui-horizontal-bar *nguiAttachment="'app.footer'" align="end" fullCenter>
+  <hra-hero-hud-unit left [hero]="hero" ></hra-hero-hud-unit>
+  <hra-hero-hud-abilities center  [hero]="hero"></hra-hero-hud-abilities>
+</ngui-horizontal-bar>
+<!-- 
+
+
+  
+  <footer *nguiAttachment="'app.fotter.main.center'">
     <div class="left">
       <hra-hero-hud-unit [hero]="hero"></hra-hero-hud-unit>
     </div>
-  
+    
     <div class="right">
       <hra-hero-hud-abilities [hero]="hero"></hra-hero-hud-abilities>
     </div>
-
-
+    
+    
   </footer>
+-->

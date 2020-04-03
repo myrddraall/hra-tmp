@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter, HostBinding, OnChanges, SimpleChanges, ChangeDetectorRef, TemplateRef } from '@angular/core';
 import { IBasicHeroModel, HeroModel, HotsDB, IHero } from 'hots-gamedata';
 
-import { CollapsableComponent } from 'src/app/ui/common/containers/collapsable/collapsable.component';
+import { CollapsableComponent } from '@ngui/application';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
 import linq from 'linq';

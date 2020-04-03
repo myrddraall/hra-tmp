@@ -5,7 +5,7 @@
         <mat-icon>expand_more</mat-icon>
     </button>
 </div>
-<ng-template nguiAttachment="app.notifications">
+<ng-template nguiAttachment="app.panels">
     <collapsable #details origin="top" duration="250ms" [open]="opened || !selectedHero" (click)="updateFocus(true)"
         (openStart)="animating = true" (openDone)="animating = false">
         <div class="filters">

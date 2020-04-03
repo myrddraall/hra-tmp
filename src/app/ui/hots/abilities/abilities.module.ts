@@ -9,17 +9,20 @@ import { IconsModule } from '../icons/icons.module';
 import { AbilityTooltipComponent } from './ability-tooltip/ability-tooltip.component';
 import { TextModule } from '../../common/text/text.module';
 import { TooltipsModule } from '../../common/tooltip/tooltip.module';
+import { AbilityChevronHudButtonComponent } from './ability-chevron-hud-button/ability-chevron-hud-button.component';
 
 
 
 @NgModule({
   declarations: [
     AbilityHexHudButtonComponent,
-    AbilityTooltipComponent
+    AbilityTooltipComponent,
+    AbilityChevronHudButtonComponent
   ],
   exports: [
     AbilityHexHudButtonComponent,
-    AbilityTooltipComponent
+    AbilityTooltipComponent,
+    AbilityChevronHudButtonComponent
   ],
   imports: [
     CommonModule,

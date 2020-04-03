@@ -2,52 +2,77 @@ $factor: 0.6;
 $width: 80em * $factor;
 $height: 9.2em * $factor;
 
-:host{
-    font-size:10px;
+:host {
+    font-size: 10px;
 
     display: flex;
     align-items: flex-end;
     justify-content: center;
-   
 
-    .center{
-        .top{
-            z-index:2;
+    .left {
+        display: flex;
+        align-items: flex-end;
+        justify-content: flex-end;
+    }
+    .right {
+        display: flex;
+        align-items: flex-start;
+        justify-content: flex-end;
+    }
+
+    .center {
+        .top {
+            z-index: 2;
             pointer-events: none;
-            .active-abilities{
-                >*{
+            .active-abilities {
+                > * {
                     pointer-events: all;
                 }
             }
         }
-        .bottom{
-            width:$width;
+        .bottom {
+            width: $width;
             height: $height;
             background-image: url(~/assets/ui/borders/hud_bg_artbarmiddlefill_glass.png);
             background-size: $width $height;
-            z-index:1;
+            z-index: 1;
         }
     }
-    
-    .main-abilities{
+
+    .main-abilities {
         display: flex;
         justify-content: center;
-       // background-color: green;
+        // background-color: green;
         bottom: 3em;
-        >*{
+        > * {
             margin: 0em 0.32em;
             font-size: 1.15em;
         }
     }
-    .active-abilities{
+    .active-abilities {
         display: flex;
         justify-content: flex-start;
         //background-color: green;
         padding-left: 0.8em;
         bottom: 1.8em;
-        >*{
+        > * {
             font-size: 0.9em;
             margin: 0em 1.2em;
+        }
+    }
+    hra-ability-chevron-hud-button {
+        font-size: 0.86em;
+    }
+
+    .left {
+        hra-ability-chevron-hud-button {
+            right: -3.2em;
+        }
+    }
+
+    .right {
+        hra-ability-chevron-hud-button {
+            left: -3.2em;
         }
     }
 }

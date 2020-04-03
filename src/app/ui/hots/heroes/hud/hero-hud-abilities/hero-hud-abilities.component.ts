@@ -61,7 +61,15 @@ export class HeroHudAbilitiesComponent implements OnChanges {
   public get abilityE() {
     return this.hero.currentAbilities.find(_ => _.button.toUpperCase() === 'E' && _.type === 'ability')
   }
+  public get abilityZ() {
+    return this.hero.currentAbilities.find(_ => _.button.toUpperCase() === 'Z' && _.type === 'ability')
+  }
 
+  public get abilityB() {
+    return this.hero.currentAbilities.find(_ => _.button.toUpperCase() === 'B' && _.type === 'ability')
+  }
+
+  
   public get abilityR() {
     const heroics = this.findActiveHeroics();
     return heroics[0];

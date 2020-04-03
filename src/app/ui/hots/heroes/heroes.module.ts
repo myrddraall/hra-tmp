@@ -8,7 +8,6 @@ import { HeroSearchComponent } from './hero-search/hero-search.component';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { FormsModule } from '@angular/forms';
-import { ContainersModule } from '../../common/containers/containers.module';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
 import { ExtendedRoleFilterButtonComponent } from './extended-role-filter-button/extended-role-filter-button.component';
@@ -43,7 +42,6 @@ import { ApplicationModule } from '@ngui/application';
     FormsModule,
     MatButtonModule,
     MatIconModule,
-    ContainersModule,
     HudModule,
     TalentsModule,
     AbilitiesModule,

@@ -1,0 +1,6 @@
+<hra-cheveron-button-border [direction]="direction" [attr.disabled]="!!model ? undefined : ''">
+    <hra-icon-chevron [direction]="direction" [iconUrl]="iconUrl" background="rgb(16, 24, 57)"></hra-icon-chevron>
+</hra-cheveron-button-border>
+<div class="hotkey">{{button}}</div>
+
+<hra-ability-tooltip *hraTooltip="tooltip && !!model?.id" [ability]="model" [hero]="hero" position="below"></hra-ability-tooltip>
