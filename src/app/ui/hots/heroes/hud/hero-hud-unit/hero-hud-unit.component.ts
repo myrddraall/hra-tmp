@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { HeroModel } from 'hots-gamedata';
+import { HeroModel2 } from 'hots-gamedata';
 import { Unsubscribable } from 'rxjs';
 import linq from 'linq';
 
@@ -12,7 +12,7 @@ import linq from 'linq';
 export class HeroHudUnitComponent implements OnChanges {
 
   @Input()
-  public hero: HeroModel;
+  public hero: HeroModel2;
   private levelSub: Unsubscribable;
 
 

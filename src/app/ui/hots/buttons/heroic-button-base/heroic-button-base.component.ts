@@ -1,5 +1,5 @@
 import { Input, ViewChild, AfterViewInit } from '@angular/core';
-import { HeroModel } from 'hots-gamedata';
+import { HeroModel2 } from 'hots-gamedata';
 import { TooltipDirective } from 'src/app/ui/common/tooltip/tooltip.directive';
 
 export abstract class HeroicButtonBaseComponent implements AfterViewInit {
@@ -8,7 +8,7 @@ export abstract class HeroicButtonBaseComponent implements AfterViewInit {
   private _tooltip:TooltipDirective;
   
   @Input()
-  public hero: HeroModel;
+  public hero: HeroModel2;
 
   @Input()
   public tooltip: boolean;

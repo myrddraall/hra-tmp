@@ -1,5 +1,5 @@
 import { Component, OnChanges, Input, SimpleChanges, ChangeDetectorRef, ChangeDetectionStrategy } from '@angular/core';
-import { HeroModel, IAbility } from 'hots-gamedata';
+import { HeroModel2, IAbility } from 'hots-gamedata';
 import { Unsubscribable } from 'rxjs';
 
 
@@ -12,7 +12,7 @@ import { Unsubscribable } from 'rxjs';
 export class HeroHudAbilitiesComponent implements OnChanges {
 
   @Input()
-  public hero: HeroModel;
+  public hero: HeroModel2;
   private levelSub: Unsubscribable;
   private formSub: Unsubscribable;
   private talentSub: Unsubscribable;
@@ -42,55 +42,12 @@ export class HeroHudAbilitiesComponent implements OnChanges {
         this.formSub = this.hero.formChange.subscribe(() => {
           this.changeRef.markForCheck();
         });
-        this.talentSub = this.hero.talentsChange.subscribe(() => {
+        this.talentSub = this.hero.selectedTalentsChange.subscribe(() => {
           this.changeRef.markForCheck();
         });
       }
 
     }
-  }
-
-  public get abilityQ() {
-    return this.hero.currentAbilities.find(_ => _.button.toUpperCase() === 'Q' && _.type === 'ability')
-  }
-
-  public get abilityW() {
-    return this.hero.currentAbilities.find(_ => _.button.toUpperCase() === 'W' && _.type === 'ability')
-  }
-
-  public get abilityE() {
-    return this.hero.currentAbilities.find(_ => _.button.toUpperCase() === 'E' && _.type === 'ability')
-  }
-  public get abilityZ() {
-    return this.hero.currentAbilities.find(_ => _.button.toUpperCase() === 'Z' && _.type === 'ability')
-  }
-
-  public get abilityB() {
-    return this.hero.currentAbilities.find(_ => _.button.toUpperCase() === 'B' && _.type === 'ability')
-  }
-
-  
-  public get abilityR() {
-    const heroics = this.findActiveHeroics();
-    return heroics[0];
-  }
-
-  private findActiveHeroics(){
-    return this.hero.currentAbilities.filter(_ => {
-      return _.button === 'Heroic'  && _.type === 'ability' && this.hero.isSelectedTalentAbilityId(_.id);
-    });
-  }
-
-  public get abilityD() {
-    const heroics = this.findActiveHeroics();
-    if(heroics.length === 2){
-      return heroics[1];
-    }
-    return this.hero.currentAbilities.find(_ => _.button === 'Trait'  && _.type === 'ability')
-  }
-
-  public get abilitiesActive() {
-    return this.hero.currentAbilities.filter(_ => _.button === 'Active')
   }
 
   public abilityTrackBy(index:number, item:IAbility){

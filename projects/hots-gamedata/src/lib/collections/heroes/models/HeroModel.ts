@@ -387,17 +387,98 @@ export class HeroModel implements IBasicHeroModel {
     }
 
     public get currentAbilities(): Array<IAbility | ISubAbility> {
+        const selectedTalents = linq.from(this.selectedTalents);
+        const abilities = linq.from(this.data.units[this.formId].abilities)
+            .concat(selectedTalents
+                .where(_ => _ && _.button === '#' && !_.prerequisiteTalentIds?.length)
+                .select(_ => ({ ..._, button: 'Active' } as unknown as IAbility)))
+            .select(_ => {
+                const abil = {..._} as IAbility & { isEnabledByTalent: boolean };
+                const talents = selectedTalents.where(t => t && t?.abilityTalentLinkIds.indexOf(_?.id) !== -1).toArray();
+           //     console.log('ability talents', _.id, talents);
+                for (const talent of talents) {
+                    if(talent.isActive){
+                        abil.isActive = talent.isActive;
+                        abil.charges = talent.charges;
+                        abil.cooldown = talent.cooldown;
+                        abil.cooldownDescription = talent.cooldownDescription;
+                        abil.energyCost = talent.energyCost;
+                        abil.energyCostDescription = talent.energyCostDescription;
+                        abil.energyCostType = talent.energyCostType;
+                        abil.lifeCost = talent.lifeCost;
+                        abil.lifeCostDescription = talent.lifeCostDescription;
+                        abil.isEnabledByTalent = true;
+                    }
+                }
+                return abil;
+            })
+            .groupJoin(selectedTalents,
+                o => o.id, i => i?.id,
+                (ability, talent) => {
+                    return {
+                        ...ability,
+                        isEnabledByTalent: !!talent.firstOrDefault()
+                    } as IAbility & { isEnabledByTalent: boolean };
+                }
+            )
+            .groupJoin(selectedTalents,
+                o => o.id, i => i?.tooltipId,
+                (ability, talent) => {
+                    return {
+                        ...ability,
+                        isEnabledByTalent: ability.isEnabledByTalent  ? true : !!talent.firstOrDefault()
+                    } as IAbility & { isEnabledByTalent: boolean };
+                }
+            )
+            .orderByDescending(_ => _.isEnabledByTalent)
 
 
-        const abilityTalents = this.findTalentsQuery
-            .where(_ => _.button === '#' && this.isSelectedTalentId(_.id, _.tier.toString() as TalentTeir) && !_.prerequisiteTalentIds?.length)
-            .select(_ => ({ ..._, button: 'Active' } as unknown as IAbility))
-            .toArray()
-            ;
-        
-        const base = [...this.data.units[this.formId].abilities, ...abilityTalents];
+      //  console.log('+++++++++++++++++++', abilities.toArray(), this.talents);
+        return abilities.toArray();
+    }
 
-        //console.log('+++++++++++++++++++', this.abilities);
-        return base;
+    public get abilityQ() {
+        return this.currentAbilities.find(_ => _.button.toUpperCase() === 'Q' && _.type === 'ability')
+    }
+
+    public get abilityW() {
+        return this.currentAbilities.find(_ => _.button.toUpperCase() === 'W' && _.type === 'ability')
+    }
+
+    public get abilityE() {
+        return this.currentAbilities.find(_ => _.button.toUpperCase() === 'E' && _.type === 'ability')
+    }
+    public get abilityZ() {
+        return this.currentAbilities.find(_ => _.button.toUpperCase() === 'Z' && _.type === 'ability')
+    }
+
+    public get abilityB() {
+        return this.currentAbilities.find(_ => _.button.toUpperCase() === 'B' && _.type === 'ability')
+    }
+
+    public get abilityR() {
+        const heroics = this.findActiveHeroics();
+        return heroics[0];
+    }
+
+    private findActiveHeroics() {
+        return this.currentAbilities.filter(_ => {
+            return _.button === 'Heroic' && _.type === 'ability' && this.isSelectedTalentAbilityId(_.id);
+        });
+    }
+
+    public get abilityD() {
+        const heroics = this.findActiveHeroics();
+        if (heroics.length === 2) {
+            return {
+                ...heroics[1],
+                button: 'Trait'
+            };
+        }
+        return this.currentAbilities.find(_ => _.button === 'Trait' )
+    }
+
+    public get abilitiesActive() {
+        return this.currentAbilities.filter(_ => _.button === 'Active')
     }
 }

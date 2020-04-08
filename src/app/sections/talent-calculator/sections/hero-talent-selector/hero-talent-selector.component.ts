@@ -1,11 +1,11 @@
 import { Location } from '@angular/common';
-import { Component, ElementRef, HostBinding, OnChanges, OnDestroy, OnInit, ChangeDetectorRef } from '@angular/core';
+import { ChangeDetectorRef, Component, ElementRef, HostBinding, OnChanges, OnDestroy, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { HeroModel, HeroStringsUtil, TalentTeir } from 'hots-gamedata';
+import { ElementResizeObserver } from '@ngui/responsive';
+import { HeroModel2, HeroStringsUtil, TalentTeir } from 'hots-gamedata';
+import { get, set } from 'idb-keyval';
 import { Unsubscribable } from 'rxjs';
 import { TalentCalculatorComponent } from '../../talent-calculator.component';
-import { ElementResizeObserver } from '@ngui/responsive'
-import { get, set } from 'idb-keyval';
 
 @Component({
   selector: 'app-hero-talent-selector',
@@ -14,7 +14,7 @@ import { get, set } from 'idb-keyval';
 })
 export class HeroTalentSelectorComponent implements OnInit, OnChanges, OnDestroy {
 
-  private _hero: HeroModel;
+  private _hero: HeroModel2;
   private forceIconModeAt = 1399;
   public forceIconMode: boolean = false;
   private _mode: 'icon' | 'tile';
@@ -43,7 +43,7 @@ export class HeroTalentSelectorComponent implements OnInit, OnChanges, OnDestroy
     */
     this.route.data.subscribe(data => {
       if (this._hero?.id !== data.hero.id) {
-        this._hero = new HeroModel(data.hero);
+        this._hero = data.hero;
         this.update();
       }
     });
@@ -79,7 +79,7 @@ export class HeroTalentSelectorComponent implements OnInit, OnChanges, OnDestroy
   }
 
 
-  public get hero(): HeroModel {
+  public get hero(): HeroModel2 {
     return this._hero;
   }
 
@@ -110,7 +110,7 @@ export class HeroTalentSelectorComponent implements OnInit, OnChanges, OnDestroy
     const base36 = this.route.snapshot.params.selectedTalents || '';
     this._hero.talentBuildUrl = base36;
     this.unsubHero();
-    this._herosubs.push(this._hero.talentsChange.subscribe(_ => {
+    this._herosubs.push(this._hero.selectedTalentsChange.subscribe(_ => {
        this.parent.selectedTalentBuild = this._hero.talentBuildUrl;
       //this.changeRef.markForCheck();
     }));
@@ -123,16 +123,16 @@ export class HeroTalentSelectorComponent implements OnInit, OnChanges, OnDestroy
   }
 
   selectTalent(tier: TalentTeir, index: number) {
-    this.hero.selectTalentByIndex(tier, index);
+    this.hero.selectTalent(tier, index);
     this.updateUrl();
   }
 
   getSelected(tier: TalentTeir) {
-    return this.hero.getSelectedTalentIndex(tier);
+    return this.hero.getSelectedTalent(tier);
   }
 
   isSelected(tier: TalentTeir, index: number) {
-    return this.hero.isSelectedTalentIndex(tier, index);
+    return this.hero.isTalentSelected(tier, index);
   }
 
 

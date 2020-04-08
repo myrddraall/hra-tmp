@@ -1,20 +1,19 @@
-import { Component, OnInit, Input, ViewChild, ElementRef, Output, EventEmitter, HostBinding, OnChanges, SimpleChanges, ChangeDetectorRef, TemplateRef } from '@angular/core';
-import { IBasicHeroModel, HeroModel, HotsDB, IHero } from 'hots-gamedata';
-
+import { ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnChanges, OnInit, SimpleChanges, TemplateRef, ViewChild } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
+import { ActivatedRoute, Router } from '@angular/router';
 import { CollapsableComponent } from '@ngui/application';
+import { GameVersion } from 'heroesprotocol-data/lib';
+import { HeroModel2, HotsDB } from 'hots-gamedata';
+import linq from 'linq';
 import { Subject } from 'rxjs';
 import { debounceTime } from 'rxjs/operators';
-import linq from 'linq';
-import { IEnumerable } from 'linq';
-import { IFavouriteTalentBuild } from '../services/favourite-talentbuilds-service/IFavouriteTalentBuild';
 import { FavouriteTalentbuildsService } from '../services/favourite-talentbuilds-service/favourite-talentbuilds.service';
-import { Router, ActivatedRoute } from '@angular/router';
-import { GameVersion } from 'heroesprotocol-data/lib';
-import { MatDialog } from '@angular/material/dialog';
+import { IFavouriteTalentBuild } from '../services/favourite-talentbuilds-service/IFavouriteTalentBuild';
+
 
 interface IHeroBuilds {
-  hero: HeroModel,
-  builds: Array<IFavouriteTalentBuild & { model: HeroModel }>
+  hero: HeroModel2,
+  builds: Array<IFavouriteTalentBuild & { model: HeroModel2 }>
 }
 
 @Component({
@@ -35,7 +34,7 @@ export class BuildSearchComponent implements OnInit, OnChanges {
   private searchUpdates: Subject<string> = new Subject();
   private focusUpdates: Subject<boolean> = new Subject();
   private _build: string;
-  public heroList: IHero[];
+  public heroList: HeroModel2[];
   public buildList: IFavouriteTalentBuild[];
 
 
@@ -110,7 +109,7 @@ export class BuildSearchComponent implements OnInit, OnChanges {
       const heroCollection = await db.heroes;
       this.gameVersion = await heroCollection.version;
       const heroIds = await heroCollection.getHeroIds();
-      const heroes: IHero[] = [];
+      const heroes: HeroModel2[] = [];
       for (const heroId of heroIds) {
         heroes.push(await heroCollection.getHero(heroId));
       }
@@ -125,9 +124,9 @@ export class BuildSearchComponent implements OnInit, OnChanges {
       o => o.heroId,
       i => i.id,
       (heroBuilds, hero) => ({
-        hero: new HeroModel(hero),
+        hero,
         builds: linq.from(heroBuilds.builds).select(_ => {
-          const h = new HeroModel(hero);
+          const h = hero;
           h.talentBuildUrl = _.build
           return {
             ..._,

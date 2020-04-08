@@ -1,9 +1,9 @@
 import { Component, OnInit, Input, HostBinding } from '@angular/core';
-import { IAbility, ITalent } from 'hots-gamedata';
+import { IAbility, ITalent, AbilityDefinitionModel, TalentDefinitionModel, AbilityType } from 'hots-gamedata';
 
 
-function isTalent(obj: IAbility | ITalent): obj is ITalent {
-  return obj?.type === 'talent';
+function isTalent(obj: AbilityDefinitionModel | TalentDefinitionModel): obj is TalentDefinitionModel {
+  return obj instanceof TalentDefinitionModel;
 }
 
 @Component({
@@ -13,7 +13,7 @@ function isTalent(obj: IAbility | ITalent): obj is ITalent {
 })
 export class AbilityTypeIconComponent implements OnInit {
   @Input()
-  public ability: IAbility | ITalent;
+  public ability: AbilityDefinitionModel | TalentDefinitionModel;
 
   constructor() { }
 
@@ -21,37 +21,102 @@ export class AbilityTypeIconComponent implements OnInit {
   }
 
   public get label(): string {
-    switch (this.ability?.button?.toLowerCase()) {
-      case '#':
-        return 'Active';
-      case 't':
-      case 'd':
-      case 'trait':
-        return 'Trait' + (this.isActive  ? ' (D)' : '');
-      case 'h':
-      case 'r':
-      case 'heroic':
-        return 'Heroic' + (this.isActive  ? ' (R)' : '');
-      case null:
-      case undefined:
+    const ability = this.ability;
+
+    switch (ability.abilityButton) {
+
+      case AbilityType.Trait:
+        return 'Trait' + (ability.isActive ? ' (D)' : '');
+      case AbilityType.Heroic:
+        return 'Heroic' + (ability.isActive ? ' (R)' : '');
+      case AbilityType.Passive:
         return 'Passive';
+
       default:
-        return this.ability?.button;
+        return this.ability.abilityButton;
+
     }
+    /*
+        if (ability instanceof AbilityDefinitionModel) {
+    
+          switch (ability.abilityType) {
+            case 'activable':
+              return 'Active';
+            case 'trait':
+              return 'Trait' + (ability.isActive ? ' (D)' : '');
+            case 'heroic':
+              return 'Heroic' + (ability.isActive ? ' (R)' : '');
+            case 'basic':
+              return ability.hotkey;
+            case 'mount':
+              return 'Z';
+            case 'hearth':
+              return 'B';
+            case null:
+            case undefined:
+              return 'Passive';
+            default:
+              return '';
+          }
+        } else {
+    
+          switch (ability.hotkey) {
+            case '#':
+              return 'Active';
+            case 'R':
+              return 'Heroic' + (ability.isActive ? ' (R)' : '');
+            case 'Q':
+            case 'W':
+            case 'E':
+              return ability.hotkey;
+            case '':
+              return 'Passive';
+    
+          }
+        }*/
   }
 
   @HostBinding('class.quest')
   public get isQuest(): boolean {
-    return !!this.ability?.isQuest;
+    if (this.ability instanceof TalentDefinitionModel) {
+      return !!this.ability?.isQuest;
+    }
+    return false;
   }
 
   @HostBinding('class.active')
   public get isActive(): boolean {
+    if (isTalent(this.ability)) {
+      switch (this.ability.abilityButton) {
+        case AbilityType.Heroic:
+          return false;
+        default:
+          return !!this.ability?.isActive;
+      }
+    }
     return !!this.ability?.isActive;
+    
   }
 
   @HostBinding('class.passive')
   public get isPassive(): boolean {
+    if (isTalent(this.ability)) {
+      switch (this.ability.abilityButton) {
+        case AbilityType.Heroic:
+          return this.ability.prerequisiteTalentIds?.length ? false : true;
+        default:
+          return !!this.ability?.isActive;
+      }
+    }
+    /*switch (this.type) {
+      case 'Active':
+      case 'Q':
+      case 'W':
+      case 'E':
+        return false;
+      case 'Heroic':
+        return isTalent(this.ability) ? (this.ability.prerequisiteTalentIds?.length ? false : true) : this.ability.isPassive;
+    }*/
     return !!this.ability?.isPassive;
   }
 
@@ -66,9 +131,8 @@ export class AbilityTypeIconComponent implements OnInit {
 
   @HostBinding('class.heroic')
   public get isHeroic(): boolean {
-    switch (this.ability?.button?.toLowerCase()) {
-      case 'heroic':
-      case 'r':
+    switch (this.ability?.hotkey) {
+      case 'R':
         return true;
     }
     return false;
@@ -79,19 +143,6 @@ export class AbilityTypeIconComponent implements OnInit {
     return isTalent(this.ability) && this.isHeroic && !!this.ability.prerequisiteTalentIds?.length;
   }
 
-  public get type(): string {
-    switch (this.ability?.button) {
-      case '#':
-        return 'active';
-      case 'Heroic':
-        return 'Her';
-      case '':
-      case null:
-      case undefined:
-        return 'passive';
-      default:
-        return this.ability?.button;
-    }
-  }
+
 
 }

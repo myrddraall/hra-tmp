@@ -1,23 +1,32 @@
 <div class="left">
-    <hra-ability-chevron-hud-button [model]="abilityZ" direction="left" [hero]="hero" tooltip="true"></hra-ability-chevron-hud-button>
+    <hra-ability-chevron-hud-button [model]="hero.activeAbilityZ" direction="left" [hero]="hero" tooltip="true">
+    </hra-ability-chevron-hud-button>
 </div>
 <div class="center">
-    <div class="top">
-        <div class="active-abilities">
-            <hra-ability-hex-hud-button *ngFor="let abil of abilitiesActive; let i = index; trackBy: abilityTrackBy" [model]="abil" [hero]="hero" [buttonLabel]="i+1" tooltip="true"></hra-ability-hex-hud-button>
+    
+        <div class="top">
+            <div class="active-abilities">
+                <hra-ability-hex-hud-button *ngFor="let abil of hero.activeAbilityActivatable; let i = index; trackBy: abilityTrackBy" [model]="abil" [hero]="hero" [buttonLabel]="i+1" tooltip="true"></hra-ability-hex-hud-button>
+            </div>
         </div>
-    </div>
+    
     <div class="bottom">
         <div class="main-abilities">
-            <hra-ability-hex-hud-button [model]="abilityQ" [hero]="hero" tooltip="true"></hra-ability-hex-hud-button>
-            <hra-ability-hex-hud-button [model]="abilityW" [hero]="hero" tooltip="true"></hra-ability-hex-hud-button>
-            <hra-ability-hex-hud-button [model]="abilityE" [hero]="hero" tooltip="true"></hra-ability-hex-hud-button>
-            <hra-ability-hex-hud-button [model]="abilityR" [hero]="hero" tooltip="true"></hra-ability-hex-hud-button>
-            <hra-ability-hex-hud-button [model]="abilityD" [hero]="hero" tooltip="true"></hra-ability-hex-hud-button>
+            <hra-ability-hex-hud-button [model]="hero.activeAbilityQ" [hero]="hero" tooltip="true">
+            </hra-ability-hex-hud-button>
+            <hra-ability-hex-hud-button [model]="hero.activeAbilityW" [hero]="hero" tooltip="true">
+            </hra-ability-hex-hud-button>
+            <hra-ability-hex-hud-button [model]="hero.activeAbilityE" [hero]="hero" tooltip="true">
+            </hra-ability-hex-hud-button>
+            <hra-ability-hex-hud-button [model]="hero.activeAbilityR" [hero]="hero" tooltip="true">
+            </hra-ability-hex-hud-button>
+            <hra-ability-hex-hud-button [model]="hero.activeAbilityD" [hero]="hero" tooltip="true">
+            </hra-ability-hex-hud-button>
         </div>
     </div>
 </div>
-<div class="right">
-    <hra-ability-chevron-hud-button [model]="abilityB" direction="right" [hero]="hero" tooltip="true"></hra-ability-chevron-hud-button>
-</div>
 
+<div class="right">
+    <hra-ability-chevron-hud-button [model]="hero.activeAbilityB" direction="right" [hero]="hero" tooltip="true">
+    </hra-ability-chevron-hud-button>
+</div>

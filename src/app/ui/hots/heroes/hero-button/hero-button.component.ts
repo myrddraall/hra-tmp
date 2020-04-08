@@ -1,5 +1,4 @@
-import { Input, OnInit } from '@angular/core';
-import { HeroModel, IHeroListItem } from 'hots-gamedata';
+import { Input } from '@angular/core';
 import { HeroicButtonBaseComponent } from '../../buttons/heroic-button-base/heroic-button-base.component';
 
 export abstract class HeroButtonComponent extends HeroicButtonBaseComponent {

@@ -7,7 +7,7 @@
       <mat-icon>apps</mat-icon>
     </button>
   </div>
-  <hra-link-copy-button class="tool" [url]="url" label="Copy Build Url"></hra-link-copy-button>
+  <hra-talent-build-link-copy-button class="tool" [hero]="hero" label="Copy"></hra-talent-build-link-copy-button>
 </ng-template>
 
 <section talents>
@@ -15,9 +15,9 @@
   <div class="talent-container">
     <div class="left">
       <table cellpadding="0" cellspacing="0" *ngIf="hero && displayMode">
-        <tr class="talent-tier" *ngFor="let tier of ['1','4','7','10','13','16','20']" [ngClass]="['tier-' + tier]">
+        <tr class="talent-tier" *ngFor="let tier of [1,4,7,10,13,16,20]" [ngClass]="['tier-' + tier]">
           <td class="tier-header">{{tier}}</td>
-          <td class="talent-cell" *ngFor="let talent of hero?.talents['level' + tier]; let i = index"
+          <td class="talent-cell" *ngFor="let talent of hero?.getTalents(tier); let i = index"
             (click)="selectTalent(tier, i)">
             <hra-talent-square-button *ngIf="displayMode === 'icon'" [model]="talent" [hero]="hero" interactive tooltip="true"
               [class.selected]="isSelected(tier, i)">
@@ -48,11 +48,15 @@
 </section>
 
 
-
 <ngui-horizontal-bar *nguiAttachment="'app.footer'" align="end" fullCenter>
   <hra-hero-hud-unit left [hero]="hero" ></hra-hero-hud-unit>
   <hra-hero-hud-abilities center  [hero]="hero"></hra-hero-hud-abilities>
 </ngui-horizontal-bar>
+<!-- 
+
+-->
+
+
 <!-- 
 
 

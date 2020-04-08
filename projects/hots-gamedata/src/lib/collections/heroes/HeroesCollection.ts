@@ -7,16 +7,14 @@ import { HeroesTalentsApi } from '../../apis/heroespatchnotes/heroes-talents/her
 import { IGameStrings } from '../../apis/HeroesToolChest/heroes-data/dtos/IGameStrings';
 import { HeroStringsUtil } from './HeroStringsUtil';
 import { IHeroListItem } from './models/index';
-
-export interface IHeroRecord extends DTOs.IHero {
-    id: string;
-    heroId: string;
-    shortName: string;
-}
+import { IHeroRecord } from './IHeroRecord';
+import { HeroDefinitionModel } from './models/HeroDefinitionModel';
+import { HeroModel2 } from './models/HeroModel2';
 
 export class HeroesCollection extends Collection<IHeroRecord> {
 
     private apiData: HeroesDataApi;
+    private gameStrings: IGameStrings;
     private apiTalents: HeroesTalentsApi;
 
     public async getHeroIds(): Promise<string[]> {
@@ -175,55 +173,61 @@ export class HeroesCollection extends Collection<IHeroRecord> {
         return tiers;
     }
 
-    public async getHero(id: string): Promise<Models.IHero> {
+    public async getHero(id: string): Promise<HeroModel2> {
         await this.initialize();
         //console.time('');
         const hero = this.query.first(_ => _.id === id);
         const strings = (await this.apiData.getGameStrings()).gamestrings;
 
-        const hid = hero.heroId;
-        const hdata: Models.IHero = {
-            id: hero.id,
-            heroId: hid,
-            title: strings.unit.title[hid],
-            description: strings.unit.description[hid],
-            searchText: strings.unit.searchtext[hid],
-            difficulty: strings.unit.difficulty[hid],
-            energytype: strings.unit.energytype[hid],
-            damagetype: strings.unit.damagetype[hid],
-            lifetype: strings.unit.lifetype[hid],
-            shieldtype: strings.unit.shieldtype[hid],
-            linkId: hero.hyperlinkId,
-            attributeId: hero.attributeId,
-            expandedRole: strings.unit.expandedrole[hid],
-            name: strings.unit.name[hid],
-            releaseDate: hero.releaseDate,
-            //releasePatch: talents.releasePatch,
-            role: strings.unit.role[hid],
-            tags: hero.descriptors,
-            type: strings.unit.type[hid],
-            units: {},
-            ratings: hero.ratings,
-            rarity: hero.rarity,
-            franchise: hero.franchise,
-            gender: hero.gender,
-            talents: this.createTalents(hero.talents, strings)
-        };
 
-        const mainUnit = this.createUnit(hero, strings);
-        hdata.units[hdata.linkId] = mainUnit;
-
-        if (hero.heroUnits) {
-            for (const k of hero.heroUnits) {
-                for (const key in k) {
-                    if (k.hasOwnProperty(key)) {
-                        const unit = this.createUnit(k[key], strings);
-                        hdata.units[key] = unit;
+        const model = new HeroModel2(hero, this.gameStrings, strings);
+        console.log('heroDef', model);
+        return model;
+        /*
+                const hid = hero.heroId;
+                const hdata: Models.IHero = {
+                    id: hero.id,
+                    heroId: hid,
+                    title: strings.unit.title[hid],
+                    description: strings.unit.description[hid],
+                    searchText: strings.unit.searchtext[hid],
+                    difficulty: strings.unit.difficulty[hid],
+                    energytype: strings.unit.energytype[hid],
+                    damagetype: strings.unit.damagetype[hid],
+                    lifetype: strings.unit.lifetype[hid],
+                    shieldtype: strings.unit.shieldtype[hid],
+                    linkId: hero.hyperlinkId,
+                    attributeId: hero.attributeId,
+                    expandedRole: strings.unit.expandedrole[hid],
+                    name: strings.unit.name[hid],
+                    releaseDate: hero.releaseDate,
+                    //releasePatch: talents.releasePatch,
+                    role: strings.unit.role[hid],
+                    tags: hero.descriptors,
+                    type: strings.unit.type[hid],
+                    units: {},
+                    ratings: hero.ratings,
+                    rarity: hero.rarity,
+                    franchise: hero.franchise,
+                    gender: hero.gender,
+                    talents: this.createTalents(hero.talents, strings)
+                };
+        
+                const mainUnit = this.createUnit(hero, strings);
+                hdata.units[hdata.linkId] = mainUnit;
+        
+                if (hero.heroUnits) {
+                    for (const k of hero.heroUnits) {
+                        for (const key in k) {
+                            if (k.hasOwnProperty(key)) {
+                                const unit = this.createUnit(k[key], strings);
+                                hdata.units[key] = unit;
+                            }
+                        }
                     }
                 }
-            }
-        }
-        return hdata;
+                return hdata;
+                */
     }
 
 
@@ -283,7 +287,7 @@ export class HeroesCollection extends Collection<IHeroRecord> {
     public async initialize(): Promise<void> {
         console.time('HeroesCollection.initialize');
         this.apiData = HeroesDataApi.getVersion(this.db.version, this.db.lang);
-
+        this.gameStrings = (await HeroesDataApi.getVersion(this.db.version, 'enus').getGameStrings()).gamestrings;
         //this.apiTalents = HeroesTalentsApi.getVersion(this.db.version);
         const heroes = await this.apiData.getHeroes();
         this.records = [];
@@ -291,8 +295,8 @@ export class HeroesCollection extends Collection<IHeroRecord> {
             if (heroes.hasOwnProperty(key)) {
                 const heroData = heroes[key] as IHeroRecord;
                 heroData.heroId = key;
-                const id = this.normalizeHeroName(heroData.hyperlinkId).toLowerCase();
-                heroData.id = id;
+                const id = this.normalizeHeroName(heroData.hyperlinkId);
+                heroData.id = id.toLowerCase();
                 heroData.shortName = id;
                 this.records.push(heroData);
             }

@@ -7,19 +7,22 @@ import { IconsModule } from '../icons/icons.module';
 import { TalentTooltipComponent } from './talent-tooltip/talent-tooltip.component';
 import { TextModule } from '../../common/text/text.module';
 import { TalentDetailButtonComponent } from './talent-detail-button/talent-detail-button.component';
-
-
+import { TalentBuildLinkCopyButtonComponent } from './talent-build-link-copy-button/talent-build-link-copy-button.component';
+import { MatButtonModule } from '@angular/material/button'
+import { MatIconModule } from '@angular/material/icon'
 
 @NgModule({
   declarations: [
     TalentSquareButtonComponent,
     TalentTooltipComponent,
-    TalentDetailButtonComponent
+    TalentDetailButtonComponent,
+    TalentBuildLinkCopyButtonComponent
   ],
   exports: [
     TalentSquareButtonComponent,
     TalentTooltipComponent,
-    TalentDetailButtonComponent
+    TalentDetailButtonComponent,
+    TalentBuildLinkCopyButtonComponent
   ],
   imports: [
     CommonModule,
@@ -27,7 +30,8 @@ import { TalentDetailButtonComponent } from './talent-detail-button/talent-detai
     ButtonsModule,
     IconsModule,
     TextModule,
-    
+    MatButtonModule,
+    MatIconModule
   ]
 })
 export class TalentsModule { }

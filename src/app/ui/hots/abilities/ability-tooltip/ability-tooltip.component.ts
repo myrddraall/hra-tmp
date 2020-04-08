@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { IAbility, HeroModel } from 'hots-gamedata';
+import { Component, Input, OnInit } from '@angular/core';
+import { HeroModel2, AbilityDefinitionModel } from 'hots-gamedata';
 
 @Component({
   selector: 'hra-ability-tooltip',
@@ -9,9 +9,9 @@ import { IAbility, HeroModel } from 'hots-gamedata';
 export class AbilityTooltipComponent implements OnInit {
 
   @Input()
-  public ability: IAbility;
+  public ability: AbilityDefinitionModel;
   @Input()
-  public hero: HeroModel;
+  public hero: HeroModel2;
 
   constructor() { }
 

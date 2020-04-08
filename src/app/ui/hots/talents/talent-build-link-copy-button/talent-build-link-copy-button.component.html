@@ -1,0 +1,3 @@
+<button class="copyLink" mat-stroked-button (click)="copyLink(input)"><span *ngIf="showLabel">{{label || ''}}</span><mat-icon>link</mat-icon></button>
+<button class="copyIngame" mat-stroked-button (click)="copyInGame(input)"><img src="assets/ui/icons/storm_ui_play_filter_nexus-on.png" /></button>
+<input #input readonly/>

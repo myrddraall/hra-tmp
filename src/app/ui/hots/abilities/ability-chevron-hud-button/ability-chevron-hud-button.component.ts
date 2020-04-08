@@ -33,16 +33,7 @@ export class AbilityChevronHudButtonComponent extends AbilityButtonComponent {
         return this.buttonLabel;
     }
     
-    switch (this.model?.button) {
-      case 'Heroic':
-        return 'R';
-      case 'Trait':
-        return 'D';
-        case 'Active':
-          return '#';
-      default:
-        return this.model?.button;
-    }
+    return this.model?.hotkey;
   }
 
 }

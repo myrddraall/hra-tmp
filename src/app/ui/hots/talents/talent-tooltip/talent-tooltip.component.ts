@@ -1,5 +1,5 @@
-import { Component, OnInit, Input } from '@angular/core';
-import { ITalent, HeroModel } from 'hots-gamedata';
+import { Component, Input, OnInit } from '@angular/core';
+import { HeroModel2, ITalent } from 'hots-gamedata';
 
 @Component({
   selector: 'hra-talent-tooltip',
@@ -11,7 +11,7 @@ export class TalentTooltipComponent implements OnInit {
   @Input()
   public talent: ITalent;
   @Input()
-  public hero: HeroModel;
+  public hero: HeroModel2;
 
   constructor() { }
 

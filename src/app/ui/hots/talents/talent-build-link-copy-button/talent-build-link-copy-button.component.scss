@@ -1,0 +1,53 @@
+:host {
+  button {
+    
+    &.navigate {
+      display: none;
+    }
+  }
+  input {
+    display: inline-block;
+    position: absolute;
+    pointer-events: none;
+    opacity: 0.001;
+  }
+  &.show-label {
+    button {
+      &.copy {
+        mat-icon {
+          margin-left: 0.5em;
+        }
+      }
+    }
+  }
+  &.show-navigate {
+    button {
+      &.copy {
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+      }
+      &.navigate {
+        display: inline-block;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+        margin-left: -1px;
+      }
+    }
+  }
+  .copyLink{
+    mat-icon{
+      margin-left: 0.5em;
+    }
+    border-radius: 4px 0px 0px 4px;
+  }
+  .copyIngame{
+    img{
+      height: 2em;
+    }
+    padding: 0px 0.5em;
+    min-width: 2em;
+    left: -1px;
+    border-radius: 0px 4px 4px 0px;
+  }
+
+}

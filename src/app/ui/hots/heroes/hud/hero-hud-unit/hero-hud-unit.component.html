@@ -6,7 +6,7 @@
                     <img class="franchise" [attr.src]="'assets/ui/icons/franchise/' + hero.franchise + '.png'" />
                 </div>
                 <div>
-                    <hra-glowing-text>{{hero.formName}}</hra-glowing-text>
+                    <hra-glowing-text>{{hero.displayName}}</hra-glowing-text>
                     <div>{{hero.title}}</div>
                 </div>
             </header>
@@ -22,8 +22,8 @@
 </div>
 <div class="stats-offset">
     <div forms *ngIf="hero?.forms?.length > 1">
-        <div class="form-button" *ngFor="let form of hero.forms; let i = index" (click)="this.hero.formId = form.linkId"
-            [class.selected]="this.hero.formId === form.linkId">
+        <div class="form-button" *ngFor="let form of hero.forms; let i = index" (click)="this.hero.currentFormId = form.linkId"
+            [class.selected]="this.hero.currentFormId === form.linkId">
             <hra-glowing-text>{{i+1}}</hra-glowing-text>
         </div>
     </div>

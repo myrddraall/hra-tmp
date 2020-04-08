@@ -4,28 +4,21 @@ import { IRatings } from './IRatings';
 import { IAbilities } from './IAbilities';
 import { IPortraits } from './IPortraits';
 import { ISubAbilities } from './ISubAbilities';
-import { ITalents } from './ITalents';
+
 import { IEnergy } from './IEnergy';
 export interface IUnit {
     unitId: string;
     hyperlinkId: string;
-    franchise: string;
-    gender: string;
     innerRadius: number;
     radius: number;
-    releaseDate: string;
     sight: number;
     speed: number;
-    rarity: string;
     scalingLinkId: string;
     descriptors: string[];
-    units: string[];
     portraits: IPortraits;
     life: ILife;
-    ratings: IRatings;
     weapons: IWeapon[];
     abilities: IAbilities;
     subAbilities: ISubAbilities[];
-    talents: ITalents;
     energy?: IEnergy;
 }

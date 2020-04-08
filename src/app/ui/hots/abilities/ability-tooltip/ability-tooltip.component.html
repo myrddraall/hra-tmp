@@ -11,7 +11,7 @@
 <section>
     <div [hraTooltipText]="ability.description" [level]="hero?.level"></div>
 </section>
-<section>
+<section *ngIf="talents?.length">
     <div>
         <ng-container *ngFor="let talent of talents">
             <div *ngIf="talent.button !== 'Heroic' || !talent.isActive" class="talent">

@@ -40,14 +40,24 @@
         background-image: url(~/assets/ui/icons/storm_ui_heroselect_customizepanel_abilityframe_heroicupgradearrow.png);
       }
     }
+
     &.active,
-    &.passive,
-    &.heroic:not(.heroic-upgrade) {
-      padding-left: 5px;
-      &::before {
-        visibility: hidden;
+      &.passive{
+        padding-left: 5px;
+        &::before {
+          visibility: hidden;
+        }
       }
-    }
+    /*&:not(.heroic-upgrade){
+      &.active,
+      &.passive,
+      &.heroic {
+        padding-left: 5px;
+        &::before {
+          visibility: hidden;
+        }
+      }
+    }*/
   }
 
   &.quest {
