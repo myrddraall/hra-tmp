@@ -37,6 +37,7 @@ $statsOffset: $portraitWidth * 0.28;
       > * {
         // pointer-events: all;
         font-size: 1.4em;
+        text-align: start;
       }
       header {
         display: flex;
@@ -45,6 +46,10 @@ $statsOffset: $portraitWidth * 0.28;
           width: 66px;
           height: 50px;
         }
+        .name-wrapper{
+          display: flex;
+          flex-direction: column;
+        }
         .franchise {
           position: relative;
           top: -18px;
@@ -52,7 +57,7 @@ $statsOffset: $portraitWidth * 0.28;
           width: 96px;
         }
         hra-glowing-text {
-          font-size: 1.2em;
+          font-size: 1em;
         }
       }
     }

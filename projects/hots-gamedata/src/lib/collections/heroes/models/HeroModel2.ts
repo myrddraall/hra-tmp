@@ -386,7 +386,7 @@ export class HeroModel2 extends HeroDefinitionModel {
     }
     public get activeAbilityD() {
         const q = linq.from(this.activeAbilities.get('trait') as AbilityDefinitionModel[])
-            .orderBy(_ => _.requiresTalent)
+            .orderByDescending(_ => _.requiresTalent)
             .orderByDescending(_ => _.isActive)
         console.log(q.toArray());
         return q.firstOrDefault()

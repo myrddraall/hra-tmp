@@ -1,5 +1,5 @@
 :host{
-    display: inline-block;
+    display: inline-flex;
     font-size: var(--base-size);
     font-weight: bold;
     position: relative;
@@ -9,10 +9,15 @@
     --text-color-dark: #00f;
 
     >div{
-        font-size: 1.8em;
+        position: relative;
         color: transparent;
+        font-size: 1.8em;
+        line-height: 1.1em;
         &.num{
+          
             position: absolute;
+            left:0px;
+            top:0px;
             background-image: linear-gradient(to bottom,var(--text-color-light) 50%, var(--text-color) 130%);
             background-clip: text;
             z-index: 3

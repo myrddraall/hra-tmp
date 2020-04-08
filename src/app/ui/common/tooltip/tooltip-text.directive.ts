@@ -16,6 +16,10 @@ export class TooltipTextDirective implements OnChanges {
 
   @Input()
   public level: number = 0;
+
+  @Input()
+  public showMath: boolean = false;
+
   constructor(
     private readonly elm: ElementRef<HTMLElement>
   ) { }
@@ -97,13 +101,21 @@ export class TooltipTextDirective implements OnChanges {
       if (base === 1 && scale === 0) {
         return '<span style="font-size:2em; position:relative; top:0.1em ">∞</span>';
       }
-      return "" + Math.round(base * Math.pow(1 + scale, this.level));
+      const value = Math.round(base * Math.pow(1 + scale, this.level));
+      if(this.showMath){
+        return `${value} ( ${base} +${Math.round(scale * 100)}% per Level )`
+      }
+      return `${value}`;
     }
     matches = str?.match(/([\d\.]+)\+\+([\d\.]+)\+\+/);
     if (matches?.length === 3) {
       const base = +matches[1];
       const scale = +matches[2];
-      return "" + Math.round(base + (scale * (this.level - 1)));
+      const value = Math.round(base + (scale * (this.level - 1)));
+      if(this.showMath){
+        return `${value} ( ${base} + ${scale} per Level )`
+      }
+      return `${value}`;
     }
     return str;
   }

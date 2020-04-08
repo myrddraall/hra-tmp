@@ -72,7 +72,6 @@ export class UnitDefinitionModel<TData extends DTOs.IUnit | DTOs.IHero = DTOs.IU
                                     type: 'activable',
                                 };
                                 abilities.push(abil);
-                                //this._abilities.push(new AbilityDefinitionModel(abil, this.gamestrings, this.gamestringsLocalized, abilities, talents))
                             }
                         }
                     }
