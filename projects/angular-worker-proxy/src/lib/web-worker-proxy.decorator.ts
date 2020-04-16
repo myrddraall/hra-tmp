@@ -38,6 +38,7 @@ export interface IWebworkerRelay {
 
     initializeAsHost(msg: IWebworkerInitMessage): void;
     addProxy(remoteId: number, proxy: IWebworkerRelay): void;
+    dispose(): void
 }
 
 export interface IWebworkerRelayInternal extends IWebworkerRelay {
@@ -46,16 +47,20 @@ export interface IWebworkerRelayInternal extends IWebworkerRelay {
     parentProxy: IWebworkerRelayInternal;
     readonly targetPath: Array<string | number>;
     readonly initialized: Promise<void>;
+    worker: Worker;
+    sendQueue: () => void;
 }
 
 function createWebWorkerRelay<T>(ofType: Type<T>): Type<IWebworkerRelayInternal> {
     return class WebWorkerRelay extends (ofType as Type) implements IWebworkerRelayInternal {
+        public worker: Worker;
+
         private _incommingMessages: Subject<IWebworkerMessage>;
 
         private _nextMessageId: number = 0;
         private _parent: IWebworkerRelayInternal = null;
         private _remoteId: number;
-        private _proxies: Map<number, WebWorkerRelay> = new Map();
+        private _proxies: Map<number, WebWorkerRelay>;
         private _msgSub: Unsubscribable;
         public _initialized: Promise<void>;
         private _remoteSubs: Map<string, Unsubscribable> = new Map();
@@ -116,7 +121,7 @@ function createWebWorkerRelay<T>(ofType: Type<T>): Type<IWebworkerRelayInternal>
                 this._msgSub = this.incommingMessages.subscribe((msg) => {
                     this.procressIncomingMessage(msg);
                 });
-                this._proxies.forEach(_ => _.initListener());
+                this._proxies?.forEach(_ => _.initListener());
             }
         }
         public get parentProxy(): IWebworkerRelayInternal {
@@ -141,8 +146,40 @@ function createWebWorkerRelay<T>(ofType: Type<T>): Type<IWebworkerRelayInternal>
         }
 
         public postMessage(msg: IWebworkerMessage<any>, transfer?: Transferable[]): void {
-            this.prepareMessage(msg);
-            this.postMessageInternal(msg, transfer);
+            this.queueMessage(() => {
+                this.prepareMessage(msg);
+                this.postMessageInternal(msg, transfer);
+            });
+            console.log('postMessage', this._queuedMessages, this)
+        }
+
+        private _queuedMessages: Array<() => void> = [];
+
+        private queueMessage(sendFn: () => void): void {
+            if (this._queuedMessages) {
+                this._queuedMessages.push(sendFn);
+            } else {
+                sendFn();
+            }
+        }
+
+        public dispose() {
+            this._proxies.forEach(proxy => {
+                proxy.dispose();
+            });
+            if (typeof super.dispose === 'function') {
+                super.dispose();
+            }
+        }
+
+        public sendQueue() {
+            if (this._queuedMessages) {
+                const msgs = this._queuedMessages;
+                this._queuedMessages = undefined;
+                for (const sender of msgs) {
+                    sender();
+                }
+            }
         }
 
         public postMessageInternal(msg: IWebworkerMessage<any>, transfer?: Transferable[]): void {
@@ -280,11 +317,15 @@ function createWebWorkerRelay<T>(ofType: Type<T>): Type<IWebworkerRelayInternal>
         public addProxy(remoteId: number, proxy: WebWorkerRelay): void {
             this.removeProxy(remoteId);
             proxy.setProxyParent(remoteId, this);
+            if (!this._proxies) {
+                this._proxies = new Map();
+            }
             this._proxies.set(remoteId, proxy);
 
         }
 
         private removeProxy(remoteId: number): void {
+            if (!this._proxies) return;
             const p = this._proxies.get(remoteId);
             if (p) {
                 this._proxies.delete(remoteId);
@@ -420,7 +461,7 @@ function createWebWorkerRelay<T>(ofType: Type<T>): Type<IWebworkerRelayInternal>
 
         private async processObservableGet(msg: IWebworkerSubscribeCall) {
             const key = getPropertyKeyInst(this, msg.memberId);
-   
+
             const obs = this[key] as Observable<any>;
 
             const unsub = obs.subscribe(
@@ -476,7 +517,7 @@ function createWebWorkerRelay<T>(ofType: Type<T>): Type<IWebworkerRelayInternal>
 
 function createMainSideRelay<T>(ofType: Type<T>, id: string): Type<IWebworkerRelay> {
     class MainSideRelay extends createWebWorkerRelay(ofType as Type) implements IWebworkerRelay {
-        private worker: Worker;
+
         private isHost: boolean = false;
         private ctorArgs: any[];
         private workerInitialized: boolean = false;
@@ -487,6 +528,13 @@ function createMainSideRelay<T>(ofType: Type<T>, id: string): Type<IWebworkerRel
             if (factory) {
                 this.isHost = true;
                 this.setWorker(factory());
+            }
+        }
+
+        public dispose() {
+            super.dispose();
+            if (this.isHost) {
+                this.worker?.terminate();
             }
         }
 
@@ -545,6 +593,7 @@ function createMainSideRelay<T>(ofType: Type<T>, id: string): Type<IWebworkerRel
                 if (this.isHost) {
                     this.sendInitMessage();
                 }
+                this.sendQueue();
             }
         }
 
@@ -564,6 +613,11 @@ function createMainSideRelay<T>(ofType: Type<T>, id: string): Type<IWebworkerRel
 
 function createWorkerSideRelay<T>(ofType: Type<T>, id: string): Type<IWebworkerRelay> {
     class WorkerSideRelay extends createWebWorkerRelay(ofType as Type) implements IWebworkerRelay {
+
+        public constructor(...args: any[]) {
+            super(...args);
+            this.sendQueue();
+        }
         /*private nextMessageId: number = 0;
         public readonly incommingMessages: Subject<IWebWorkerMessage> = new Subject();
 
@@ -1050,8 +1104,8 @@ export function Cache(): MethodDecorator {
                     setCacheValue(this, propertyKey, '', ret);
                     return ret;
                 },
-                set: function (value:any): void {
-                    if(descriptor.set){
+                set: function (value: any): void {
+                    if (descriptor.set) {
                         deleteCacheValue(this, propertyKey, '')
                         descriptor.set.call(this, value);
                     }
@@ -1085,22 +1139,39 @@ export function OnMain(): PropertyDecorator {
     };
 }
 
+
+function getInstKey(propertyKey: string, subkey: string): string {
+    return `___${propertyKey}_${subkey}`;
+}
+function setInstValue(inst: any, propertyKey: string | symbol, subkey: string, value: any) {
+    const key = getInstKey(propertyKey.toString(), subkey);
+    inst[key] = value;
+}
+
+function getInstValue(inst: any, propertyKey: string | symbol, subkey: string): any {
+    const key = getInstKey(propertyKey.toString(), subkey);
+    return inst[key];
+}
+
 export function Proxy(): PropertyDecorator {
     return (target: Object, propertyKey: string | symbol): void => {
         const memberId = setRemoteMemberId(target, propertyKey);
-        let __value: any;
-        let __initializedValue: any
         Reflect.defineProperty(target, propertyKey, {
-            get: function (this: IWebworkerRelay) {
-                if (!__initializedValue) {
-                    __initializedValue = __value;
-                    this.addProxy(memberId, __value);
+            get: function (this: IWebworkerRelayInternal) {
+                const value = getInstValue(this, propertyKey, 'value');
+                if (!getInstValue(this, propertyKey, 'initializedValue')) {
+                    setInstValue(this, propertyKey, 'initializedValue', value);
+                    this.addProxy(memberId, value);
+                } else {
+                    if (this.worker && typeof value.setWorker === 'function') {
+                        value.setWorker(this.worker);
+                    }
                 }
-                return __value;
+                return value;
             },
             set: function (this: IWebworkerRelay, value: any): void {
-                __initializedValue = null;
-                __value = value;
+                setInstValue(this, propertyKey, 'initializedValue', null);
+                setInstValue(this, propertyKey, 'value', value);
             }
         });
         //return createProxyMember(WebWorkerSide.MAIN, target, propertyKey, descriptor);

@@ -1,3 +1,14 @@
 <ngui-application>
     <router-outlet></router-outlet>
+    <!--
+
+        <button hraFileSelect><div>TEST1</div><div>TEST2</div><div>TEST3</div></button>
+        <button hraFileSelect><div>TEST122</div><div>TEST222</div><div>TEST322</div></button>
+    -->
+
+    <hra-replay-upload-button *nguiAttachment="'app.header.main.right'"></hra-replay-upload-button>
 </ngui-application>
+
+<div class="loading" *ngIf="loading">
+    <img src="assets/ui/icons/storm_triforce_purple1.png" />
+</div>

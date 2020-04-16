@@ -1,0 +1,15 @@
+:host {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    &:host-context([align="start"]) {
+        justify-content: flex-start;
+    }
+    &:host-context([align="end"]) {
+        justify-content: flex-end;
+    }
+    &:host-context([align="center"]) {
+        justify-content: center;
+    }
+}

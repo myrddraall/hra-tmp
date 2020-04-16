@@ -1,10 +1,12 @@
 // tslint:disable:variable-name
 import { HeroesCollection } from '../collections/heroes/HeroesCollection';
-import { GameVersion } from 'heroesprotocol-data/lib';
+import { GameVersion } from 'heroesprotocol-data';
+import { AwardsCollection } from '../collections/awards/AwardsCollection';
 
 export class HotsDB {
     private static _cache: Map<string, HotsDB> = new Map();
     private _heroes: HeroesCollection;
+    private _awards: AwardsCollection;
     private _initialized: Promise<HotsDB>;
 
     public static getVersion(version: GameVersion | 'latest', lang: string = 'enus'): Promise<HotsDB> {
@@ -22,6 +24,7 @@ export class HotsDB {
         public readonly lang: string,
     ) {
         this._heroes = new HeroesCollection(this);
+        this._awards = new AwardsCollection(this);
     }
 
     private initialize(): Promise<HotsDB> {
@@ -29,7 +32,10 @@ export class HotsDB {
             return this._initialized;
         }
         return this._initialized = new Promise(async (res, rej) => {
-            await this._heroes.initialize();
+            await Promise.all([
+                this._heroes.initialize(),
+                this._awards.initialize()
+            ]);
             res(this);
         });
     }
@@ -38,6 +44,13 @@ export class HotsDB {
         return (async () => {
             await this.initialize();
             return this._heroes;
+        })();
+    }
+    
+    public get matchAwards(): Promise<AwardsCollection> {
+        return (async () => {
+            await this.initialize();
+            return this._awards;
         })();
     }
 }

@@ -282,9 +282,9 @@ export class UnitDefinitionModel<TData extends DTOs.IUnit | DTOs.IHero = DTOs.IU
         return linq.from(this.talents)
     }
 
-    protected getTalent(id: string): TalentDefinitionModel;
-    protected getTalent(tier: TalentTeir, index: number): TalentDefinitionModel;
-    protected getTalent(idOrTier: string | TalentTeir, index?: number): TalentDefinitionModel {
+    public getTalent(id: string): TalentDefinitionModel;
+    public getTalent(tier: TalentTeir, index: number): TalentDefinitionModel;
+    public getTalent(idOrTier: string | TalentTeir, index?: number): TalentDefinitionModel {
         if (typeof idOrTier === 'string') {
             return this.talentQuery.where(_ => _.id === idOrTier).firstOrDefault();
         }

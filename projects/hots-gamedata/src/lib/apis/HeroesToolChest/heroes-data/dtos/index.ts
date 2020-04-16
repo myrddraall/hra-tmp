@@ -15,3 +15,4 @@ export * from './ITalents';
 export * from './IUnit';
 export * from './IWeapon';
 export * from './IAbilityBase';
+export * from './IMatchAwardData';

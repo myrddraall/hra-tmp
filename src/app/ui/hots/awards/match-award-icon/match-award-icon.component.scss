@@ -1,0 +1,43 @@
+:host {
+    display: inline-block;
+    font-size: var(--base-size);
+    width: 7.2em;
+    height: 7.2em;
+    hra-icon-square {
+        font-size: 1em;
+    }
+}
+
+.award-tooltip {
+    display: flex;
+    flex-direction: column;
+    margin: 1em;
+    header {
+        display: flex;
+        align-items: center;
+        .icon {
+            margin-right: 1em;
+        }
+        .content {
+            display: flex;
+            flex-direction: column;
+
+            hra-glowing-text {
+                font-size: 1em;
+            }
+            .description {
+                align-self: center;
+            }
+        }
+    }
+    .stats {
+        display: flex;
+        flex-direction: column;
+        .stat {
+            display: flex;
+            .stat-label{
+                margin-right: 0.5em;
+            }
+        }
+    }
+}

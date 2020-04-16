@@ -1,0 +1,29 @@
+<hra-icon-square [iconUrl]="iconUrl" *ngIf="award"></hra-icon-square>
+
+<div *hraTooltip="!!award" position="end" class="award-tooltip">
+    <header>
+        <div class="icon">
+            <hra-icon-square [iconUrl]="iconLargeUrl"></hra-icon-square>
+        </div>
+        <div class="content">
+            <div class="name">
+                <hra-glowing-text>{{award.name}}</hra-glowing-text>
+            </div>
+            <div class="description">{{award.description}}</div>
+        </div>
+    </header>
+    <div class="stats" *ngIf="award.value">
+        <div class="stat players-value" *ngIf="award.value.player">
+            <div class="stat-label">{{award.id}}:</div>
+            <div class="stat-value">{{award.value.player | number}}</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">id:</div>
+            <div class="stat-value">{{award.id}}</div>
+        </div>
+        <div class="stat">
+            <div class="stat-label">gameLink:</div>
+            <div class="stat-value">{{award.gameLink}}</div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,14 @@
+:host {
+    width: auto;
+    height: auto;
+    display: inline-block;
+    canvas {
+      width: auto;
+      min-width: 100%;
+    //  max-width: 100%;
+      height: auto;
+      min-height: 100%;
+      max-height: 100%;
+    }
+  }
+  

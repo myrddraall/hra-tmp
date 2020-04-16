@@ -2,7 +2,7 @@ import { ChangeDetectorRef, Component, ElementRef, HostBinding, Input, OnChanges
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CollapsableComponent } from '@ngui/application';
-import { GameVersion } from 'heroesprotocol-data/lib';
+import { GameVersion } from 'heroesprotocol-data';
 import { HeroModel2, HotsDB } from 'hots-gamedata';
 import linq from 'linq';
 import { Subject } from 'rxjs';

@@ -13,7 +13,7 @@
   }
   &.show-label {
     button {
-      &.copy {
+      &.copyLink {
         mat-icon {
           margin-left: 0.5em;
         }
@@ -22,15 +22,23 @@
   }
   &.show-navigate {
     button {
-      &.copy {
+      &.copyLink {
         border-top-right-radius: 0px;
         border-bottom-right-radius: 0px;
+      }
+      &.copyIngame {
+        border-top-right-radius: 0px;
+        border-bottom-right-radius: 0px;
+        margin-left: -1px;
       }
       &.navigate {
         display: inline-block;
         border-top-left-radius: 0px;
         border-bottom-left-radius: 0px;
         margin-left: -1px;
+        padding-left:0.6em;
+        padding-right:0.6em;
+        min-width: 0px;
       }
     }
   }

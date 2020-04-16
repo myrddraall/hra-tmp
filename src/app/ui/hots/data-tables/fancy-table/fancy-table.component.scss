@@ -1,0 +1,10 @@
+:host{
+    display: block;
+    table{
+        width:100%;
+        background-color: transparent;
+        tr, th, td{
+            border: none;
+        }
+    }
+}

@@ -1,0 +1,13 @@
+<div hraFileSelect (stateChange)="onStateChange($event)" (fileChange)="onFileSelect($event)">
+    <button class="btn-none" mat-stroked-button>Load Replay</button>
+    <button class="btn-over" mat-raised-button color="primary">Load Replay</button>
+    <button class="btn-outside" mat-raised-button >Load Replay</button>
+</div>
+
+<ng-container *nguiAttachment="'app.panels'" >
+    <div *ngIf="state" hraFileSelect class="file-selec-overlay" (fileChange)="onFileSelect($event)">
+    
+        <div>%username%\Documents\Heroes of the Storm\Accounts\[account-number]\[player-id]\Replays\Multiplayer</div>
+    
+    </div>
+</ng-container>

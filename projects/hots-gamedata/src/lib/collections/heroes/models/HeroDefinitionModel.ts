@@ -14,7 +14,6 @@ export class HeroDefinitionModel extends UnitDefinitionModel<IHeroRecord>{
 
     public constructor(data: IHeroRecord, gamestrings: IGameStrings, gamestringsLocalized: IGameStrings) {
         super(data, gamestrings, gamestringsLocalized);
-        console.log(':::', data)
 
         /*for (const tierStr in this.data.talents) {
             if (this.data.talents.hasOwnProperty(tierStr)) {

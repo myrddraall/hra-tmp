@@ -14,7 +14,8 @@ import { HeroModel2 } from './models/HeroModel2';
 export class HeroesCollection extends Collection<IHeroRecord> {
 
     private apiData: HeroesDataApi;
-    private gameStrings: IGameStrings;
+    public gameStrings: IGameStrings;
+    public gameStringsLocalized: IGameStrings;
     private apiTalents: HeroesTalentsApi;
 
     public async getHeroIds(): Promise<string[]> {
@@ -172,7 +173,13 @@ export class HeroesCollection extends Collection<IHeroRecord> {
         }
         return tiers;
     }
-
+    public async getHeroByHeroId(id: string): Promise<HeroModel2> {
+        await this.initialize();
+        const hero = this.query.first(_ => _.heroId === id);
+        const strings = (await this.apiData.getGameStrings()).gamestrings;
+        const model = new HeroModel2(hero, this.gameStrings, strings);
+        return model;
+    }
     public async getHero(id: string): Promise<HeroModel2> {
         await this.initialize();
         //console.time('');
@@ -181,7 +188,7 @@ export class HeroesCollection extends Collection<IHeroRecord> {
 
 
         const model = new HeroModel2(hero, this.gameStrings, strings);
-        console.log('heroDef', model);
+      //  console.log('heroDef', model);
         return model;
         /*
                 const hid = hero.heroId;
@@ -287,21 +294,23 @@ export class HeroesCollection extends Collection<IHeroRecord> {
     public async initialize(): Promise<void> {
         console.time('HeroesCollection.initialize');
         this.apiData = HeroesDataApi.getVersion(this.db.version, this.db.lang);
+        this.gameStringsLocalized = (await this.apiData.getGameStrings()).gamestrings;
         this.gameStrings = (await HeroesDataApi.getVersion(this.db.version, 'enus').getGameStrings()).gamestrings;
-        //this.apiTalents = HeroesTalentsApi.getVersion(this.db.version);
+        
         const heroes = await this.apiData.getHeroes();
         this.records = [];
         for (const key in heroes) {
             if (heroes.hasOwnProperty(key)) {
                 const heroData = heroes[key] as IHeroRecord;
                 heroData.heroId = key;
-                const id = this.normalizeHeroName(heroData.hyperlinkId);
+                const id = HeroStringsUtil.normalizeHeroName(heroData.hyperlinkId);
                 heroData.id = id.toLowerCase();
                 heroData.shortName = id;
                 this.records.push(heroData);
             }
         }
         console.timeEnd('HeroesCollection.initialize');
+        console.log(this.records);
     }
     public get version() {
         return (async () => {
@@ -310,17 +319,5 @@ export class HeroesCollection extends Collection<IHeroRecord> {
         })();
     }
 
-    public normalizeHeroName(name: string): string {
-        return name?.replace(/[ÀÁÂÃÄÅ]/g, "A")
-            .replace(/[àáâãäå]/g, "a")
-            .replace(/[ÈÉÊËĒĔĖĘĚ]/g, "E")
-            .replace(/[èéêëēĕėęě]/g, "e")
-            .replace(/[ÌÍÎÏĨĬĮİ]/g, "I")
-            .replace(/[ìíîïĩīĭį]/g, "i")
-            .replace(/[ÒÓÔÕÖŌŎŐ]/g, "O")
-            .replace(/[òóôõöōŏő]/g, "o")
-            .replace(/[ÙÚÛÜŨŪŬŮŰ]/g, "U")
-            .replace(/[ùúûüũūŭůű]/g, "u")
-            .replace(/[^a-z0-9]/gi, '');
-    }
+    
 }

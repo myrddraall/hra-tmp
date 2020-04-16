@@ -86,7 +86,7 @@ export class AbilityDefinitionModel extends AbilityTalentDefinitionModelBase<IAb
 
       //  .where(_ => _.abilityTalentLinkIds ? _.abilityTalentLinkIds[0] === data.nameId : false);
 
-        console.log('required', data.nameId, this._parentAbilityId, data, abilityTalentQ.toArray());
+    //    console.log('required', data.nameId, this._parentAbilityId, data, abilityTalentQ.toArray());
 
       /*  const relatedTalents = linq.from(talentList)
             .where(_ => (_.abilityTalentLinkIds ? _.abilityTalentLinkIds.indexOf(this.id) !== -1 : false) || (_.abilityTalentLinkIds ? _.abilityTalentLinkIds.indexOf(this._parentAbilityId) !== -1 : false) || _.buttonId === this.id || _.buttonId === this.tooltipId || _.nameId === this.id || _.buttonId === subOfNameId || _.nameId === subOfNameId)

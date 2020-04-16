@@ -1,12 +1,13 @@
 import { HeroDefinitionModel } from './HeroDefinitionModel';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
-import { IHeroRecord } from 'hots-gamedata/lib';
+
 import { IGameStrings } from '../../../apis/HeroesToolChest/heroes-data/dtos/IGameStrings';
 import linq from 'linq';
 import { TalentTeir } from './TalentTeir';
 import { TalentDefinitionModel } from './TalentDefinitionModel';
 import { AbilityDefinitionModel } from './AbilityDefinitionModel';
 import { AbilityType } from '../../../apis/HeroesToolChest/heroes-data/dtos';
+import { IHeroRecord } from '../IHeroRecord';
 
 export class HeroModel2 extends HeroDefinitionModel {
     private _levelSubject: BehaviorSubject<number> = new BehaviorSubject(1);
@@ -319,7 +320,6 @@ export class HeroModel2 extends HeroDefinitionModel {
                         if (idx === -1) {
                             k = '-1';
                             const pAbil = this.getAbility(v.parentAbilityId);
-                            console.log('check parent of sub', pAbil);
                             if (pAbil.abilityType !== 'activable') {
                                 buttonIds.push(pAbil.id);
                                 k = buttonIds.length.toString();
@@ -388,7 +388,6 @@ export class HeroModel2 extends HeroDefinitionModel {
         const q = linq.from(this.activeAbilities.get('trait') as AbilityDefinitionModel[])
             .orderByDescending(_ => _.requiresTalent)
             .orderByDescending(_ => _.isActive)
-        console.log(q.toArray());
         return q.firstOrDefault()
     }
     public get activeAbilityActivatable() {

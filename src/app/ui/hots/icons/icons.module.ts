@@ -6,6 +6,7 @@ import { IconSquareComponent } from './icon-square/icon-square.component';
 import { ImageModule } from '../../common/image/image.module';
 import { AbilityTypeIconComponent } from './ability-type-icon/ability-type-icon.component';
 import { IconChevronComponent } from './icon-chevron/icon-chevron.component';
+import { IconComponent } from './icon/icon.component';
 
 
 
@@ -15,14 +16,16 @@ import { IconChevronComponent } from './icon-chevron/icon-chevron.component';
     IconSquareComponent,
     IconVHexComponent,
     IconChevronComponent,
-    AbilityTypeIconComponent
+    AbilityTypeIconComponent,
+    IconComponent
   ],
   exports: [
     IconCircleComponent,
     IconSquareComponent,
     IconVHexComponent,
     IconChevronComponent,
-    AbilityTypeIconComponent
+    AbilityTypeIconComponent,
+    IconComponent
   ],
   imports: [
     CommonModule,

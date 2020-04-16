@@ -1,0 +1,292 @@
+@import "~@angular/material/theming";
+@function varPalette($paletteName) {
+    @return (
+        50: var(--theme-palette-#{$paletteName}-color-50),
+        100: var(--theme-palette-#{$paletteName}-color-100),
+        200: var(--theme-palette-#{$paletteName}-color-200),
+        300: var(--theme-palette-#{$paletteName}-color-300),
+        400: var(--theme-palette-#{$paletteName}-color-400),
+        500: var(--theme-palette-#{$paletteName}-color-500),
+        600: var(--theme-palette-#{$paletteName}-color-600),
+        700: var(--theme-palette-#{$paletteName}-color-700),
+        800: var(--theme-palette-#{$paletteName}-color-800),
+        900: var(--theme-palette-#{$paletteName}-color-900),
+        A100: var(--theme-palette-#{$paletteName}-color-A100),
+        A200: var(--theme-palette-#{$paletteName}-color-A200),
+        A400: var(--theme-palette-#{$paletteName}-color-A400),
+        A700: var(--theme-palette-#{$paletteName}-color-A700),
+        contrast: (
+            50: var(--theme-palette-#{$paletteName}-contrast-50),
+            100: var(--theme-palette-#{$paletteName}-contrast-100),
+            200: var(--theme-palette-#{$paletteName}-contrast-200),
+            300: var(--theme-palette-#{$paletteName}-contrast-300),
+            400: var(--theme-palette-#{$paletteName}-contrast-400),
+            500: var(--theme-palette-#{$paletteName}-contrast-500),
+            600: var(--theme-palette-#{$paletteName}-contrast-600),
+            700: var(--theme-palette-#{$paletteName}-contrast-700),
+            800: var(--theme-palette-#{$paletteName}-contrast-800),
+            900: var(--theme-palette-#{$paletteName}-contrast-900),
+            A100: var(--theme-palette-#{$paletteName}-contrast-A100),
+            A200: var(--theme-palette-#{$paletteName}-contrast-A200),
+            A400: var(--theme-palette-#{$paletteName}-contrast-A400),
+            A700: var(--theme-palette-#{$paletteName}-contrast-A700),
+        )
+    );
+}
+
+@function colorComponents($color) {
+    @return red($color), green($color), blue($color);
+}
+
+@mixin includePalette($paletteName, $mdPalette, $default: 500, $lighter: 100, $darker: 700) {
+    html {
+        /* theme palet #{$paletteName} */
+        --theme-palette-#{$paletteName}-color-50: #{map-get($mdPalette, 50)};
+        --theme-palette-#{$paletteName}-color-100: #{map-get($mdPalette, 100)};
+        --theme-palette-#{$paletteName}-color-200: #{map-get($mdPalette, 200)};
+        --theme-palette-#{$paletteName}-color-300: #{map-get($mdPalette, 300)};
+        --theme-palette-#{$paletteName}-color-400: #{map-get($mdPalette, 400)};
+        --theme-palette-#{$paletteName}-color-500: #{map-get($mdPalette, 500)};
+        --theme-palette-#{$paletteName}-color-600: #{map-get($mdPalette, 600)};
+        --theme-palette-#{$paletteName}-color-700: #{map-get($mdPalette, 700)};
+        --theme-palette-#{$paletteName}-color-800: #{map-get($mdPalette, 800)};
+        --theme-palette-#{$paletteName}-color-900: #{map-get($mdPalette, 900)};
+        --theme-palette-#{$paletteName}-color-A100: #{map-get($mdPalette, A100)};
+        --theme-palette-#{$paletteName}-color-A200: #{map-get($mdPalette, A200)};
+        --theme-palette-#{$paletteName}-color-A400: #{map-get($mdPalette, A400)};
+        --theme-palette-#{$paletteName}-color-A700: #{map-get($mdPalette, A700)};
+
+        --theme-palette-#{$paletteName}-color: #{map-get($mdPalette, $default)};
+        --theme-palette-#{$paletteName}-color-lighter: #{map-get($mdPalette, $lighter)};
+        --theme-palette-#{$paletteName}-color-darker: #{map-get($mdPalette, $darker)};
+
+        --theme-palette-#{$paletteName}-contrast-50: #{map-get(map-get($mdPalette, contrast), 50)};
+        --theme-palette-#{$paletteName}-contrast-100: #{map-get(map-get($mdPalette, contrast), 100)};
+        --theme-palette-#{$paletteName}-contrast-200: #{map-get(map-get($mdPalette, contrast), 200)};
+        --theme-palette-#{$paletteName}-contrast-300: #{map-get(map-get($mdPalette, contrast), 300)};
+        --theme-palette-#{$paletteName}-contrast-400: #{map-get(map-get($mdPalette, contrast), 400)};
+        --theme-palette-#{$paletteName}-contrast-500: #{map-get(map-get($mdPalette, contrast), 500)};
+        --theme-palette-#{$paletteName}-contrast-600: #{map-get(map-get($mdPalette, contrast), 600)};
+        --theme-palette-#{$paletteName}-contrast-700: #{map-get(map-get($mdPalette, contrast), 700)};
+        --theme-palette-#{$paletteName}-contrast-800: #{map-get(map-get($mdPalette, contrast), 800)};
+        --theme-palette-#{$paletteName}-contrast-900: #{map-get(map-get($mdPalette, contrast), 900)};
+        --theme-palette-#{$paletteName}-contrast-A100: #{map-get(map-get($mdPalette, contrast), A100)};
+        --theme-palette-#{$paletteName}-contrast-A200: #{map-get(map-get($mdPalette, contrast), A200)};
+        --theme-palette-#{$paletteName}-contrast-A400: #{map-get(map-get($mdPalette, contrast), A400)};
+        --theme-palette-#{$paletteName}-contrast-A700: #{map-get(map-get($mdPalette, contrast), A700)};
+
+        --theme-palette-#{$paletteName}-contrast: #{map-get(map-get($mdPalette, contrast), $default)};
+        --theme-palette-#{$paletteName}-contrast-lighter: #{map-get(map-get($mdPalette, contrast), $lighter)};
+        --theme-palette-#{$paletteName}-contrast-darker: #{map-get(map-get($mdPalette, contrast), $darker)};
+
+        --theme-palette-#{$paletteName}-color-50-rgb: #{colorComponents(map-get($mdPalette, 50))};
+        --theme-palette-#{$paletteName}-color-100-rgb: #{colorComponents(map-get($mdPalette, 100))};
+        --theme-palette-#{$paletteName}-color-200-rgb: #{colorComponents(map-get($mdPalette, 200))};
+        --theme-palette-#{$paletteName}-color-300-rgb: #{colorComponents(map-get($mdPalette, 300))};
+        --theme-palette-#{$paletteName}-color-400-rgb: #{colorComponents(map-get($mdPalette, 400))};
+        --theme-palette-#{$paletteName}-color-500-rgb: #{colorComponents(map-get($mdPalette, 500))};
+        --theme-palette-#{$paletteName}-color-600-rgb: #{colorComponents(map-get($mdPalette, 600))};
+        --theme-palette-#{$paletteName}-color-700-rgb: #{colorComponents(map-get($mdPalette, 700))};
+        --theme-palette-#{$paletteName}-color-800-rgb: #{colorComponents(map-get($mdPalette, 800))};
+        --theme-palette-#{$paletteName}-color-900-rgb: #{colorComponents(map-get($mdPalette, 900))};
+        --theme-palette-#{$paletteName}-color-A100-rgb: #{colorComponents(map-get($mdPalette, A100))};
+        --theme-palette-#{$paletteName}-color-A200-rgb: #{colorComponents(map-get($mdPalette, A200))};
+        --theme-palette-#{$paletteName}-color-A400-rgb: #{colorComponents(map-get($mdPalette, A400))};
+        --theme-palette-#{$paletteName}-color-A700-rgb: #{colorComponents(map-get($mdPalette, A700))};
+
+        --theme-palette-#{$paletteName}-color-rgb: #{colorComponents(map-get($mdPalette, $default))};
+        --theme-palette-#{$paletteName}-color-lighter-rgb: #{colorComponents(map-get($mdPalette, $lighter))};
+        --theme-palette-#{$paletteName}-color-darker-rgb: #{colorComponents(map-get($mdPalette, $darker))};
+
+        --theme-palette-#{$paletteName}-contrast-50-rgb: #{colorComponents(map-get(map-get($mdPalette, contrast), 50))};
+        --theme-palette-#{$paletteName}-contrast-100-rgb: #{colorComponents(map-get(map-get($mdPalette, contrast), 100))};
+        --theme-palette-#{$paletteName}-contrast-200-rgb: #{colorComponents(map-get(map-get($mdPalette, contrast), 200))};
+        --theme-palette-#{$paletteName}-contrast-300-rgb: #{colorComponents(map-get(map-get($mdPalette, contrast), 300))};
+        --theme-palette-#{$paletteName}-contrast-400-rgb: #{colorComponents(map-get(map-get($mdPalette, contrast), 400))};
+        --theme-palette-#{$paletteName}-contrast-500-rgb: #{colorComponents(map-get(map-get($mdPalette, contrast), 500))};
+        --theme-palette-#{$paletteName}-contrast-600-rgb: #{colorComponents(map-get(map-get($mdPalette, contrast), 600))};
+        --theme-palette-#{$paletteName}-contrast-700-rgb: #{colorComponents(map-get(map-get($mdPalette, contrast), 700))};
+        --theme-palette-#{$paletteName}-contrast-800-rgb: #{colorComponents(map-get(map-get($mdPalette, contrast), 800))};
+        --theme-palette-#{$paletteName}-contrast-900-rgb: #{colorComponents(map-get(map-get($mdPalette, contrast), 900))};
+        --theme-palette-#{$paletteName}-contrast-A100-rgb: #{colorComponents(
+                map-get(map-get($mdPalette, contrast), A100)
+            )};
+        --theme-palette-#{$paletteName}-contrast-A200-rgb: #{colorComponents(
+                map-get(map-get($mdPalette, contrast), A200)
+            )};
+        --theme-palette-#{$paletteName}-contrast-A400-rgb: #{colorComponents(
+                map-get(map-get($mdPalette, contrast), A400)
+            )};
+        --theme-palette-#{$paletteName}-contrast-A700-rgb: #{colorComponents(
+                map-get(map-get($mdPalette, contrast), A700)
+            )};
+
+        --theme-palette-#{$paletteName}-contrast-rgb: #{colorComponents(
+                map-get(map-get($mdPalette, contrast), $default)
+            )};
+        --theme-palette-#{$paletteName}-contrast-lighter-rgb: #{colorComponents(
+                map-get(map-get($mdPalette, contrast), $lighter)
+            )};
+        --theme-palette-#{$paletteName}-contrast-darker-rgb: #{colorComponents(
+                map-get(map-get($mdPalette, contrast), $darker)
+            )};
+    }
+}
+
+$md-primary: (
+    50: #ffe0ff,
+    100: #ffb3ff,
+    200: #ff80ff,
+    300: #ff4dff,
+    400: #ff26ff,
+    500: #ff00ff,
+    600: #ff00ff,
+    700: #ff00ff,
+    800: #ff00ff,
+    900: #ff00ff,
+    A100: #ffffff,
+    A200: #fff2ff,
+    A400: #ffbfff,
+    A700: #ffa6ff,
+    contrast: (
+        50: #000000,
+        100: #000000,
+        200: #000000,
+        300: #000000,
+        400: #ffffff,
+        500: #ffffff,
+        600: #ffffff,
+        700: #ffffff,
+        800: #ffffff,
+        900: #ffffff,
+        A100: #000000,
+        A200: #000000,
+        A400: #000000,
+        A700: #000000,
+    ),
+);
+
+$md-accent: (
+    50: #e0f7ff,
+    100: #b3ecff,
+    200: #80dfff,
+    300: #4dd2ff,
+    400: #26c9ff,
+    500: #00bfff,
+    600: #00b9ff,
+    700: #00b1ff,
+    800: #00a9ff,
+    900: #009bff,
+    A100: #ffffff,
+    A200: #f2f9ff,
+    A400: #bfe3ff,
+    A700: #a6d8ff,
+    contrast: (
+        50: #000000,
+        100: #000000,
+        200: #000000,
+        300: #000000,
+        400: #000000,
+        500: #000000,
+        600: #000000,
+        700: #000000,
+        800: #000000,
+        900: #ffffff,
+        A100: #000000,
+        A200: #000000,
+        A400: #000000,
+        A700: #000000,
+    ),
+);
+
+$md-warn: (
+    50: #fff0e0,
+    100: #ffdab3,
+    200: #ffc180,
+    300: #ffa84d,
+    400: #ff9526,
+    500: #ff8200,
+    600: #ff7a00,
+    700: #ff6f00,
+    800: #ff6500,
+    900: #ff5200,
+    A100: #ffffff,
+    A200: #fff6f2,
+    A400: #ffd0bf,
+    A700: #ffbda6,
+    contrast: (
+        50: #000000,
+        100: #000000,
+        200: #000000,
+        300: #000000,
+        400: #000000,
+        500: #000000,
+        600: #000000,
+        700: #000000,
+        800: #000000,
+        900: #ffffff,
+        A100: #000000,
+        A200: #000000,
+        A400: #000000,
+        A700: #000000,
+    ),
+);
+
+$light-text: #ffffff;
+$light-primary-text: $light-text;
+$light-accent-text: rgba($light-primary-text, 0.7);
+$light-disabled-text: rgba($light-primary-text, 0.5);
+$light-dividers: rgba($light-primary-text, 0.12);
+$light-focused: rgba($light-primary-text, 0.12);
+
+$mat-dark-theme-foreground: (
+    base: $light-text,
+    divider: $light-dividers,
+    dividers: $light-dividers,
+    disabled: $light-disabled-text,
+    disabled-button: rgba($light-text, 0.3),
+    disabled-text: $light-disabled-text,
+    elevation: black,
+    hint-text: $light-disabled-text,
+    secondary-text: $light-accent-text,
+    accent-text: $light-accent-text,
+    icon: $light-text,
+    icons: $light-text,
+    text: $light-text,
+    slider-min: $light-text,
+    slider-off: rgba($light-text, 0.3),
+    slider-off-active: rgba($light-text, 0.3),
+);
+
+// Dark bg
+$dark-background: rgb(8, 0, 15);
+$dark-bg-lighter-5: lighten($dark-background, 5%);
+$dark-bg-lighter-10: lighten($dark-background, 10%);
+$dark-bg-lighter-20: lighten($dark-background, 20%);
+$dark-bg-lighter-30: lighten($dark-background, 30%);
+$light-bg-alpha-4: rgba(#fafafa, 0.04);
+$light-bg-alpha-12: rgba(#fafafa, 0.12);
+
+// Background palette for dark themes.
+$mat-dark-theme-background: (
+    background: $dark-background,
+    status-bar: $dark-bg-lighter-20,
+    app-bar: $dark-bg-lighter-5,
+    hover: $light-bg-alpha-4,
+    card: rgba($dark-bg-lighter-5, 0.4),
+    dialog: $dark-bg-lighter-5,
+    disabled-button: $light-bg-alpha-12,
+    raised-button: $dark-bg-lighter-5,
+    focused-button: $light-focused,
+    selected-button: $dark-bg-lighter-20,
+    selected-disabled-button: $dark-bg-lighter-30,
+    disabled-button-toggle: $dark-bg-lighter-10,
+    unselected-chip: $dark-bg-lighter-20,
+    disabled-list-option: $dark-bg-lighter-10,
+);
+
+$hots-primary: mat-palette(varPalette(primary));
+$hots-accent: mat-palette(varPalette(accent));
+$hots-warn: mat-palette(varPalette(warn));
+
+$theme: mat-dark-theme($hots-primary, $hots-accent, $hots-warn);

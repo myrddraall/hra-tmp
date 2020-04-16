@@ -1,0 +1,13 @@
+<div class="cell">
+    <hra-icon [iconUrl]="heroIcon"></hra-icon>
+    <div class="content">
+        <ng-content></ng-content>
+    </div>
+    <div class="flags">
+        <img *ngIf="player?.hasVoiceSilencePenalty"  src="assets/ui/icons/scorescreen/storm_ui_silencepenalty_voice_chat.png" />
+        <img  *ngIf="player?.hasSilencePenalty" src="assets/ui/icons/scorescreen/storm_ui_silencepenalty_chat.png"/>
+        <img *ngIf="player?.isBlizzardStaff" class="blizz" src="assets/ui/icons/storm_ui_icon_blizz.png"/>
+    </div>
+    <div class="boost" *ngIf="player?.hasActiveBoost"></div>
+    <img *ngIf="player?.hasActiveBoost" class="boost" src="assets/ui/icons/storm_ui_boost_icon_small.png"/>
+</div>

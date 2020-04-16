@@ -1,0 +1,55 @@
+$size: 3.2em;
+// base layout
+:host {
+    font-size: var(--base-size);
+    position: relative;
+    display: inline-block;
+    width: $size;
+    height: $size;
+    background-image: url(~/assets/ui/icons/scorescreen/scorescreen-category-sheet.png);
+    background-size: $size * 3;
+    background-position-x: 0em;
+    background-position-y: 0em;
+    &.active {
+        background-position-x: right;
+    }
+    &:hover {
+        background-position-x: center;
+    }
+
+    &[icon="assist"] {
+        background-position-y: $size * -0;
+    }
+
+    &[icon="damagetaken"] {
+        background-position-y: $size * -1;
+    }
+    &[icon="death"] {
+        background-position-y: $size * -2;
+    }
+    &[icon="healedandabsorbed"] {
+        background-position-y: $size * -3;
+    }
+    &[icon="herodamage"] {
+        background-position-y: $size * -4;
+    }
+    &[icon="kill"] {
+        background-position-y: $size * -5;
+    }
+    &[icon="leaderboard"] {
+        background-position-y: $size * -6;
+    }
+    &[icon="miniondamage"] {
+        background-position-y: $size * -7;
+    }
+    &[icon="selfhealingshielding"] {
+        background-position-y: $size * -8;
+    }
+    &[icon="siegedamage"] {
+        background-position-y: $size * -9;
+    }
+    &[icon="xpcontribution"] {
+        background-position-y: $size * -10;
+    }
+
+}

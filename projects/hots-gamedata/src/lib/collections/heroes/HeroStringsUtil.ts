@@ -57,8 +57,13 @@ export class HeroStringsUtil {
     }
 
     public static normalizeStringNoSpace(name: string, spaceReplacement: string = ''): string {
-        return this.normalizeString(name)
+        return HeroStringsUtil.normalizeString(name)
             .replace(/[^a-z0-9 \-]/gi, '')
             .replace(/[^a-z0-9]/gi, spaceReplacement);
+    }
+
+    public static normalizeHeroName(name: string): string {
+        return HeroStringsUtil.normalizeString(name)
+            .replace(/[^a-z0-9]/gi, '');
     }
 }

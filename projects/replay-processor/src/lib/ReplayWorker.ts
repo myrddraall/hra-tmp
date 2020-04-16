@@ -1,12 +1,16 @@
 
-import { Proxy, RunOnWorker, WebWorker, WorkerOnly } from 'angular-worker-proxy';
+import { Proxy, RunOnWorker, WebWorker, WorkerOnly, MainOnly } from 'angular-worker-proxy';
 import { Buffer } from 'buffer';
 import { Observable, Subject } from 'rxjs';
 import { IReplayDataProvider } from './IReplayDataProvider';
-import { MatchInfo } from './MatchInfo';
-import { IMatch } from "./types/IMatch";
+import { MatchInfo } from './match/MatchInfo';
+import { IMatch } from "./match/IMatch";
 import { IProgressEvent } from './ProgressEvent';
 import { ReplayData } from './ReplayData';
+import { Match } from './match/Match';
+import { GameStats } from './gamestats/GameStats';
+import { get, set, keys, del } from 'idb-keyval';
+import linq from 'linq';
 
 export interface Defer<T> extends Promise<T> {
     resolve: (value?: T | PromiseLike<T>) => void;
@@ -37,10 +41,15 @@ export class ReplayWorker implements IReplayDataProvider {
     private _init = false;
 
     @Proxy()
-    public matchInfo2: MatchInfo = new MatchInfo(this);
+    public matchInfo: MatchInfo = new MatchInfo(this);
+
+    @Proxy()
+    public gameStats: GameStats = new GameStats(this, this.matchInfo);
 
 
-    constructor(private file?: File) { }
+    constructor(private fileOrId?: File | string) {
+
+    }
 
     @RunOnWorker()
     public get progress(): Observable<IProgressEvent> {
@@ -52,14 +61,65 @@ export class ReplayWorker implements IReplayDataProvider {
         console.log('init');
         if (!this._init) {
             this._init = true;
-            const replayData = new ReplayData(this.file);
+            const replayData = new ReplayData(typeof this.fileOrId === 'string' ? await this.getStoredReplayFile(this.fileOrId) : this.fileOrId);
             replayData.progress.subscribe(_ => {
                 this._progress.next(_);
             })
             await replayData.load();
             this._replayData.resolve(replayData);
+            const info = await this.matchInfo.matchInfo;
+            await this.initStore(info.id, replayData);
+
         }
-        return await this.matchInfo2.matchInfo;
+        return await this.matchInfo.matchInfo;
+    }
+
+    private async initStore(id: string, replay: ReplayData) {
+        let finfo: any = await get(`__hots_replays__.${id}`);
+        if (!finfo) {
+            finfo = {
+                id,
+                created: new Date()
+            }
+            set(`__hots_replays__.${id}.file`, replay.data);
+        }
+        finfo.lastAccess = new Date();
+        set(`__hots_replays__.${id}`, finfo);
+        await this.trimStoredFiles();
+    }
+
+    private async deleteStore(id: string) {
+        await del(`__hots_replays__.${id}`);
+        await del(`__hots_replays__.${id}.file`);
+    }
+
+    private async trimStoredFiles() {
+        const files:any[] = await this.getStoredFileInfos();
+        while(files?.length > 25){
+            await this.deleteStore(files.shift().id);
+        } 
+    }
+
+    private async getStoredFileInfos() {
+        return  linq.from(await Promise.all(linq.from(await keys())
+            .select(_ => _.toString())
+            .where(_ => _.startsWith('__hots_replays__.') && !_.endsWith('.file'))
+            .select( id => get(id)).toArray()))
+            .orderBy((_:any) => _.lastAccess)
+            .toArray();
+    }
+
+    public static hasReplayStored(id: string): Promise<boolean> {
+        return get(`__hots_replays__.${id}`);
+    }
+
+    protected getStoredReplayFile(id: string): Promise<ArrayBuffer> {
+        return get(`__hots_replays__.${id}.file`);
+    }
+
+    @MainOnly()
+    public async initializeMain() {
+        return await new Match(await this.initialize()).initialize();
     }
 
     @WorkerOnly()

@@ -4,6 +4,7 @@ import { GameVersion } from 'heroesprotocol-data';
 import { IHeroDataSet } from './dtos';
 import { Cache } from 'angular-worker-proxy'
 import { IGameStringsFile } from './dtos/IGameStrings';
+import { IMatchAwardsDTO } from './dtos/IMatchAwardData';
 // @dynamic
 export class HeroesDataApi {
 
@@ -132,6 +133,10 @@ export class HeroesDataApi {
 
     public getHeroes(): Promise<IHeroDataSet> {
         return this.readData('herodata');
+    }
+
+    public getMatchAwards(): Promise<IMatchAwardsDTO> {
+        return this.readData('matchawarddata');
     }
 
     @Cache()

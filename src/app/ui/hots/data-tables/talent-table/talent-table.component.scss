@@ -1,0 +1,16 @@
+:host{
+    display: block;
+    font-size: var(--base-size);
+    padding: 2.4em;
+    hra-talent-square-button{
+        font-size: 0.4em;
+        margin-right: 0.8em;
+    }
+
+    .cdk-column-Tools{
+        width: 16em;
+    }
+    .cdk-column-Talents{
+        width: 25em;
+    }
+}

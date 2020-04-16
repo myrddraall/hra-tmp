@@ -1,5 +1,5 @@
 import { MPQArchive } from '@heroesbrowser/mpq';
-import { FilteredEvents, IHeroProtocol, IReplayDetails, IReplayGameEvent, IReplayHeader, IReplayInitData, IReplayMessageEvent, IReplayTrackerEvent } from 'heroesprotocol-data';
+import { FilteredEvents, IHeroProtocol, IReplayDetails, IReplayGameEvent, IReplayHeader, IReplayInitData, IReplayMessageEvent, IReplayTrackerEvent, GameVersion } from 'heroesprotocol-data';
 import { HeroProtocolLoader } from 'heroesprotocol-loader';
 import { Observable, Subject } from 'rxjs';
 import { IProgressEvent } from './ProgressEvent';
@@ -52,7 +52,25 @@ export class ReplayData {
     private _gameEvents: IReplayGameEvent[];
     private _messageEvents: IReplayMessageEvent[];
     private _trackerEvents: IReplayTrackerEvent[];
-    constructor(private file: File) {
+    private file: File;
+    private _version: GameVersion;
+
+    constructor(fileOrData: File | ArrayBuffer) {
+        if (fileOrData instanceof ArrayBuffer) {
+            this._data = fileOrData;
+            this.file = {
+                name: ''
+            } as File;
+        } else {
+            this.file = fileOrData;
+        }
+    }
+
+    public get version(): GameVersion {
+        return this._version;
+    }
+    public get data(): ArrayBuffer {
+        return this._data;
     }
     public get progress(): Observable<IProgressEvent> {
         return this._progress;
@@ -136,7 +154,8 @@ export class ReplayData {
                 progress.currentStep.total = _.total;
                 this._progress.next(progress);
             });
-            await this.parseHeader();
+            const header = await this.parseHeader();
+            this._version = new GameVersion(header.m_version);
             progress.currentStep.loaded = progress.currentStep.total;
             progress.overall.loaded++;
             this._progress.next(progress);
@@ -247,6 +266,9 @@ export class ReplayData {
     }
 
     private loadFromFile(): Promise<ArrayBuffer> {
+        if (this._data) {
+            return Promise.resolve(this._data);
+        }
         return new Promise((res, rej) => {
             const progress: IProgressEvent = {
                 currentStep: {

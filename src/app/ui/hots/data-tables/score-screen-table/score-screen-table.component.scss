@@ -1,0 +1,62 @@
+:host {
+    display: block;
+    font-size: var(--base-size);
+    padding: 2.4em;
+
+    hra-match-award-icon {
+        font-size: 0.5em;
+    }
+    hra-fancy-cell{
+        font-size: 0.72em;
+    }
+    hra-fancy-hero-cell{
+        font-size: 0.72em;
+    }
+
+    .cdk-column-Hero {
+        width: 100%;
+    }
+
+    .cdk-column-Kills,
+    .cdk-column-Assists,
+    .cdk-column-Deaths {
+        min-width: 4em;
+    }
+
+    .cdk-column-SiegeDamage,
+    .cdk-column-HeroDamage,
+    .cdk-column-Healing,
+    .cdk-column-SelfHealing,
+    .cdk-column-DamageTaken,
+    .cdk-column-XPContribution {
+        min-width: 7em;
+    }
+    .cdk-column-Awards {
+        width: 3.9em;
+        max-width: 3.9em;
+        min-width: 3.9em;
+    }
+
+    .cdk-column-MVPScoreBlizz{
+        min-width: 7em;
+        max-width: 7em;
+        hra-match-award-icon{
+            flex-grow: 0;
+            flex-shrink: 0;
+        }
+
+        .value{
+            flex-grow: 1;
+            flex-shrink: 0;
+         //   width:100%;
+        }
+    }
+
+    table{
+        &[sort-by="SoloKill"]{
+            td.cdk-column-Kills {
+                
+            }
+        }
+    }
+}

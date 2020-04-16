@@ -37,9 +37,6 @@
       "replay-processor": [
         "dist/replay-processor"
       ],
-      "replay-processor/*": [
-        "dist/replay-processor/*"
-      ],
       "angular-worker-proxy": [
         "dist/angular-worker-proxy"
       ],

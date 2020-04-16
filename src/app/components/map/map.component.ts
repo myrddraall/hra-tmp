@@ -1,5 +1,5 @@
-import { Component, OnInit, ViewChild, AfterViewInit, ElementRef, Input, OnChanges, SimpleChanges, AfterContentInit } from '@angular/core';
-import { Map, CRS, imageOverlay, FitBoundsOptions, LatLngBounds, svgOverlay, featureGroup, LatLng, marker, Layer } from 'leaflet';
+import { AfterContentInit, AfterViewInit, Component, ElementRef, Input, OnChanges, SimpleChanges, ViewChild } from '@angular/core';
+import { CRS, imageOverlay, LatLngBounds, Layer, Map, marker } from 'leaflet';
 import ResizeObserver from 'resize-observer-polyfill';
 
 export interface IMap {
@@ -40,13 +40,12 @@ export class MapComponent implements AfterViewInit, AfterContentInit, OnChanges 
 
 
   public onResize(rect: DOMRectReadOnly) {
-    console.log(rect);
     
     if (this.mapContainer) {
 
       const m = this.mapDef;
 
-      console.log(this.mapContainer.nativeElement.getClientRects());
+
      /* const xFactor = rect.width / m.width;
       const yFactor = rect.height / m.height;
       const factor = Math.min(xFactor, yFactor);
@@ -56,23 +55,24 @@ export class MapComponent implements AfterViewInit, AfterContentInit, OnChanges 
 
       if(this.mapComponent){
         this.mapComponent.setMinZoom(0).invalidateSize();
-        var wantedZoom = this.mapComponent.getBoundsZoom(new LatLngBounds([0, 0], [m.height, m.width]), false);
-        this.mapComponent.setMinZoom(wantedZoom);
-
+        setTimeout(()=>{
+          var wantedZoom = this.mapComponent.getBoundsZoom(new LatLngBounds([0, 0], [m.height, m.width]), false);
+          this.mapComponent.setMinZoom(wantedZoom);
+        });
       }
     }
   }
 
   ngAfterViewInit(): void {
-    console.log('ngAfterViewInit')
+    
     this.createMap();
   }
 
   ngAfterContentInit() {
-    console.log('ngAfterContentInit')
+  
   }
   ngOnChanges(changes: SimpleChanges): void {
-    console.log('ngOnChanges')
+
   }
 
   private createMap() {

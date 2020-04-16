@@ -33,11 +33,21 @@ export class TalentBuildLinkCopyButtonComponent implements OnInit {
   }
 
   public copyLink(input: HTMLInputElement) {
+    const baseHref = document.querySelector('head > base').getAttribute('href');
     this.copy(input,
       location.protocol + '//' + location.host + 
-      this.router.createUrlTree(['talent-calculator', this.hero.id, this.hero.talentBuildUrl]).toString()
+      this.router.createUrlTree([baseHref, 'talent-calculator', this.hero.id, this.hero.talentBuildUrl]).toString()
     );
   }
+
+  public navigateTo() {
+    /*this.copy(input,
+      location.protocol + '//' + location.host + 
+      this.router.createUrlTree(['talent-calculator', this.hero.id, this.hero.talentBuildUrl]).toString()
+    );*/
+    this.router.navigate(['/talent-calculator', this.hero.id, this.hero.talentBuildUrl]);
+  }
+
 
   public copyInGame(input: HTMLInputElement) {
     this.copy(input, this.hero.talentBuildIngameLink);

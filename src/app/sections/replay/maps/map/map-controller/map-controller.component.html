@@ -1,0 +1,11 @@
+<hra-map *ngIf="mapDefinition" [map]="mapDefinition"></hra-map>
+<div class="content-container">
+    <ng-content></ng-content>
+</div>
+
+<ng-template [nguiAttachment]="'app.left'" ]>
+    <mat-nav-list>
+        <mat-list-item [routerLink]="['./']">Score Screen</mat-list-item>
+        <mat-list-item [routerLink]="['./', 'talents']">Talents</mat-list-item>
+    </mat-nav-list>
+</ng-template>

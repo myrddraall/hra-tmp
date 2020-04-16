@@ -10,5 +10,20 @@
         height:100vh;
         background-color: rgba(0,0,0, 0.9);
         z-index: 10000;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        img{
+            animation: rotation 5s infinite linear;
+        }
     }
 }
+
+@keyframes rotation {
+    from {
+      transform: rotate(0deg);
+    }
+    to {
+      transform: rotate(359deg);
+    }
+  }

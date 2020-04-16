@@ -1,4 +1,4 @@
 <hra-square-button-border [attr.disabled]="!!model ? undefined : ''">
     <hra-icon-square [iconUrl]="iconUrl"></hra-icon-square>
 </hra-square-button-border>
-<hra-talent-tooltip *hraTooltip="tooltip" [talent]="model" [hero]="hero" position="below"></hra-talent-tooltip>
+<hra-talent-tooltip *hraTooltip="tooltip && !!model" [talent]="model" [hero]="hero" position="below"></hra-talent-tooltip>

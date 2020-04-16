@@ -43,7 +43,7 @@ export class MatchinfoBarComponent implements OnChanges {
 
   private async update() {
     this.replay = await this.replayService.getReplay(this.replayId);
-    this.match = await this.replay?.matchInfo2.matchInfo;
+    this.match = await this.replay?.matchInfo.matchInfo;
     this.changeRef.markForCheck();
   }
 

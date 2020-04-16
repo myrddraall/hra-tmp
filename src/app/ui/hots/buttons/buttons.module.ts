@@ -6,6 +6,7 @@ import { CircleButtonBorderComponent } from './borders/circle-button-border/circ
 import { BaseButtonBorderComponent } from './borders/base-button-border/base-button-border.component';
 import { TooltipsModule } from '../../common/tooltip/tooltip.module';
 import { ChevronButtonBorderComponent } from './borders/cheveron-button-border/cheveron-button-border.component';
+import { ScoreCategoryButtonComponent } from './score-category-button/score-category-button.component';
 
 
 
@@ -15,7 +16,8 @@ import { ChevronButtonBorderComponent } from './borders/cheveron-button-border/c
     HexButtonBorderComponent,
     CircleButtonBorderComponent,
     BaseButtonBorderComponent,
-    ChevronButtonBorderComponent
+    ChevronButtonBorderComponent,
+    ScoreCategoryButtonComponent
   ],
   exports: [
     SquareButtonBorderComponent,
@@ -23,7 +25,8 @@ import { ChevronButtonBorderComponent } from './borders/cheveron-button-border/c
     CircleButtonBorderComponent,
     BaseButtonBorderComponent,
     TooltipsModule,
-    ChevronButtonBorderComponent
+    ChevronButtonBorderComponent,
+    ScoreCategoryButtonComponent
   ],
   imports: [
     CommonModule,

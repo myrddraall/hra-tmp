@@ -1,0 +1,159 @@
+<table #table mat-table [dataSource]="data">
+
+    <ng-container matColumnDef="Hero">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+            <hra-fancy-hero-cell [hero]="row.player.hero" [player]="row.player">
+                <div>{{row.player.hero.name}}</div>
+                <div>{{row.player.name}}</div>
+            </hra-fancy-hero-cell>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="Talents">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+            <hra-fancy-cell>
+                <hra-talent-square-button tooltip="true" *ngFor="let talent of row.player.hero.selectedTalents"
+                    [hero]="row.player.hero" [model]="talent"></hra-talent-square-button>
+            </hra-fancy-cell>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="Tools">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let row">
+            <hra-fancy-cell>
+                <hra-talent-build-link-copy-button [hero]="row.player.hero" label="Build" showNavigate="true"></hra-talent-build-link-copy-button>
+            </hra-fancy-cell>
+        </td>
+    </ng-container>
+    <!--
+
+    <ng-container matColumnDef="Awards">
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let score">
+            <hra-fancy-cell>
+                <hra-match-award-icon [award]="score.award"></hra-match-award-icon>
+            </hra-fancy-cell>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="MVPScore" >
+        <th mat-header-cell *matHeaderCellDef></th>
+        <td mat-cell *matCellDef="let score" align="start" [class.best]="isBest(score, 'mvpScore')" [class.team-best]="isTeamBest(score, 'mvpScore')">
+            <hra-fancy-cell>{{(score.mvpScore.Score) * 1 | number:'0.1-1' }}</hra-fancy-cell>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="MVPScoreBlizz">
+        <th mat-header-cell *matHeaderCellDef  align="end"><hra-fancy-header-cell>MVP Score</hra-fancy-header-cell></th>
+        <td mat-cell *matCellDef="let score" align="end"  [class.best]="isBest(score, 'mvpScore')" [class.team-best]="isTeamBest(score, 'mvpScore')">
+            <hra-fancy-cell>
+                <hra-match-award-icon [award]="score.award"></hra-match-award-icon>
+                <div class="value">{{(score.mvpScore.Total) * 1 | number:'0.2-2' }}</div>
+            </hra-fancy-cell>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="Kills">
+        <th mat-header-cell *matHeaderCellDef [class.sorted]="sortBy === 'SoloKill'">
+            <hra-fancy-header-cell>
+                <hra-score-category-button icon="kill" (click)="toggleSort('SoloKill')" [class.active]="sortBy === 'SoloKill'"></hra-score-category-button>
+            </hra-fancy-header-cell>
+        </th>
+        <td mat-cell *matCellDef="let score" [class.best]="isBest(score, 'SoloKill')" [class.team-best]="isTeamBest(score, 'SoloKill')" [class.sorted]="sortBy === 'SoloKill'">
+            <hra-fancy-cell>{{score.values.SoloKill}}</hra-fancy-cell>
+        </td>
+    </ng-container>
+    <ng-container matColumnDef="Assists">
+        <th mat-header-cell *matHeaderCellDef [class.sorted]="sortBy === 'Assists'">
+            <hra-fancy-header-cell>
+                <hra-score-category-button icon="assist" (click)="toggleSort('Assists')" [class.active]="sortBy === 'Assists'"></hra-score-category-button>
+            </hra-fancy-header-cell>
+        </th>
+        <td mat-cell *matCellDef="let score" [class.best]="isBest(score, 'Assists')" [class.team-best]="isTeamBest(score, 'Assists')" [class.sorted]="sortBy === 'Assists'">
+            <hra-fancy-cell>{{score.values.Assists}}</hra-fancy-cell>
+        </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="Deaths">
+        <th mat-header-cell *matHeaderCellDef [class.sorted]="sortBy === 'Deaths'">
+            <hra-fancy-header-cell>
+                <hra-score-category-button icon="death" (click)="toggleSort('Deaths')" [class.active]="sortBy === 'Deaths'"></hra-score-category-button>
+            </hra-fancy-header-cell>
+        </th>
+        <td mat-cell *matCellDef="let score" [class.best]="isBest(score, 'Deaths')" [class.team-best]="isTeamBest(score, 'Deaths')" [class.sorted]="sortBy === 'Deaths'">
+            <hra-fancy-cell>{{score.values.Deaths}}</hra-fancy-cell>
+        </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="SiegeDamage">
+        <th mat-header-cell *matHeaderCellDef [class.sorted]="sortBy === 'SiegeDamage'">
+            <hra-fancy-header-cell>
+                <hra-score-category-button icon="siegedamage" (click)="toggleSort('SiegeDamage')" [class.active]="sortBy === 'SiegeDamage'"></hra-score-category-button>
+            </hra-fancy-header-cell>
+        </th>
+        <td mat-cell *matCellDef="let score" [class.best]="isBest(score, 'SiegeDamage')" [class.team-best]="isTeamBest(score, 'SiegeDamage')" [class.sorted]="sortBy === 'SiegeDamage'">
+            <hra-fancy-cell>{{score.values.SiegeDamage | number}}</hra-fancy-cell>
+        </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="HeroDamage">
+        <th mat-header-cell *matHeaderCellDef [class.sorted]="sortBy === 'HeroDamage'">
+            <hra-fancy-header-cell>
+                <hra-score-category-button icon="herodamage" (click)="toggleSort('HeroDamage')" [class.active]="sortBy === 'HeroDamage'"></hra-score-category-button>
+            </hra-fancy-header-cell>
+        </th>
+        <td mat-cell *matCellDef="let score" [class.best]="isBest(score, 'HeroDamage')" [class.team-best]="isTeamBest(score, 'HeroDamage')" [class.sorted]="sortBy === 'HeroDamage'">
+            <hra-fancy-cell>{{score.values.HeroDamage | number}}</hra-fancy-cell>
+        </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="Healing">
+        <th mat-header-cell *matHeaderCellDef [class.sorted]="sortBy === 'Healing'">
+            <hra-fancy-header-cell>
+                <hra-score-category-button icon="healedandabsorbed" (click)="toggleSort('Healing')" [class.active]="sortBy === 'Healing'"></hra-score-category-button>
+            </hra-fancy-header-cell>
+        </th>
+        <td mat-cell *matCellDef="let score" [class.best]="isBest(score, 'Healing')" [class.team-best]="isTeamBest(score, 'Healing')" [class.sorted]="sortBy === 'Healing'">
+            <hra-fancy-cell>{{score.values.Healing | number}}</hra-fancy-cell>
+        </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="SelfHealing" >
+        <th mat-header-cell *matHeaderCellDef [class.sorted]="sortBy === 'SelfHealing'">
+            <hra-fancy-header-cell>
+                <hra-score-category-button icon="selfhealingshielding" (click)="toggleSort('SelfHealing')" [class.active]="sortBy === 'SelfHealing'"></hra-score-category-button>
+            </hra-fancy-header-cell>
+        </th>
+        <td mat-cell *matCellDef="let score" [class.best]="isBest(score, 'SelfHealing')" [class.team-best]="isTeamBest(score, 'SelfHealing')" [class.sorted]="sortBy === 'SelfHealing'">
+            <hra-fancy-cell>{{score.values.SelfHealing | number}}</hra-fancy-cell>
+        </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="DamageTaken">
+        <th mat-header-cell *matHeaderCellDef [class.sorted]="sortBy === 'DamageTaken'">
+            <hra-fancy-header-cell>
+                <hra-score-category-button icon="damagetaken" (click)="toggleSort('DamageTaken')" [class.active]="sortBy === 'DamageTaken'"></hra-score-category-button>
+            </hra-fancy-header-cell>
+        </th>
+        <td mat-cell *matCellDef="let score" [class.best]="isBest(score, 'DamageTaken')" [class.team-best]="isTeamBest(score, 'DamageTaken')" [class.sorted]="sortBy === 'DamageTaken'">
+            <hra-fancy-cell>{{score.values.DamageTaken | number}}</hra-fancy-cell>
+        </td>
+    </ng-container>
+    
+    <ng-container matColumnDef="XPContribution">
+        <th mat-header-cell *matHeaderCellDef [class.sorted]="sortBy === 'ExperienceContribution'">
+            <hra-fancy-header-cell>
+                <hra-score-category-button icon="xpcontribution"  (click)="toggleSort('ExperienceContribution')" [class.active]="sortBy === 'ExperienceContribution'"></hra-score-category-button>
+            </hra-fancy-header-cell>
+        </th>
+        <td mat-cell *matCellDef="let score" [class.best]="isBest(score, 'ExperienceContribution')" [class.team-best]="isTeamBest(score, 'ExperienceContribution')" [class.sorted]="sortBy === 'ExperienceContribution'">
+            <hra-fancy-cell>{{score.values.ExperienceContribution | number}}</hra-fancy-cell>
+        </td>
+    </ng-container>
+    
+-->
+
+
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;" [class.team1]="row.teamId === 0"
+        [class.team2]="row.teamId === 1"></tr>
+</table>

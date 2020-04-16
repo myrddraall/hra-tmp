@@ -1,10 +1,11 @@
-import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
-import { AppRoutingModule } from './app-routing.module';
-import { AppComponent } from './app.component';
+import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ApplicationModule } from '@ngui/application';
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { ReplayUploadModule } from './common/replay-upload/replay-upload.module';
+import { AttachmentsService } from '@ngui/ui-attachments';
 
 
 @NgModule({
@@ -15,9 +16,10 @@ import { ApplicationModule } from '@ngui/application';
     BrowserModule,
     AppRoutingModule,
     ApplicationModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    ReplayUploadModule
   ],
-  providers: [],
+  providers: [AttachmentsService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }
